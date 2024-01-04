@@ -1,1 +1,2 @@
-.env
+config/.env
+config/allowed.json

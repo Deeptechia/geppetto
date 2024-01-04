@@ -3,8 +3,8 @@ import sys
 import logging
 import json
 from dotenv import load_dotenv
-from openai_scripts.openai_handler import OpenAIHandler
-from slack_scripts.slack_handler import SlackHandler
+from srcs.openai_handler import OpenAIHandler
+from srcs.slack_handler import SlackHandler
 from slack_bolt import App
 from slack_sdk import WebClient
 from slack_bolt.adapter.socket_mode import SocketModeHandler

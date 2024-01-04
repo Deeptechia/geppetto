@@ -28,7 +28,7 @@ class OpenAIHandler:
     def url_to_image(self, url):
         openai.api_key = self.openai_api_key
         img = Image.open(urlopen(url=url))
-        return img.save("dall-e.png")
+        return img.save("./assets/dall-e.png")
 
     def generate_chatgpt_response(self, prompt):
         try:
