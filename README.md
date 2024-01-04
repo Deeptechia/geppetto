@@ -3,7 +3,7 @@
 ![https://img.shields.io/badge/license-MIT-green](https://img.shields.io/badge/license-MIT-green)
 
 <p align="center">
-  <img src="/GeppettoMini.png" alt="Geppetto" center/>
+  <img src="./assets/GeppettoMini.png" alt="Geppetto" center/>
 </p>
 
 Geppetto is a Slack bot that integrates with OpenAI's and DALL-E-3 models. 
