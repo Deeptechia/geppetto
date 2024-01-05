@@ -36,9 +36,7 @@ def load_allowed_users():
     except json.JSONDecodeError:
         logging.error("Error decoding allowed users file.")
 
-
-# Start the Slack app
-if __name__ == "__main__":
+def main():
     load_allowed_users()
     Slack_Handler = SlackHandler(
         allowed_users,
@@ -50,3 +48,7 @@ if __name__ == "__main__":
         CHATGPT_MODEL,
     )
     SocketModeHandler(Slack_Handler.app, Slack_Handler.SLACK_APP_TOKEN).start()
+
+# Start the Slack app
+if __name__ == "__main__":
+    main()
