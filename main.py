@@ -1,12 +1,8 @@
 import os
-import sys
 import logging
 import json
 from dotenv import load_dotenv
-from srcs.openai_handler import OpenAIHandler
 from srcs.slack_handler import SlackHandler
-from slack_bolt import App
-from slack_sdk import WebClient
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv("config/.env")
@@ -19,6 +15,7 @@ SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN_TEST")
 SIGNING_SECRET = os.getenv("SIGNING_SECRET_TEST")
 
 # Initialize logging
+# TODO: log to a file
 logging.basicConfig(level=logging.INFO)
 
 allowed_users = {}
@@ -43,10 +40,9 @@ if __name__ == "__main__":
     Slack_Handler = SlackHandler(
         allowed_users,
         SLACK_BOT_TOKEN,
-        SLACK_APP_TOKEN,
         SIGNING_SECRET,
         OPENAI_API_KEY,
         DALLE_MODEL,
         CHATGPT_MODEL,
     )
-    SocketModeHandler(Slack_Handler.app, Slack_Handler.SLACK_APP_TOKEN).start()
+    SocketModeHandler(Slack_Handler.app, SLACK_APP_TOKEN).start()
