@@ -9,7 +9,7 @@ from slack_bolt import App
 from slack_sdk import WebClient
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-load_dotenv("config/.env")
+load_dotenv(os.path.join("config", ".env"))
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
@@ -28,7 +28,7 @@ def load_allowed_users():
     """Load allowed users from a JSON file."""
     global allowed_users
     try:
-        with open("./config/allowed-slack-ids.json", "r") as file:
+        with open(os.path.join("config", "allowed-slack-ids.json"), "r") as file:
             allowed_users = json.load(file)
             logging.info("Allowed users:%s" % allowed_users)
     except FileNotFoundError:
