@@ -1,5 +1,7 @@
-config/.env
-*.env
-__pycache__/
-*.pyc
-*.DS_Store
+**/.env
+
+**/__pycache__/
+**/*.pyc
+
+# Ignore system-specific files
+**/.DS_Store
