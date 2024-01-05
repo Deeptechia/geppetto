@@ -85,7 +85,7 @@ class SlackMethods:
                 self.handle_greeting_english(channel_id, thread_id)
             elif "dalle" in msg.lower():
                 self.handle_dalle(msg, channel_id, thread_id)
-            else:
+            elif msg:
                 self.handle_default(msg, channel_id, thread_id)
         else:
             self.send_permission_denied(channel_id, thread_id)
