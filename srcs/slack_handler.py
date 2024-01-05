@@ -67,7 +67,7 @@ class SlackHandler:
             if is_allowed(user_id):
                 if "hola" in msg.lower():
                     saludo = "Hola! Mi nombre es Geppetto!"
-                    image_path = "./assets/GeppettoMini.png"
+                    image_path = os.path.join("assets", "GeppettoMini.png")
 
                     self.client.files_upload(
                         channels=channel_id,
@@ -87,7 +87,7 @@ class SlackHandler:
 
                 elif "hello" in msg.lower():
                     greet = "Hi! My name is Geppetto!"
-                    image_path = "./assets/GeppettoMini.png"
+                    image_path = os.path.join("assets", "GeppettoMini.png")
 
                     self.client.files_upload(
                         channels=channel_id,
@@ -123,7 +123,7 @@ class SlackHandler:
                         channels=channel_id,
                         thread_ts=thread_id,
                         username="Dall-E",
-                        file="./assets/dall-e.png",
+                        file=os.path.join("assets", "dall-e.png"),
                         title="respuesta",
                     )
 
@@ -186,7 +186,7 @@ class SlackHandler:
                 if "hola" in msg.lower():
                     saludo = "Hola! Mi nombre es Geppetto!"
                     # Path to the PNG image file you want to attach
-                    image_path = "./assets/GeppettoMini.png"
+                    image_path = os.path.join("assets", "GeppettoMini.png")
                     # Upload the image to Slack
                     self.client.files_upload(
                         channels=channel_id,
@@ -208,7 +208,7 @@ class SlackHandler:
                 elif "hello" in msg.lower():
                     greet = "Hi! My name is Geppetto!"
                     # Path to the PNG image file you want to attach
-                    image_path = "./assets/GeppettoMini.png"
+                    image_path = os.path.join("assets", "GeppettoMini.png")
 
                     # Upload the image to Slack
                     self.client.files_upload(
@@ -246,7 +246,7 @@ class SlackHandler:
                         channels=channel_id,
                         thread_ts=thread_id,
                         username="Dall-E",
-                        file="./assets/dall-e.png",
+                        file=os.path.join("assets", "dall-e.png"),
                         title="respuesta",
                     )
 
