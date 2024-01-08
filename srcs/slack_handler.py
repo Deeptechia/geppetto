@@ -67,17 +67,14 @@ class SlackMethods:
         logging.info("%s: %s" % (user_id, msg))
 
         # Check if user is allowed
-        if self.is_allowed(user_id):
+        if user_id in self.allowed_users.values():
             self.handle_default(msg, channel_id, thread_id)
         else:
             self.send_permission_denied(channel_id, thread_id)
 
-    def is_allowed(self, user_id):
-        """Check if a user is allowed to interact with the bot."""
-        return user_id in self.allowed_users.values()
-
     def handle_default(self, msg, channel_id, thread_id):
-        thread_history, prompt = self.thread_prompt(msg, thread_id)
+        thread_history = thread_messages.get(thread_id, [])
+        thread_history.append({"role": "user", "content": msg})
 
         response = self.app.client.chat_postMessage(
             channel=channel_id,
@@ -92,15 +89,17 @@ class SlackMethods:
         else:
             print("Failed to post the message.")
 
-        # response_from_chatgpt = self.openai_scripts.generate_chatgpt_response(prompt)
-        response_from_chatgpt = self.open_ai.send_message(prompt)
-        thread_history.append({"content": response_from_chatgpt})
+        response_from_chatgpt = self.open_ai.send_message(thread_history)
+        if isinstance(response_from_chatgpt, str):
+            thread_history.append(
+                {"role": "assistant", "content": response_from_chatgpt}
+            )
         thread_messages[thread_id] = thread_history
 
         try:
             if isinstance(response_from_chatgpt, bytes):
                 self.client.files_upload_v2(
-                    channels=channel_id,
+                    channel=channel_id,
                     thread_ts=thread_id,
                     username="Dall-E",
                     content=response_from_chatgpt,
@@ -124,13 +123,3 @@ class SlackMethods:
                  usuarios permitidos. Solicite permiso para utilizar la aplicación",
             thread_ts=thread_id,
         )
-
-    def thread_prompt(self, msg, thread_id):
-        thread_history = thread_messages.get(thread_id, [])
-        thread_history.append({"role": "user", "content": msg})
-        thread_messages[thread_id] = thread_history
-        prompt = "\n".join(
-            # TODO: include image in history?
-            [m["content"] for m in thread_history]
-        )
-        return thread_history, prompt
