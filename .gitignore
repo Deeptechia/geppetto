@@ -1,1 +1,10 @@
-config/.env
+**/.env
+
+**/__pycache__/
+**/*.pyc
+
+# Ignore system-specific files
+**/.DS_Store
+
+# Ignore the slack ids
+config/allowed-slack-ids.json

@@ -6,6 +6,7 @@ import os
 
 
 class OpenAIHandler:
+    # TODO: use a global object for OpenAI instead of redeclaring the API key every time
     def __init__(self, openai_api_key, dalle_model, chatgpt_model):
         self.openai_api_key = openai_api_key
         self.dalle_model = dalle_model
@@ -27,8 +28,8 @@ class OpenAIHandler:
             return None
 
     def url_to_image(self, url):
-        openai.api_key = self.openai_api_key
         img = Image.open(urlopen(url=url))
+        # TODO: return the image instead of saving it to a file
         return img.save(os.path.join("assets", "dall-e.png"))
 
     def generate_chatgpt_response(self, prompt):
