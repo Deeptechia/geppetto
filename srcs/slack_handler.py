@@ -136,6 +136,8 @@ class SlackMethods:
     def handle_dalle(self, msg, channel_id, thread_id):
         _, prompt = self.thread_prompt(msg, thread_id)
 
+        logging.info("prompt: %s" % (prompt))
+
         self.client.chat_postMessage(
             channel=channel_id,
             username="Dall-E",
@@ -144,12 +146,13 @@ class SlackMethods:
         )
 
         url = self.openai_scripts.text_to_image_url(prompt=prompt)
+        self.openai_scripts.url_to_image(url=url)
         # TODO: if image is returned, we could use it in the response
         self.client.files_upload(
             channels=channel_id,
             thread_ts=thread_id,
             username="Dall-E",
-            file= os.path.join("assets", "dall-e.png"),  # TODO: use path.join instead
+            file= os.path.join("assets", "dall-e.png"), 
             title="respuesta",
         )
 
