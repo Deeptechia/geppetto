@@ -87,7 +87,7 @@ class SlackMethods:
 
     def handle_greeting_spanish(self, channel_id, thread_id):
         SALUDO = "Hola! Mi nombre es Geppetto!"
-        image_path = "./assets/GeppettoMini.png"  # TODO: use path.join instead - imagepath is repeated below
+        image_path = os.path.join("assets", "GeppettoMini.png")  
 
         self.client.files_upload(
             channels=channel_id,
@@ -112,7 +112,7 @@ class SlackMethods:
 
     def handle_greeting_english(self, channel_id, thread_id):
         GREET = "Hi! My name is Geppetto!"
-        image_path = "./assets/GeppettoMini.png"  # TODO: use path.join instead
+        image_path = os.path.join("assets", "GeppettoMini.png")  
 
         self.client.files_upload(
             channels=channel_id,
@@ -145,12 +145,11 @@ class SlackMethods:
 
         url = self.openai_scripts.text_to_image_url(prompt=prompt)
         # TODO: if image is returned, we could use it in the response
-
         self.client.files_upload(
             channels=channel_id,
             thread_ts=thread_id,
             username="Dall-E",
-            file="./assets/dall-e.png",  # TODO: use path.join instead
+            file= os.path.join("assets", "dall-e.png"),  # TODO: use path.join instead
             title="respuesta",
         )
 

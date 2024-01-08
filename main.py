@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from srcs.slack_handler import SlackHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-load_dotenv("config/.env")
+load_dotenv(os.path.join("config", ".env"))
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
@@ -25,7 +25,7 @@ def load_allowed_users():
     """Load allowed users from a JSON file."""
     global allowed_users
     try:
-        with open("./config/allowed-slack-ids.json", "r") as file:
+        with open(os.path.join("config", "allowed-slack-ids.json"), "r") as file:
             allowed_users = json.load(file)
             logging.info("Allowed users:%s" % allowed_users)
     except FileNotFoundError:
@@ -33,9 +33,7 @@ def load_allowed_users():
     except json.JSONDecodeError:
         logging.error("Error decoding allowed users file.")
 
-
-# Start the Slack app
-if __name__ == "__main__":
+def main():
     load_allowed_users()
     Slack_Handler = SlackHandler(
         allowed_users,
@@ -45,4 +43,9 @@ if __name__ == "__main__":
         DALLE_MODEL,
         CHATGPT_MODEL,
     )
+
     SocketModeHandler(Slack_Handler.app, SLACK_APP_TOKEN).start()
+
+# Start the Slack app
+if __name__ == "__main__":
+    main()
