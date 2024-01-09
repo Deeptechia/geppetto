@@ -6,7 +6,7 @@
   <img src="./assets/GeppettoMini.png" alt="Geppetto" center/>
 </p>
 
-Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's and DALL-E-3 models  This project is brought to you by [CoinFabrik](https://www.coinfabrik.com) a company specialized in cybersecurity and decentralized technologies. We recommend to read our [blog](https://www.coinfabrik.com/blog/) and follow us: [Twitter/X](https://twitter.com/coinfabrik), [LinkedIn](https://www.linkedin.com/company/coinfabrik).
+Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's and DALL-E-3 models  This project is brought to you by [CoinFabrik](https://www.coinfabrik.com) a company specialized in cybersecurity and decentralized technologies. We recommend to read our [blog](https://www.coinfabrik.com/blog/) and follow us: [Twitter/X](https://twitter.com/coinfabrik), and [LinkedIn](https://www.linkedin.com/company/coinfabrik).
 
 ## Features
 
