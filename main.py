@@ -2,7 +2,7 @@ import os
 import logging
 import json
 from dotenv import load_dotenv
-from srcs.slack_handler import SlackHandler
+from src.slack_handler import SlackHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 load_dotenv(os.path.join("config", ".env"))
