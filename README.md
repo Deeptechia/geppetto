@@ -6,7 +6,7 @@
   <img src="./assets/GeppettoMini.png" alt="Geppetto" center/>
 </p>
 
-Geppetto is a Slack bot that integrates with OpenAI's and DALL-E-3 models. 
+Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's and DALL-E-3 models  This project is brought to you by [CoinFabrik](https://www.coinfabrik.com) a company specialized in cybersecurity and decentralized technologies.
 
 ## Features
 
@@ -54,10 +54,10 @@ Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
 ## About CoinFabrik
 
-We - [CoinFabrik](https://www.coinfabrik.com/) - are a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 180 blockchain-related projects, EVM based and also for Solana, Algorand, and Polkadot. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, currently working on code in Substrate, Solidity, Clarity, Rust, TEAL and Stellar Soroban.
+[CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, EVM based as well as Solana, Algorand, and Polkadot, among others. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, currently working on code in Substrate, Solidity, Clarity, Rust, TEAL and Stellar Soroban.
 
-Our team has an academic background in computer science and mathematics, with work experience focused on cybersecurity and software development, including academic publications, patents turned into products, and conference presentations. Furthermore, we have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires.
+Our team has an academic background in computer science, software engineering, and mathematics, including academic publications, patents turned into products, and conference presentations. Furthermore, we research along universities around the world. For example, we work with Cornell, UCLA, École Polytechnique in Paris and have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina.
 
 ## License
 
-Geppetto is licensed and distributed under a MIT license. [Contact us](https://www.coinfabrik.com/) if you're looking for an exception to the terms.
+Geppetto is licensed and distributed under a MIT license. [Contact us](https://www.coinfabrik.com/#contact-us) if you're looking for an exception to the terms.
