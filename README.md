@@ -56,7 +56,7 @@ Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
 [CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, EVM based as well as Solana, Algorand, and Polkadot, among others. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, currently working on code in Substrate, Solidity, Clarity, Rust, TEAL and Stellar Soroban.
 
-Our team has an academic background in computer science, software engineering, and mathematics, including academic publications, patents turned into products, and conference presentations. Furthermore, we research along universities around the world. For example, we work with Cornell, UCLA, École Polytechnique in Paris and have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina.
+Our team has an academic background in computer science, software engineering, and mathematics, including academic publications, patents turned into products, and conference presentations. Furthermore, we research along universities around the world. For example, we work with Cornell, UCLA, École Polytechnique in Paris and have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina. Last, but not least, we have a great management and people experience team with strong experience in the field.
 
 ## License
 
