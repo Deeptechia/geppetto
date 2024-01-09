@@ -190,8 +190,7 @@ class SlackMethods:
     def send_permission_denied(self, channel_id, thread_id):
         self.app.client.chat_postMessage(
             channel=channel_id,
-            text="El usuario solicitante no pertenece a la lista de\
-                 usuarios permitidos. Solicite permiso para utilizar la aplicación",
+            text="El usuario solicitante no pertenece a la lista de usuarios permitidos. Solicite permiso para utilizar la aplicación",
             thread_ts=thread_id,
         )
 
