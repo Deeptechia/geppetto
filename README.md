@@ -31,7 +31,7 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
    - Include the word "dalle" in your message to request image generation with DALL-E-3.
 
 - **Allowed Users:**
-   - Only authorized users can interact with the application. Check with the administrator for permissions.
+   - Only authorized users can interact with the application. Set allowed users in [./config/allowed-slack-ids.json](https://github.com/CoinFabrik/geppetto/blob/main/config/allowed-slack-ids.json).
 
 ## Configuration
 
