@@ -35,12 +35,39 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
 
 ## Configuration
 
-Before running the application, make sure to set the following environment variables in a `.env` file:
+### Slack Configuration
 
-- `SLACK_BOT_TOKEN`: Slack bot token.
-- `SLACK_APP_TOKEN`: Slack application token.
+Follow these steps to configure Slack for your application:
+
+#### Create App
+1. **Modify `manifest-dev.yaml`**: Update fields under `display_information` and `bot_user` to customize Geppetto for your personal use.
+2. **Create New App**:
+    - Go to the [Slack API](https://api.slack.com) and navigate to *Your Apps*.
+    - Click on *Create New App*.
+    - Choose *Create from manifest*, select *yaml* and paste the contents of the modified `manifest-dev.yaml` file.
+    - Click *Next* and then *Create* the application.
+
+#### Save App Credentials
+1. Under the *App Credentials* section, save the following:
+   - **Client Secret**: This will be our `SLACK_BOT_TOKEN`.
+   - **Signing Secret**.
+2. In the *App-Level Tokens* section:
+   - Click on *Generate Tokens and Scopes*.
+   - Set a Token Name and assign the scope to `connections write`.
+   - Generate and save the **App-Level Token** for later use (this will be our `SLACK_APP_TOKEN`).
+
+#### Reinstall Workspace
+Finally, in the *Basic Information* section, click on *Reinstall Workspace*. This action requires approval from an owner of your Slack workspace to consolidate the changes.
+
+
+#### Enviroment Configuration
+
+Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
+
+- `SLACK_BOT_TOKEN`: Slack bot token. This is the `Client Secret` from your slack App Credentials.
+- `SLACK_APP_TOKEN`: Slack application token. This is the `App-Level Token` from your slack App Credentials
 - `OPENAI_API_KEY`: OpenAI API key.
-- `SIGNING_SECRET`: Signing secret to verify Slack requests.
+- `SIGNING_SECRET`: Signing secret to verify Slack requests. This is the `Signing Secret` your slack App Credentials.
 - `DALLE_MODEL`: OpenAI's DALL-E-3 model.
 - `CHATGPT_MODEL`: OpenAI's ChatGPT-4 model.
 
