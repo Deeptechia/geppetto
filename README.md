@@ -44,23 +44,24 @@ Follow these steps to configure Slack for your application:
     - Click *Next* and then *Create* the application.
 
 #### Save App Credentials
-1. Under the *App Credentials* section, save the following:
-   - **Client Secret**: This will be your `SLACK_BOT_TOKEN`.
-   - **Signing Secret**.
-2. In the *App-Level Tokens* section:
-   - Click on *Generate Tokens and Scopes*.
-   - Set a Token Name and assign the scope to `connections:write`.
-   - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
-
-#### Reinstall Workspace
-Finally, in the *Basic Information* section, click on *Reinstall to Workspace*. This action requires approval from an owner of your Slack workspace to consolidate the changes.
+At the **Basic Information** section:
+  1. Under the *App Credentials* subsection, save the following:
+     - **Signing Secret**.
+  2. In the *App-Level Tokens* subsection:
+     - Click on *Generate Tokens and Scopes*.
+     - Set a Token Name and assign the scope to `connections:write`.
+     - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
+At the **Install App** section:
+  3. Under the Install App to Your Team subsection:
+     - Install or Request the installation of your app to your Workspace (if it requires approval from an owner of your Slack workspace).
+     - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`)
 
 ### Environment Configuration
 
 Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
 
-- `SLACK_BOT_TOKEN`: Your Slack bot token (the `Client Secret` from your Slack App Credentials).
-- `SLACK_APP_TOKEN`: Your Slack application token (the `App-Level Token` from your Slack App Credentials).
+- `SLACK_BOT_TOKEN`: Your Slack bot token (it should start with 'xoxb').
+- `SLACK_APP_TOKEN`: Your Slack application token (it should start with 'xapp').
 - `OPENAI_API_KEY`: Your OpenAI API key.
 - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
 - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
