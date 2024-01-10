@@ -34,10 +34,24 @@ def load_allowed_users():
         logging.error("Error decoding allowed users file.")
 
 
+def load_bot_default_responses():
+    """Load bot default responses from a JSON file."""
+    global bot_default_responses
+    try:
+        with open(os.path.join("config", "default_responses.json"), "r") as file:
+            bot_default_responses = json.load(file)
+    except FileNotFoundError:
+        logging.error("default responses file not found.")
+    except json.JSONDecodeError:
+        logging.error("Error decoding default responses file.")
+
+
 def main():
     load_allowed_users()
+    load_bot_default_responses()
     Slack_Handler = SlackHandler(
         allowed_users,
+        bot_default_responses,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
         OPENAI_API_KEY,
