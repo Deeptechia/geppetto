@@ -12,8 +12,6 @@ from src.slack_handler import SlackHandler, thread_messages
 
 
 class TestSlack(unittest.TestCase):
-    slack_handler = None
-
     @classmethod
     def setUpClass(cls):
         cls.patcher1 = patch("src.slack_handler.OpenAIHandler")
