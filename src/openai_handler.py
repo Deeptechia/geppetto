@@ -45,7 +45,6 @@ class OpenAIHandler:
             return self.download_image(response_url.data[0].url)
         except Exception as e:
             logging.error(f"Error generating image: {e}")
-            return None
 
     def send_message(self, user_prompt):
         logging.info("Sending msg to chatgpt: %s" % (user_prompt))
