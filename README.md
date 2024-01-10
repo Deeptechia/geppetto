@@ -53,8 +53,9 @@ At the **Basic Information** section:
      - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
 At the **Install App** section:
   3. Under the Install App to Your Team subsection:
+     - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`).
      - Install or Request the installation of your app to your Workspace (if it requires approval from an owner of your Slack workspace).
-     - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`)
+
 
 ### Environment Configuration
 
