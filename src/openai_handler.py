@@ -8,10 +8,13 @@ import os
 
 
 class OpenAIHandler:
-    def __init__(self, openai_api_key, dalle_model, chatgpt_model):
+    def __init__(
+        self, openai_api_key, dalle_model, chatgpt_model, bot_default_responses
+    ):
         self.client = openai.OpenAI(api_key=openai_api_key)
         self.dalle_model = dalle_model
         self.chatgpt_model = chatgpt_model
+        self.bot_default_responses = bot_default_responses
 
     def get_functionalities(self):
         # TODO: should get functionalities from config file maybe?
@@ -30,6 +33,7 @@ class OpenAIHandler:
         return img_byte_arr
 
     def generate_image(self, prompt, size="1024x1024"):
+        logging.info("Generating image: %s with size: %s" % (prompt, size))
         try:
             response_url = self.client.images.generate(
                 model=self.dalle_model,
@@ -44,6 +48,8 @@ class OpenAIHandler:
             return None
 
     def send_message(self, user_prompt):
+        logging.info("Sending msg to chatgpt: %s" % (user_prompt))
+
         tools = [
             {
                 "type": "function",
@@ -81,7 +87,7 @@ class OpenAIHandler:
         messages = [
             {
                 "role": "system",
-                "content": "You are Geppetto, a general intelligence bot created by CoinFabrik.",  # TODO: get this from the config file
+                "content": self.bot_default_responses["features"]["personality"],
             },
             *user_prompt,
         ]

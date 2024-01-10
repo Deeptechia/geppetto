@@ -10,15 +10,15 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
 
 ## Features
 
-1. **Initial Greeting:**
-   - When you send a message containing the word "hello," the application responds with a greeting.
-
-2. **Interaction with ChatGPT-4:**
+1. **Interaction with ChatGPT-4:**
    - You can send direct messages to the application and receive responses from ChatGPT-4.
    - Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
 
-3. **Image Generation with DALL-E-3:**
-   - If you include the word "dalle" in your message, the application uses DALL-E-3 to generate an image based on the message.
+2. **Image Generation with DALL-E-3:**
+   - The application uses DALL-E-3 to generate an image based on the message.
+
+
+
 
 ## Usage Rules
 
@@ -28,7 +28,6 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
 
 - **Slack Channels:**
    - You must mention the application with "@" to interact in channels.
-   - Include the word "dalle" in your message to request image generation with DALL-E-3.
 
 - **Allowed Users:**
    - Only authorized users can interact with the application. Check with the administrator for permissions.
