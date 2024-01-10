@@ -1,12 +1,12 @@
 # Geppetto
 
-![https://img.shields.io/badge/license-MIT-green](https://img.shields.io/badge/license-MIT-green)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 <p align="center">
-  <img src="./assets/GeppettoMini.png" alt="Geppetto" center/>
+  <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
 </p>
 
-Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's and DALL-E-3 models  This project is brought to you by [CoinFabrik](https://www.coinfabrik.com) a company specialized in cybersecurity and decentralized technologies. We recommend to read our [blog](https://www.coinfabrik.com/blog/) and follow us: [Twitter/X](https://twitter.com/coinfabrik), and [LinkedIn](https://www.linkedin.com/company/coinfabrik).
+Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's ChatGPT-4 and DALL-E-3 models. This project is brought to you by [CoinFabrik](https://www.coinfabrik.com), a company specialized in cybersecurity and decentralized technologies. We recommend reading our [blog](https://www.coinfabrik.com/blog/) and following us on [Twitter](https://twitter.com/coinfabrik) and [LinkedIn](https://www.linkedin.com/company/coinfabrik).
 
 ## Features
 
@@ -49,42 +49,47 @@ Follow these steps to configure Slack for your application:
 
 #### Save App Credentials
 1. Under the *App Credentials* section, save the following:
-   - **Client Secret**: This will be our `SLACK_BOT_TOKEN`.
+   - **Client Secret**: This will be your `SLACK_BOT_TOKEN`.
    - **Signing Secret**.
 2. In the *App-Level Tokens* section:
    - Click on *Generate Tokens and Scopes*.
-   - Set a Token Name and assign the scope to `connections write`.
-   - Generate and save the **App-Level Token** for later use (this will be our `SLACK_APP_TOKEN`).
+   - Set a Token Name and assign the scope to `connections:write`.
+   - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
 
 #### Reinstall Workspace
-Finally, in the *Basic Information* section, click on *Reinstall Workspace*. This action requires approval from an owner of your Slack workspace to consolidate the changes.
+Finally, in the *Basic Information* section, click on *Reinstall to Workspace*. This action requires approval from an owner of your Slack workspace to consolidate the changes.
 
-
-#### Enviroment Configuration
+### Environment Configuration
 
 Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
 
-- `SLACK_BOT_TOKEN`: Slack bot token. This is the `Client Secret` from your slack App Credentials.
-- `SLACK_APP_TOKEN`: Slack application token. This is the `App-Level Token` from your slack App Credentials
-- `OPENAI_API_KEY`: OpenAI API key.
-- `SIGNING_SECRET`: Signing secret to verify Slack requests. This is the `Signing Secret` your slack App Credentials.
-- `DALLE_MODEL`: OpenAI's DALL-E-3 model.
-- `CHATGPT_MODEL`: OpenAI's ChatGPT-4 model.
+- `SLACK_BOT_TOKEN`: Your Slack bot token (the `Client Secret` from your Slack App Credentials).
+- `SLACK_APP_TOKEN`: Your Slack application token (the `App-Level Token` from your Slack App Credentials).
+- `OPENAI_API_KEY`: Your OpenAI API key.
+- `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
+- `DALLE_MODEL`: The OpenAI DALL-E-3 model.
+- `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
 
-## Execution
+## Deployment
 
-1. Install dependencies with `pip install -r requirements.txt`.
-2. Run the application with `python script_name.py`.
+Before you begin, ensure you have the following installed:
+- Python (version 3.x recommended)
+- pip (Python package manager)
+
+Follow these steps to deploy Geppetto:
+
+1. Download the repository and open your terminal.
+2. Navigate to the repository directory and install dependencies with `pip install .`.
+3. Run the application by entering `geppetto` in the terminal.
 
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
-
 ## About CoinFabrik
 
-[CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, EVM based as well as Solana, Algorand, and Polkadot, among others. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, currently working on code in Substrate, Solidity, Clarity, Rust, TEAL and Stellar Soroban.
+[CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, including EVM-based and other platforms like Solana, Algorand, and Polkadot. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, working on code in languages such as Substrate, Solidity, Clarity, Rust, TEAL, and Stellar Soroban.
 
-Our team has an academic background in computer science, software engineering, and mathematics, including academic publications, patents turned into products, and conference presentations. Furthermore, we research along universities around the world. For example, we work with Cornell, UCLA, École Polytechnique in Paris and have an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina. Last, but not least, we have a great management and people experience team with strong experience in the field.
+Our team has an academic background in computer science, software engineering, and mathematics, with accomplishments including academic publications, patents turned into products, and conference presentations. We actively research in collaboration with universities worldwide, such as Cornell, UCLA, and École Polytechnique in Paris, and maintain an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina. Our management and people experience team has extensive expertise in the field.
 
 ## License
 
-Geppetto is licensed and distributed under a MIT license. [Contact us](https://www.coinfabrik.com/#contact-us) if you're looking for an exception to the terms.
+Geppetto is licensed and distributed under the MIT license. [Contact us](https://www.coinfabrik.com/#contact-us) if you're looking for an exception to the terms.
