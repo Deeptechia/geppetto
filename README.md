@@ -61,8 +61,8 @@ At the **Install App** section:
 
 Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
 
-- `SLACK_BOT_TOKEN`: Your Slack bot token (it should start with 'xoxb').
-- `SLACK_APP_TOKEN`: Your Slack application token (it should start with 'xapp').
+- `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
+- `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
 - `OPENAI_API_KEY`: Your OpenAI API key.
 - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
 - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
