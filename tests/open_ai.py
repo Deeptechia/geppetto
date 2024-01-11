@@ -2,9 +2,7 @@ import json
 import os
 import sys
 import unittest
-from unittest.mock import MagicMock, Mock, patch
-
-import openai
+from unittest.mock import Mock, patch
 
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -15,7 +13,9 @@ from src.openai_handler import OpenAIHandler
 
 
 def OF(**kw):
-    class OF: pass
+    class OF:
+        pass
+
     instance = OF()
     for k, v in kw.items():
         setattr(instance, k, v)
@@ -25,10 +25,8 @@ def OF(**kw):
 class TestOpenAI(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher = patch("src.openai_handler.openai.OpenAI")
+        cls.patcher = patch("src.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
-        # Mocking the ChatCompletion response as a dictionary
-        # object_with_attributes_choice = MockOpenAIChatCompletionResponse()
         cls.openai_handler = OpenAIHandler(
             "openai_api_key",
             "dall-e-3",
@@ -47,14 +45,15 @@ class TestOpenAI(unittest.TestCase):
         mock_chat_completion_response.choices = [
             OF(message=OF(content="Mocked ChatGPT Response", tool_calls=[]))
         ]
-        self.mock_openai.return_value.chat.completions.create.return_value = (
+        self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
         response = self.openai_handler.send_message(user_prompt)
         self.assertEqual(response, "Mocked ChatGPT Response")
 
-    def test_send_image_message(self):
-        # Mock tool_call for image generation
+    @patch("src.openai_handler.OpenAIHandler.download_image")
+    def test_send_image_message(self, mock_download_image):
+        mock_download_image.return_value = b"Mocked Image Bytes"
         mock_tool_call = Mock()
         mock_tool_call.function.name = "generate_image"
         mock_tool_call.function.arguments = json.dumps(
@@ -62,12 +61,15 @@ class TestOpenAI(unittest.TestCase):
         )
 
         mock_chat_completion_response = Mock()
-
         mock_chat_completion_response.choices = [
-            OF(message=OF(content="", tool_calls=[mock_tool_call]))
-            # {"message": {"content": "", "tool_calls": [mock_tool_call]}}
+            OF(
+                message=OF(
+                    content="Generate an image of a mountain",
+                    tool_calls=[mock_tool_call],
+                )
+            )
         ]
-        self.mock_openai.return_value.chat.completions.create.return_value = (
+        self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
 
