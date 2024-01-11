@@ -16,7 +16,6 @@ class OpenAIHandler:
         self.bot_default_responses = bot_default_responses
 
     def get_functionalities(self):
-        # TODO: should get functionalities from config file maybe?
         return json.dumps(
             [
                 "Generate an image from text",
@@ -45,7 +44,7 @@ class OpenAIHandler:
         except Exception as e:
             logging.error(f"Error generating image: {e}")
 
-    def send_message(self, user_prompt):
+    def send_message(self, user_prompt, callback, *callback_args):
         logging.info("Sending msg to chatgpt: %s" % (user_prompt))
         tools = [
             {
@@ -103,6 +102,8 @@ class OpenAIHandler:
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
+            if function_name == "generate_image":
+                callback(*callback_args)
             response = function(**function_args)
             return response
         else:

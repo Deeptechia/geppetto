@@ -11,9 +11,9 @@ load_dotenv(os.path.join("config", ".env"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
 CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
-SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN_TEST")
-SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN_TEST")
-SIGNING_SECRET = os.getenv("SIGNING_SECRET_TEST")
+SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
+SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN")
+SIGNING_SECRET = os.getenv("SIGNING_SECRET")
 
 # Initialize logging
 # TODO: log to a file
