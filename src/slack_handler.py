@@ -7,13 +7,10 @@ from src.openai_handler import OpenAIHandler
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
-# Define global variables
-thread_messages = {}
-
-# TODO: maybe use a separate config file with all the dictionaries/descriptions
-
 
 class SlackHandler:
+    thread_messages = {}
+
     def __init__(
         self,
         allowed_users,
@@ -48,7 +45,7 @@ class SlackHandler:
             channel_id,
             thread_id,
         )
-        thread_history = thread_messages.get(thread_id, [])
+        thread_history = self.thread_messages.get(thread_id, [])
         thread_history.append({"role": "user", "content": msg})
 
         response = self.app.client.chat_postMessage(
@@ -63,25 +60,17 @@ class SlackHandler:
         else:
             logging.error("Failed to post the message.")
 
-        response_from_chatgpt = self.openai.send_message(thread_history)
+        response_from_chatgpt = self.openai.send_message(
+            thread_history, self.send_preparing_image_message, channel_id, thread_id
+        )
         if isinstance(response_from_chatgpt, str):
             thread_history.append(
                 {"role": "assistant", "content": response_from_chatgpt}
             )
-        thread_messages[thread_id] = thread_history
+        self.thread_messages[thread_id] = thread_history
 
         try:
             if isinstance(response_from_chatgpt, bytes):
-                dalle_message = self.bot_default_responses["dalle"]["preparing_image"]
-                logging.info("Sending dalle default message: %s" % dalle_message)
-
-                self.app.client.chat_postMessage(
-                    channel=channel_id,
-                    username="Dall-E",
-                    text=dalle_message,
-                    thread_ts=thread_id,
-                )
-
                 self.app.client.files_upload_v2(
                     channel=channel_id,
                     thread_ts=thread_id,
@@ -99,6 +88,17 @@ class SlackHandler:
                 )
         except Exception as e:
             logging.error("Error posting message: %s", e)
+
+    def send_preparing_image_message(self, channel_id, thread_id):
+        dalle_message = self.bot_default_responses["dalle"]["preparing_image"]
+        logging.info("Sending dalle default message: %s" % dalle_message)
+
+        self.app.client.chat_postMessage(
+            channel=channel_id,
+            username="Dall-E",
+            text=dalle_message,
+            thread_ts=thread_id,
+        )
 
     def handle_event(self, body):
         event = body["event"]

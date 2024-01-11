@@ -1,23 +1,21 @@
 from io import BytesIO
 import json
-import openai
+from openai import OpenAI
 from PIL import Image
 from urllib.request import urlopen
 import logging
-import os
 
 
 class OpenAIHandler:
     def __init__(
         self, openai_api_key, dalle_model, chatgpt_model, bot_default_responses
     ):
-        self.client = openai.OpenAI(api_key=openai_api_key)
+        self.client = OpenAI(api_key=openai_api_key)
         self.dalle_model = dalle_model
         self.chatgpt_model = chatgpt_model
         self.bot_default_responses = bot_default_responses
 
     def get_functionalities(self):
-        # TODO: should get functionalities from config file maybe?
         return json.dumps(
             [
                 "Generate an image from text",
@@ -45,11 +43,9 @@ class OpenAIHandler:
             return self.download_image(response_url.data[0].url)
         except Exception as e:
             logging.error(f"Error generating image: {e}")
-            return None
 
-    def send_message(self, user_prompt):
+    def send_message(self, user_prompt, callback, *callback_args):
         logging.info("Sending msg to chatgpt: %s" % (user_prompt))
-
         tools = [
             {
                 "type": "function",
@@ -63,8 +59,6 @@ class OpenAIHandler:
                             "size": {
                                 "type": "string",
                                 "enum": [
-                                    "256x256",
-                                    "512x512",
                                     "1024x1024",
                                     "1024x1792",
                                     "1792x1024",
@@ -108,6 +102,8 @@ class OpenAIHandler:
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
+            if function_name == "generate_image":
+                callback(*callback_args)
             response = function(**function_args)
             return response
         else:
