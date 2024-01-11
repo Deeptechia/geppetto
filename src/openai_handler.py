@@ -1,17 +1,16 @@
 from io import BytesIO
 import json
-import openai
+from openai import OpenAI
 from PIL import Image
 from urllib.request import urlopen
 import logging
-import os
 
 
 class OpenAIHandler:
     def __init__(
         self, openai_api_key, dalle_model, chatgpt_model, bot_default_responses
     ):
-        self.client = openai.OpenAI(api_key=openai_api_key)
+        self.client = OpenAI(api_key=openai_api_key)
         self.dalle_model = dalle_model
         self.chatgpt_model = chatgpt_model
         self.bot_default_responses = bot_default_responses
@@ -45,11 +44,9 @@ class OpenAIHandler:
             return self.download_image(response_url.data[0].url)
         except Exception as e:
             logging.error(f"Error generating image: {e}")
-            return None
 
     def send_message(self, user_prompt):
         logging.info("Sending msg to chatgpt: %s" % (user_prompt))
-
         tools = [
             {
                 "type": "function",
@@ -63,8 +60,6 @@ class OpenAIHandler:
                             "size": {
                                 "type": "string",
                                 "enum": [
-                                    "256x256",
-                                    "512x512",
                                     "1024x1024",
                                     "1024x1792",
                                     "1792x1024",

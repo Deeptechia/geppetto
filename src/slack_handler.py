@@ -7,13 +7,10 @@ from src.openai_handler import OpenAIHandler
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
-# Define global variables
-thread_messages = {}
-
-# TODO: maybe use a separate config file with all the dictionaries/descriptions
-
 
 class SlackHandler:
+    thread_messages = {}
+
     def __init__(
         self,
         allowed_users,
@@ -48,7 +45,7 @@ class SlackHandler:
             channel_id,
             thread_id,
         )
-        thread_history = thread_messages.get(thread_id, [])
+        thread_history = self.thread_messages.get(thread_id, [])
         thread_history.append({"role": "user", "content": msg})
 
         response = self.app.client.chat_postMessage(
@@ -68,7 +65,7 @@ class SlackHandler:
             thread_history.append(
                 {"role": "assistant", "content": response_from_chatgpt}
             )
-        thread_messages[thread_id] = thread_history
+        self.thread_messages[thread_id] = thread_history
 
         try:
             if isinstance(response_from_chatgpt, bytes):
