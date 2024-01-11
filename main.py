@@ -1,11 +1,8 @@
 import os
 import logging
-import sys
 from dotenv import load_dotenv
 from src.slack_handler import SlackHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
-
 from utils.load_bot_responses import load_bot_responses
 from utils.load_allowed_users import load_allowed_users
 
