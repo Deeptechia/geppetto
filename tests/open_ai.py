@@ -9,7 +9,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from src.openai_handler import OpenAIHandler
+from src.geppetto.openai_handler import OpenAIHandler
 
 
 def OF(**kw):
@@ -25,7 +25,7 @@ def OF(**kw):
 class TestOpenAI(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher = patch("src.openai_handler.OpenAI")
+        cls.patcher = patch("src.geppetto.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
         cls.openai_handler = OpenAIHandler(
             "openai_api_key",
@@ -48,36 +48,36 @@ class TestOpenAI(unittest.TestCase):
         self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
-        response = self.openai_handler.send_message(user_prompt)
+        response = self.openai_handler.send_message(user_prompt, None, None)
         self.assertEqual(response, "Mocked ChatGPT Response")
 
-    @patch("src.openai_handler.OpenAIHandler.download_image")
-    def test_send_image_message(self, mock_download_image):
-        mock_download_image.return_value = b"Mocked Image Bytes"
-        mock_tool_call = Mock()
-        mock_tool_call.function.name = "generate_image"
-        mock_tool_call.function.arguments = json.dumps(
-            {"prompt": "Generate an image of a mountain", "size": "1024x1024"}
-        )
+@patch("src.geppetto.openai_handler.OpenAIHandler.download_image")
+def test_send_image_message(self, mock_download_image):
+    mock_download_image.return_value = b"Mocked Image Bytes"
+    mock_tool_call = Mock()
+    mock_tool_call.function.name = "generate_image"
+    mock_tool_call.function.arguments = json.dumps(
+        {"prompt": "Generate an image of a mountain", "size": "1024x1024"}
+    )
 
-        mock_chat_completion_response = Mock()
-        mock_chat_completion_response.choices = [
-            OF(
-                message=OF(
-                    content="Generate an image of a mountain",
-                    tool_calls=[mock_tool_call],
-                )
+    mock_chat_completion_response = Mock()
+    mock_chat_completion_response.choices = [
+        OF(
+            message=OF(
+                content="Generate an image of a mountain",
+                tool_calls=[mock_tool_call],
             )
-        ]
-        self.mock_openai().chat.completions.create.return_value = (
-            mock_chat_completion_response
         )
+    ]
+    self.mock_openai().chat.completions.create.return_value = (
+        mock_chat_completion_response
+    )
 
-        user_prompt = [{"role": "user", "content": "Generate an image of a mountain"}]
-        response = self.openai_handler.send_message(user_prompt)
+    user_prompt = [{"role": "user", "content": "Generate an image of a mountain"}]
+    response = self.openai_handler.send_message(user_prompt,None,None )
 
-        # Assuming download_image returns bytes
-        self.assertIsInstance(response, bytes)
+    # Assuming download_image returns bytes
+    self.assertIsInstance(response, bytes)
 
 
 if __name__ == "__main__":

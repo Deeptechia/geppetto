@@ -7,15 +7,15 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from utils.load_bot_responses import load_bot_responses
-from src.slack_handler import SlackHandler, thread_messages
+from src.geppetto.utils.load_bot_responses import load_bot_responses
+from src.geppetto.slack_handler import SlackHandler
 
 
 class TestSlack(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher1 = patch("src.slack_handler.OpenAIHandler")
-        cls.patcher2 = patch("src.slack_handler.App")
+        cls.patcher1 = patch("src.geppetto.slack_handler.OpenAIHandler")
+        cls.patcher2 = patch("src.geppetto.slack_handler.App")
         cls.MockOpenAIHandler = cls.patcher1.start()
         cls.MockApp = cls.patcher2.start()
 
@@ -69,11 +69,11 @@ class TestSlack(unittest.TestCase):
 
         self.slack_handler.handle_message(message, channel_id, thread_id)
 
-        self.assertIn(thread_id, thread_messages)
-        self.assertIn({"role": "user", "content": message}, thread_messages[thread_id])
+        self.assertIn(thread_id, self.slack_handler.thread_messages)
+        self.assertIn({"role": "user", "content": message}, self.slack_handler.thread_messages[thread_id])
         self.assertIn(
             {"role": "assistant", "content": mock_open_ai_response},
-            thread_messages[thread_id],
+            self.slack_handler.thread_messages[thread_id],
         )
 
         self.MockApp().client.chat_postMessage.assert_called_with(
