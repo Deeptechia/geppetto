@@ -7,15 +7,15 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from src.geppetto.utils.load_bot_responses import load_bot_responses
-from src.geppetto.slack_handler import SlackHandler
+from geppetto.utils.load_bot_responses import load_bot_responses
+from geppetto.slack_handler import SlackHandler
 
 
 class TestSlack(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher1 = patch("src.geppetto.slack_handler.OpenAIHandler")
-        cls.patcher2 = patch("src.geppetto.slack_handler.App")
+        cls.patcher1 = patch("geppetto.slack_handler.OpenAIHandler")
+        cls.patcher2 = patch("geppetto.slack_handler.App")
         cls.MockOpenAIHandler = cls.patcher1.start()
         cls.MockApp = cls.patcher2.start()
 

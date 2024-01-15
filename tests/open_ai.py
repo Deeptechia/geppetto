@@ -9,7 +9,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from src.geppetto.openai_handler import OpenAIHandler
+from geppetto.openai_handler import OpenAIHandler
 
 
 def OF(**kw):
@@ -25,7 +25,7 @@ def OF(**kw):
 class TestOpenAI(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher = patch("src.geppetto.openai_handler.OpenAI")
+        cls.patcher = patch("geppetto.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
         cls.openai_handler = OpenAIHandler(
             "openai_api_key",
@@ -51,7 +51,7 @@ class TestOpenAI(unittest.TestCase):
         response = self.openai_handler.send_message(user_prompt, None, None)
         self.assertEqual(response, "Mocked ChatGPT Response")
 
-@patch("src.geppetto.openai_handler.OpenAIHandler.download_image")
+@patch("geppetto.openai_handler.OpenAIHandler.download_image")
 def test_send_image_message(self, mock_download_image):
     mock_download_image.return_value = b"Mocked Image Bytes"
     mock_tool_call = Mock()
