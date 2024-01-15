@@ -5,7 +5,16 @@ build-backend = "poetry.masonry.api"
 [tool.poetry]
 name = "geppetto"
 version = "0.0.1"
-authors = [".."]
+authors = [
+    "Lucas Arbues <lucas.arbues@coinfabrik.com>",
+    "Ignacio Peña <ignacio.penia@coinfabrik.com>",
+    "Federico Patagua <federico.patagua@coinfabrik.com>",
+    "Arturo Beccar <arturo.beccar@coinfabrik.com>",
+    "José Garcia Crosta <jose.garcia.crosta@coinfabrik.com>",
+    "David Weil <david.weil@coinfabrik.com>",
+    "Diego Kelyacoubian <diego.kelyacoubian@coinfabrik.com>",
+    "Sebastian Wain <sebastian.wain@coifabrik.com>"
+]
 description = "Geppetto is a Slack bot that integrates with OpenAIs and DALL-E-3 models."
 readme = "README.md" 
 classifiers = [
