@@ -73,12 +73,13 @@ Before running the application, copy the `.configuration/.env.example` file into
 Before you begin, ensure you have the following installed:
 - Python (version 3.x recommended)
 - pip (Python package manager)
+- poetry
 
 Follow these steps to deploy Geppetto:
 
 1. Download the repository and open your terminal.
-2. Navigate to the repository directory and install dependencies with `pip install .`.
-3. Run the application by entering `geppetto` in the terminal.
+2. Navigate to the repository directory and install dependencies with `poetry install`.
+3. Run the application by entering `poetry run geppetto` in the terminal.
 
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
