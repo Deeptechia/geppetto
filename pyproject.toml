@@ -1,0 +1,33 @@
+[build-system]
+requires = ["poetry>=1.1.0"]
+build-backend = "poetry.masonry.api"
+
+[tool.poetry]
+name = "geppetto"
+version = "0.0.1"
+authors = [".."]
+description = "Geppetto is a Slack bot that integrates with OpenAIs and DALL-E-3 models."
+readme = "README.md" 
+classifiers = [
+    "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.6",
+        "Topic :: Chatbot",
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+certifi = "^2023.11.17"
+openai = "^1.4.0"
+python-dotenv = "^1.0.0"
+slack-bolt = "^1.18.1"
+slack-sdk = "^3.26.1"
+Pillow = "^10.1.0"
+
+[tool.poetry.scripts]
+geppetto = "src.geppetto.main:main"
+
+[project.urls]
+Homepage = "https://github.com/CoinFabrik/geppetto"
+Issues = "https://github.com/CoinFabrik/geppetto/issues"

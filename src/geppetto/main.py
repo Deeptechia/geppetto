@@ -1,10 +1,10 @@
 import os
 import logging
 from dotenv import load_dotenv
-from slack_handler import SlackHandler
+from .slack_handler import SlackHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from utils.load_bot_responses import load_bot_responses
-from utils.load_allowed_users import load_allowed_users
+from .utils.load_bot_responses import load_bot_responses
+from .utils.load_allowed_users import load_allowed_users
 
 load_dotenv(os.path.join("config", ".env"))
 
