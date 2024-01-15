@@ -44,6 +44,7 @@ Follow these steps to configure Slack for your application:
     - Click *Next* and then *Create* the application.
 
 #### Save App Credentials
+
 At the **Basic Information** section:
   1. Under the *App Credentials* subsection, save the following:
      - **Signing Secret**.
@@ -51,6 +52,7 @@ At the **Basic Information** section:
      - Click on *Generate Tokens and Scopes*.
      - Set a Token Name and assign the scope to `connections:write`.
      - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
+
 At the **Install App** section:
   3. Under the Install App to Your Team subsection:
      - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`).
