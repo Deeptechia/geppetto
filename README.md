@@ -88,7 +88,10 @@ Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 ## Tests
 
 In order to run the tests, execute the following command from the root folder:
-`python -m unittest discover tests`
+`python -m unittest`
+
+or `python -m unittest -v` for a verbose more specific output
+
 
 ## About CoinFabrik
 
