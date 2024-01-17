@@ -7,7 +7,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from geppetto.utils.load_bot_responses import load_bot_responses
+from geppetto.utils import load_bot_responses
 from geppetto.slack_handler import SlackHandler
 
 
