@@ -7,7 +7,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
-from geppetto.utils import load_bot_responses
+from geppetto.utils import load_json
 from geppetto.slack_handler import SlackHandler
 
 
@@ -24,7 +24,7 @@ class TestSlack(unittest.TestCase):
         OPENAI_API_KEY = "openai_key"
         DALLE_MODEL = "dall-e-3"
         CHATGPT_MODEL = "gpt-4"
-        BOT_DEFAULT_RESPONSES = load_bot_responses()
+        BOT_DEFAULT_RESPONSES = load_json("default_responses")
 
         cls.slack_handler = SlackHandler(
             {"test_user_id": "Test User"},
