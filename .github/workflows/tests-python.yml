@@ -20,3 +20,6 @@ jobs:
         
       - name: Run Test OpenAI
         run: python ./tests/open_ai.py
+
+      - name: Run Test Slack
+        run: python ./tests/slack.py
