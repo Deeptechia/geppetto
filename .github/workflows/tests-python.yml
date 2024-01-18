@@ -1,3 +1,4 @@
+
 name: Run Script
 
 on:
@@ -23,3 +24,4 @@ jobs:
 
       - name: Run Test Slack
         run: python ./tests/test_slack.py
+
