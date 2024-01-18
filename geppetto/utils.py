@@ -10,7 +10,7 @@ def load_json(json_name):
             logging.info("%s:%s" % (json_name, json_file))
             return json_file
     except FileNotFoundError:
-        logging.error("Allowed users file not found.")
+        logging.error("%s file not found." % json_name)
     except json.JSONDecodeError:
-        logging.error("Error decoding allowed users file.")
+        logging.error("Error decoding %s file." % json_name)
     return {}
