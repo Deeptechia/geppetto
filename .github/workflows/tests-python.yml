@@ -1,5 +1,5 @@
 
-name: Run Script
+name: Test Geppetto
 
 on:
   push:
