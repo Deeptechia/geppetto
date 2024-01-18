@@ -24,7 +24,7 @@ class TestSlack(unittest.TestCase):
         OPENAI_API_KEY = "openai_key"
         DALLE_MODEL = "dall-e-3"
         CHATGPT_MODEL = "gpt-4"
-        BOT_DEFAULT_RESPONSES = load_json("default_responses")
+        BOT_DEFAULT_RESPONSES = load_json("default_responses.json")
 
         cls.slack_handler = SlackHandler(
             {"test_user_id": "Test User"},

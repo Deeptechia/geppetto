@@ -21,8 +21,8 @@ logging.basicConfig(level=logging.INFO)
 
 def main():
     Slack_Handler = SlackHandler(
-        load_json("allowed-slack-ids"),
-        load_json("default_responses"),
+        load_json("allowed-slack-ids.json"),
+        load_json("default_responses.json"),
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
         OPENAI_API_KEY,
