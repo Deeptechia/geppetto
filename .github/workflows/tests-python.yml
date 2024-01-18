@@ -20,9 +20,8 @@ jobs:
         run: pip install -r requirements.txt
         
       - name: Run Test OpenAI
-        run: python ./tests/open_ai.py
+        run: python ./tests/test_open_ai.py
 
       - name: Run Test Slack
-        run: python ./tests/slack.py
-        
- 
+        run: python ./tests/test_slack.py
+

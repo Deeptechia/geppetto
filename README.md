@@ -85,6 +85,14 @@ Follow these steps to deploy Geppetto:
 
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
+## Tests
+
+In order to run the tests, execute the following command from the root folder:
+`python -m unittest`
+
+or `python -m unittest -v` for a verbose more specific output
+
+
 ## About CoinFabrik
 
 [CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, including EVM-based and other platforms like Solana, Algorand, and Polkadot. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, working on code in languages such as Substrate, Solidity, Clarity, Rust, TEAL, and Stellar Soroban.
