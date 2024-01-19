@@ -2,7 +2,7 @@ import logging
 import os
 from slack_bolt import App
 import certifi
-from openai_handler import OpenAIHandler
+from .openai_handler import OpenAIHandler
 
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
