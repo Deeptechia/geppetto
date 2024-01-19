@@ -3,8 +3,7 @@ import logging
 from dotenv import load_dotenv
 from .slack_handler import SlackHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from .utils.load_bot_responses import load_bot_responses
-from .utils.load_allowed_users import load_allowed_users
+from .utils import load_json
 
 load_dotenv(os.path.join("config", ".env"))
 
@@ -22,8 +21,8 @@ logging.basicConfig(level=logging.INFO)
 
 def main():
     Slack_Handler = SlackHandler(
-        load_allowed_users(),
-        load_bot_responses(),
+        load_json("allowed-slack-ids.json"),
+        load_json("default_responses.json"),
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
         OPENAI_API_KEY,
