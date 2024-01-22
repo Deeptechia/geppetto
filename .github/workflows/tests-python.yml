@@ -1,8 +1,7 @@
 
 name: Test Geppetto
 
-on:
-  push:
+on: [ push, pull_request]
 
 jobs:
   Test-Python3:
@@ -17,8 +16,14 @@ jobs:
       - name: Run Python
         run: python --version
       - name: install requirements
-        run: pip install -r requirements.txt
-        
-      - name: Run Tests
         run: |
-          find ./tests -type f -name "*.py" -exec python {} \;
+          pip install -r requirements.txt
+          pip install xmlrunner
+
+      - name: Test with unittest and generate report
+        run: |
+          python -m xmlrunner discover -s tests -o test-reports
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: test-reports
