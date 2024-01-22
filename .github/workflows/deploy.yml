@@ -16,6 +16,7 @@ jobs:
       - name: Install SSH Client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
 
+      
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
@@ -23,9 +24,12 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           touch ~/.ssh/config
           touch ~/.ssh/known_hosts
-          chmod -R 400 ~/.ssh
+          chmod 644 ~/.ssh/config  # Asignar permisos adecuados al archivo config
+          chmod 644 ~/.ssh/known_hosts  # Asignar permisos adecuados al archivo known_hosts
+          chmod 700 ~/.ssh  # Asignar permisos adecuados al directorio .ssh
           ssh-keyscan 34.148.199.154 >> ~/.ssh/known_hosts
-
+      
+      
       - name: Deploy to Server
         run: |
           ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "cd /home/geppetto/geppetto/ && \
