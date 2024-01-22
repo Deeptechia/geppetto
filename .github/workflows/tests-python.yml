@@ -18,12 +18,8 @@ jobs:
       - name: install requirements
         run: |
           pip install -r requirements.txt
-          pip install unittest-xml-reporting
-
-      - name: Test with unittest and generate report
+          
+      - name: Run Test 
         run: |
-          python -m xmlrunner discover -s tests -o test-reports -v
-      - uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: test-reports
+          python -m unittest discover tests -v
+      
