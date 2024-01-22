@@ -22,7 +22,7 @@ jobs:
 
       - name: Test with unittest and generate report
         run: |
-          python -m xmlrunner discover -s tests -o test-reports
+          python -m xmlrunner discover -s tests -o test-reports -v
       - uses: actions/upload-artifact@v2
         with:
           name: test-reports
