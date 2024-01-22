@@ -18,6 +18,7 @@ jobs:
       - name: install requirements
         run: |
           pip install -r requirements.txt
+          pip install unittest
           pip install xmlrunner
 
       - name: Test with unittest and generate report
