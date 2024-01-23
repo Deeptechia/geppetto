@@ -27,7 +27,7 @@ jobs:
           chmod 644 ~/.ssh/config
           chmod 644 ~/.ssh/known_hosts
           chmod 700 ~/.ssh
-          ssh-keyscan 34.148.199.154 >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa 34.148.199.154 >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
         run: |
