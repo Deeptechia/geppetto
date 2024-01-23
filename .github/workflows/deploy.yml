@@ -16,7 +16,7 @@ jobs:
       - name: Install SSH Client
 
         env:
-            PRIVATE_KEY: ${{ secrets.KEY  }}
+            SSH_PRIVATE_KEY: ${{ secrets.KEY  }}
             HOSTNAME : ${{ secrets.HOST  }}
             USER_NAME : ${{ secrets.USERNAME  }}
             
