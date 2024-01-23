@@ -27,7 +27,8 @@ jobs:
           chmod 644 ~/.ssh/config  # Asignar permisos adecuados al archivo config
           chmod 644 ~/.ssh/known_hosts  # Asignar permisos adecuados al archivo known_hosts
           chmod 700 ~/.ssh  # Asignar permisos adecuados al directorio .ssh
-          ssh-keyscan -H 34.148.199.154 >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa 34.148.199.154
+          ssh-keyscan -t rsa 34.148.199.154 >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
         run: |
