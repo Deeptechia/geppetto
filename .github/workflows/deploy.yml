@@ -31,6 +31,4 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -v -i ~/.ssh/id_rsa geppetto@34.148.199.154 "cd /home/geppetto/geppetto/ && \
-            ls -ltr && \
-            pm2 status"
+          ssh -v -i ~/.ssh/id_rsa geppetto@34.148.199.154 "pm2 status"
