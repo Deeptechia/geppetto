@@ -21,7 +21,7 @@ jobs:
             USER_NAME : ${{ secrets.USERNAME  }}
             
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
            cd /home/mrubel/test &&
