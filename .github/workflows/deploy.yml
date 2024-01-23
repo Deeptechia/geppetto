@@ -1,4 +1,4 @@
-name: SSH Command Example
+name: Deploy
 
 on:
   push:
@@ -30,4 +30,6 @@ jobs:
 
       - name: Run SSH Command
         run: |
-          ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "ls"
+          ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "cd /home/geppetto/geppetto/ && \
+            git rev-parse HEAD && \
+            pm2 status"
