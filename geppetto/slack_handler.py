@@ -110,8 +110,8 @@ class SlackHandler:
         logging.info("Received event: %s" % event)
         logging.info("%s: %s" % (user_id, msg))
 
-        # Check if user is allowed
-        if user_id in self.allowed_users.values():
+        # Check if user is allowed or * as wildcard to all users
+        if "*" in self.user.values() or user_id in self.allowed_users.values():
             self.handle_message(msg, channel_id, thread_id)
         else:
             permission_denied_message = self.bot_default_responses["user"][
