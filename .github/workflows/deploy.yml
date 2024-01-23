@@ -32,4 +32,10 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "cd /home/geppetto/geppetto/ && \
             git rev-parse HEAD && \
-            pm2 status"
+            pm2 status && \
+            pm2 stop geppetto && \
+            git pull && \
+            git rev-parse HEAD && \
+            pm2 start geppetto"
+
+            
