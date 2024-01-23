@@ -14,18 +14,21 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install SSH Client
-
-        env:
-            SSH_PRIVATE_KEY: ${{ secrets.KEY  }}
-            HOSTNAME : ${{ secrets.HOST  }}
-            USER_NAME : ${{ secrets.USERNAME  }}
-            
+        run: sudo apt-get update && sudo apt-get install -y openssh-client
+      
+      
+      - name: Configure SSH
         run: |
-          echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          touch ~/.ssh/config
+          touch ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/config
+          chmod 644 ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          ssh-keyscan 34.148.199.154 >> ~/.ssh/known_hosts
 
-           cd /home/mrubel/test &&
-           touch tttt.txt
-
-            '
-            
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa geppetto@34.148.199.154 "ls"
