@@ -24,12 +24,11 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           touch ~/.ssh/config
           touch ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/config  # Asignar permisos adecuados al archivo config
-          chmod 644 ~/.ssh/known_hosts  # Asignar permisos adecuados al archivo known_hosts
-          chmod 700 ~/.ssh  # Asignar permisos adecuados al directorio .ssh
-          ssh-keyscan -t rsa 34.148.199.154
-          ssh-keyscan -t rsa 34.148.199.154 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/config
+          chmod 644 ~/.ssh/known_hosts
+          chmod 700 ~/.ssh
+          ssh-keyscan 34.148.199.154 >> ~/.ssh/known_hosts
 
       - name: Deploy to Server
         run: |
-          ssh -v -i ~/.ssh/id_rsa geppetto@34.148.199.154 "pm2 status"
+          ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "ls"
