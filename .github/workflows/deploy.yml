@@ -9,6 +9,9 @@ jobs:
   ssh-command:
     runs-on: ubuntu-latest
 
+    env:
+      SERVER_IP: ${{ secrets.SERVER_IP }}
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -26,11 +29,11 @@ jobs:
           chmod 644 ~/.ssh/config
           chmod 644 ~/.ssh/known_hosts
           chmod 700 ~/.ssh
-          ssh-keyscan -t rsa 34.148.199.154 >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
 
       - name: Run SSH Command
         run: |
-          ssh -i ~/.ssh/id_rsa geppetto@34.148.199.154 "cd /home/geppetto/geppetto/ && \
+          ssh -i ~/.ssh/id_rsa geppetto@$SERVER_IP "cd /home/geppetto/geppetto/ && \
             git rev-parse HEAD && \
             pm2 status && \
             pm2 stop geppetto && \
