@@ -59,6 +59,25 @@ class TestSlack(unittest.TestCase):
             thread_ts="1",
         )
 
+    def test_random_user_allowed_with_wildcard_permission(self):
+        body = {
+            "event": {
+                "text": "Test message",
+                "channel": "test_channel",
+                "ts": "1",
+                "user": "random_user_id",
+            }
+        }
+
+        self.slack_handler.allowed_users = {"random_users": "*"}
+        self.slack_handler.handle_event(body)
+
+        self.MockApp().client.chat_postMessage.assert_called_with(
+            channel="test_channel",
+            text=":geppetto: ... :thought_balloon: ...",
+            thread_ts="1",
+        )
+
     def test_handle_message(self):
         mock_open_ai_response = "Mock text response"
         self.MockOpenAIHandler().send_message.return_value = mock_open_ai_response
@@ -70,7 +89,10 @@ class TestSlack(unittest.TestCase):
         self.slack_handler.handle_message(message, channel_id, thread_id)
 
         self.assertIn(thread_id, self.slack_handler.thread_messages)
-        self.assertIn({"role": "user", "content": message}, self.slack_handler.thread_messages[thread_id])
+        self.assertIn(
+            {"role": "user", "content": message},
+            self.slack_handler.thread_messages[thread_id],
+        )
         self.assertIn(
             {"role": "assistant", "content": mock_open_ai_response},
             self.slack_handler.thread_messages[thread_id],

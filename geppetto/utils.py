@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+
 def load_json(file_name):
     """Load information from a JSON file."""
     try:
