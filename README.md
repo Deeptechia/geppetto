@@ -1,12 +1,12 @@
 # Geppetto
 
-![License: MIT](https://img.shields.io/badge/license-MIT-green)
+![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
 
 <p align="center">
   <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
 </p>
 
-Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's ChatGPT-4 and DALL-E-3 models. This project is brought to you by [CoinFabrik](https://www.coinfabrik.com), a company specialized in cybersecurity and decentralized technologies. We recommend reading our [blog](https://www.coinfabrik.com/blog/) and following us on [Twitter](https://twitter.com/coinfabrik) and [LinkedIn](https://www.linkedin.com/company/coinfabrik).
+Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's ChatGPT-4 and DALL-E-3 models. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
 
 ## Features
 
@@ -16,6 +16,8 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
 
 2. **Image Generation with DALL-E-3:**
    - The application uses DALL-E-3 to generate an image based on the message.
+
+![Geppetto](/assets/Geppetto.gif)
 
 ## Usage Rules
 
@@ -92,13 +94,18 @@ In order to run the tests, execute the following command from the root folder:
 
 or `python -m unittest -v` for a verbose more specific output
 
+## About DeepTechia
 
-## About CoinFabrik
+We are DeepTechia, where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
-[CoinFabrik](https://www.coinfabrik.com/) is a research and development company specialized in Web3, with a strong background in cybersecurity. Founded in 2014, we have worked on over 250 decentralization projects, including EVM-based and other platforms like Solana, Algorand, and Polkadot. Beyond development, we offer security audits through a dedicated in-house team of senior cybersecurity professionals, working on code in languages such as Substrate, Solidity, Clarity, Rust, TEAL, and Stellar Soroban.
+Born from a passion for cutting-edge technology and a vision for a digitally integrated future, DeepTechia was established to be more than just a tech consultancy. We are visionaries, strategists, and implementers, dedicated to pushing the boundaries of what’s possible while ensuring real-world applicability.
 
-Our team has an academic background in computer science, software engineering, and mathematics, with accomplishments including academic publications, patents turned into products, and conference presentations. We actively research in collaboration with universities worldwide, such as Cornell, UCLA, and École Polytechnique in Paris, and maintain an ongoing collaboration on knowledge transfer and open-source projects with the University of Buenos Aires, Argentina. Our management and people experience team has extensive expertise in the field.
+Over the years, we’ve had the privilege of partnering with over 500 companies from a wide range of industries, guiding them through the intricate maze of digital transformation.
+
+At DeepTechia, we believe in a future where technology enhances every facet of business operations, from efficiency and growth to innovation and customer engagement. Our commitment is unwavering: to provide solutions that are forward-thinking yet grounded, innovative yet practical.
+
+We’re not just your tech consultants; we’re your partners in crafting a digital future that’s bright, secure, and boundless.
 
 ## License
 
-Geppetto is licensed and distributed under the MIT license. [Contact us](https://www.coinfabrik.com/#contact-us) if you're looking for an exception to the terms.
+Geppetto is licensed and distributed under the AGPLv3 license. [Contact us](https://deeptechia.io/contact/) if you're looking for an exception to the terms.
