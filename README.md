@@ -17,6 +17,8 @@ Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates
 2. **Image Generation with DALL-E-3:**
    - The application uses DALL-E-3 to generate an image based on the message.
 
+![Geppetto](/assets/Geppetto.gif)
+
 ## Usage Rules
 
 - **Direct Messages:**
