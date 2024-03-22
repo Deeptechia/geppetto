@@ -1,27 +1,27 @@
 import unittest
+from geppetto.llm_api_handler import LLMHandler
+from geppetto.llm_controller import LLMController
 
-from geppetto.llm_controller import LLMController, WipGenericHandler
+ClientMock = {}
 
 
-class HandlerMock(WipGenericHandler):
+class HandlerMock(LLMHandler):
 
-    def __init__(self, name, model):
-        self.name = name
-        self.model = model
-
-    def get_info(self):
-        return "LLM %s model %s" % (self.name, self.model)
+    def llm_generate_content(self, **args):
+        pass
 
 
 sample_llms_cfg = [
     {
         "name": "First LLM",
         "model": "LLM1",
+        "client": ClientMock,
         "handler": HandlerMock
     },
     {
         "name": "Second LLM",
         "model": "LLM2",
+        "client": ClientMock,
         "handler": HandlerMock
     }
 ]
@@ -69,7 +69,7 @@ class TestController(unittest.TestCase):
     def test_controller_handler_usage(self):
         self.llm_controller.init_controller()
         info = self.llm_controller.handlers["First LLM"].get_info()
-        assert info == "LLM First LLM model LLM1"
+        assert info == "Name: First LLM - Model: LLM1"
 
 
 if __name__ == "__main__":

@@ -1,20 +1,12 @@
 from typing import List, Type, TypedDict
-
-# wip
-# from handlers import GenericHandler
-
-
-class WipGenericHandler:
-    """
-    WIP
-    """
-    pass
+from .llm_api_handler import LLMHandler
 
 
 class LLMCfgRec(TypedDict):
     name: str
     model: str
-    handler: Type[WipGenericHandler]
+    client: object
+    handler: Type[LLMHandler]
 
 
 LLMCfgs = List[LLMCfgRec]

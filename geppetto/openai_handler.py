@@ -21,10 +21,12 @@ class OpenAIHandler(LLMHandler):
         self,
         bot_default_responses,
     ):
-
-        self.client = OpenAI(api_key=OPENAI_API_KEY)
+        super().__init__(
+            'OpenAI',
+            CHATGPT_MODEL,
+            OpenAI(api_key=OPENAI_API_KEY)
+        )
         self.dalle_model = DALLE_MODEL
-        self.chatgpt_model = CHATGPT_MODEL
         self.bot_default_responses = bot_default_responses
 
     def get_functionalities(self):
@@ -98,7 +100,7 @@ class OpenAIHandler(LLMHandler):
             *user_prompt,
         ]
         response = self.client.chat.completions.create(
-            model=self.chatgpt_model,
+            model=self.model,
             messages=messages,
             tools=tools,
             tool_choice="auto",
