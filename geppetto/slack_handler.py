@@ -13,13 +13,12 @@ class SlackHandler:
 
     def __init__(
         self,
-        NAME,
         allowed_users,
         bot_default_responses,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
     ):
-        self.name = NAME
+        self.name = 'Geppetto Slack handler'
         self.llm_handler = OpenAIHandler(  # WIP: Place Holder instance with openai, it should use the llm switcher
             bot_default_responses,
         )

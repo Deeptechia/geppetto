@@ -22,15 +22,16 @@ def OF(**kw):
     return instance
 
 
+def callback_mock():
+    pass
+
+
 class TestOpenAI(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.patcher = patch("geppetto.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
         cls.openai_handler = OpenAIHandler(
-            "openai_api_key",
-            "dall-e-3",
-            "gpt-4",
             {"features": {"personality": "_"}},
         )
 
@@ -48,7 +49,7 @@ class TestOpenAI(unittest.TestCase):
         self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
-        response = self.openai_handler.send_message(user_prompt, None, None)
+        response = self.openai_handler.llm_generate_content(user_prompt, callback_mock, None)
         self.assertEqual(response, "Mocked ChatGPT Response")
 
     def my_callback(self, result):
@@ -80,7 +81,7 @@ class TestOpenAI(unittest.TestCase):
 
         callback = self.my_callback
 
-        response = self.openai_handler.send_message(user_prompt, callback, None)
+        response = self.openai_handler.llm_generate_content(user_prompt, callback, None)
 
         # Assuming download_image returns bytes
         self.assertIsInstance(response, bytes)

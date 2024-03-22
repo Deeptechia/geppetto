@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from typing import Callable
 
 class LLMHandler(ABC):
     def __init__(self, name, models_dict, client):
@@ -11,7 +11,7 @@ class LLMHandler(ABC):
         return "Name:\t{name}\nModel:\t{model}\nClient\t{client}"
 
     @abstractmethod
-    def llm_generate_content(self, prompt: str):
+    def llm_generate_content(self, prompt: str, callback: Callable, *callback_args):
         pass
 
     @abstractmethod

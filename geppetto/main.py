@@ -20,7 +20,6 @@ logging.basicConfig(level=logging.INFO)
 
 def main():
     Slack_Handler = SlackHandler(  # WIP: Place Holder Instance with openai credentials
-        "openai",
         load_json("allowed-slack-ids.json"),
         load_json("default_responses.json"),
         SLACK_BOT_TOKEN,
