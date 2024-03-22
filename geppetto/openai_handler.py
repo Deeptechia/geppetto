@@ -4,15 +4,27 @@ from openai import OpenAI
 from PIL import Image
 from urllib.request import urlopen
 import logging
+from .llm_api_handler import LLMHandler
+from dotenv import load_dotenv
+import os
+
+load_dotenv(os.path.join("config", ".env"))
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DALLE_MODEL = os.getenv("DALLE_MODEL")
+CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
 
 
-class OpenAIHandler:
+class OpenAIHandler(LLMHandler):
+
     def __init__(
-        self, openai_api_key, dalle_model, chatgpt_model, bot_default_responses
+        self,
+        bot_default_responses,
     ):
-        self.client = OpenAI(api_key=openai_api_key)
-        self.dalle_model = dalle_model
-        self.chatgpt_model = chatgpt_model
+
+        self.client = OpenAI(api_key=OPENAI_API_KEY)
+        self.dalle_model = DALLE_MODEL
+        self.chatgpt_model = CHATGPT_MODEL
         self.bot_default_responses = bot_default_responses
 
     def get_functionalities(self):
@@ -44,7 +56,7 @@ class OpenAIHandler:
         except Exception as e:
             logging.error(f"Error generating image: {e}")
 
-    def send_message(self, user_prompt, callback, *callback_args):
+    def llm_generate_content(self, user_prompt, callback, *callback_args):
         logging.info("Sending msg to chatgpt: %s" % (user_prompt))
         tools = [
             {
@@ -108,3 +120,9 @@ class OpenAIHandler:
             return response
         else:
             return response.choices[0].message.content
+
+    def thread_history_append(self, thread_history: dict, msg: str, role: str):
+        thread_history.append({"role": role, "content": msg})
+
+    def is_image_data(self, response_from_llm_api):
+        return isinstance(response_from_llm_api, bytes)

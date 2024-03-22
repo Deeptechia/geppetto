@@ -17,12 +17,10 @@ class SlackHandler:
         bot_default_responses,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
-        OPENAI_API_KEY,
-        DALLE_MODEL,
-        CHATGPT_MODEL,
     ):
-        self.openai = OpenAIHandler(
-            OPENAI_API_KEY, DALLE_MODEL, CHATGPT_MODEL, bot_default_responses
+        self.name = 'Geppetto Slack handler'
+        self.llm_handler = OpenAIHandler(  # WIP: Place Holder instance with openai, it should use the llm switcher
+            bot_default_responses,
         )
         self.app = App(signing_secret=SIGNING_SECRET, token=SLACK_BOT_TOKEN)
         self.allowed_users = allowed_users
@@ -46,7 +44,7 @@ class SlackHandler:
             thread_id,
         )
         thread_history = self.thread_messages.get(thread_id, [])
-        thread_history.append({"role": "user", "content": msg})
+        self.llm_handler.thread_history_append(thread_history, msg, "user")
 
         response = self.app.client.chat_postMessage(
             channel=channel_id,
@@ -60,29 +58,35 @@ class SlackHandler:
         else:
             logging.error("Failed to post the message.")
 
-        response_from_chatgpt = self.openai.send_message(
-            thread_history, self.send_preparing_image_message, channel_id, thread_id
+        response_from_llm_api = self.llm_handler.llm_generate_content(
+            thread_history,
+            self.send_preparing_image_message,
+            channel_id,
+            thread_id,  # ISSUE: Has the callback args necessary for openai's tool calls, it is not agnostic
         )
-        if isinstance(response_from_chatgpt, str):
-            thread_history.append(
-                {"role": "assistant", "content": response_from_chatgpt}
+        if isinstance(response_from_llm_api, str):
+            self.llm_handler.thread_history_append(
+                thread_history, response_from_llm_api, "assistant"
             )
+
         self.thread_messages[thread_id] = thread_history
 
         try:
-            if isinstance(response_from_chatgpt, bytes):
+            if self.llm_handler.is_image_data():
                 self.app.client.files_upload_v2(
                     channel=channel_id,
                     thread_ts=thread_id,
-                    username="Dall-E",
-                    content=response_from_chatgpt,
+                    username="image_generator",
+                    content=response_from_llm_api,
                     title="Image",
-                )
+                )  # TODO: images from other apis might not use bytes as datatype
             else:
-                logging.info("response from chatgpt: %s" % response_from_chatgpt)
+                logging.info(
+                    "response from %s: %s" % (self.name, response_from_llm_api)
+                )
                 self.app.client.chat_update(
                     channel=channel_id,
-                    text=response_from_chatgpt,
+                    text=response_from_llm_api,
                     thread_ts=thread_id,
                     ts=timestamp,
                 )
@@ -90,12 +94,12 @@ class SlackHandler:
             logging.error("Error posting message: %s", e)
 
     def send_preparing_image_message(self, channel_id, thread_id):
-        dalle_message = self.bot_default_responses["dalle"]["preparing_image"]
+        dalle_message = self.bot_default_responses["image_generator"]["preparing_image"]
         logging.info("Sending dalle default message: %s" % dalle_message)
 
         self.app.client.chat_postMessage(
             channel=channel_id,
-            username="Dall-E",
+            username="image_generator",
             text=dalle_message,
             thread_ts=thread_id,
         )
