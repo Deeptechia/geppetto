@@ -1,12 +1,11 @@
-from typing import List, Type, TypedDict
+from typing import List, Type, TypedDict, Dict
 from .llm_api_handler import LLMHandler
 
 
 class LLMCfgRec(TypedDict):
     name: str
-    model: str
-    client: object
     handler: Type[LLMHandler]
+    handler_args: Dict
 
 
 LLMCfgs = List[LLMCfgRec]
@@ -34,6 +33,4 @@ class LLMController:
 
     def get_handler(self, name):
         llm_cfg = self.get_llm_cfg(name)
-        args = dict(llm_cfg)
-        handler = args.pop('handler')
-        return handler(**args)
+        return llm_cfg['handler'](**llm_cfg['handler_args'])

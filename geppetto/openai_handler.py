@@ -19,7 +19,7 @@ class OpenAIHandler(LLMHandler):
 
     def __init__(
         self,
-        bot_default_responses,
+        personality,
     ):
         super().__init__(
             'OpenAI',
@@ -27,7 +27,7 @@ class OpenAIHandler(LLMHandler):
             OpenAI(api_key=OPENAI_API_KEY)
         )
         self.dalle_model = DALLE_MODEL
-        self.bot_default_responses = bot_default_responses
+        self.personality = personality
 
     def get_functionalities(self):
         return json.dumps(
@@ -95,7 +95,7 @@ class OpenAIHandler(LLMHandler):
         messages = [
             {
                 "role": "system",
-                "content": self.bot_default_responses["features"]["personality"],
+                "content": self.personality,
             },
             *user_prompt,
         ]

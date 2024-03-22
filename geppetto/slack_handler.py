@@ -2,10 +2,12 @@ import logging
 import os
 from slack_bolt import App
 import certifi
-from .openai_handler import OpenAIHandler
 
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
+
+# wip: TBD switcher
+SLACK_DEFAULT_LLM = "OpenAI"
 
 
 class SlackHandler:
@@ -17,11 +19,10 @@ class SlackHandler:
         bot_default_responses,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
+        llm_controller
     ):
         self.name = 'Geppetto Slack handler'
-        self.llm_handler = OpenAIHandler(  # WIP: Place Holder instance with openai, it should use the llm switcher
-            bot_default_responses,
-        )
+        self.llm_ctrl = llm_controller.handlers
         self.app = App(signing_secret=SIGNING_SECRET, token=SLACK_BOT_TOKEN)
         self.allowed_users = allowed_users
         self.bot_default_responses = bot_default_responses
@@ -44,7 +45,7 @@ class SlackHandler:
             thread_id,
         )
         thread_history = self.thread_messages.get(thread_id, [])
-        self.llm_handler.thread_history_append(thread_history, msg, "user")
+        self.llm_ctrl[SLACK_DEFAULT_LLM].thread_history_append(thread_history, msg, "user")
 
         response = self.app.client.chat_postMessage(
             channel=channel_id,
@@ -58,21 +59,21 @@ class SlackHandler:
         else:
             logging.error("Failed to post the message.")
 
-        response_from_llm_api = self.llm_handler.llm_generate_content(
+        response_from_llm_api = self.llm_ctrl[SLACK_DEFAULT_LLM].llm_generate_content(
             thread_history,
             self.send_preparing_image_message,
             channel_id,
             thread_id,  # ISSUE: Has the callback args necessary for openai's tool calls, it is not agnostic
         )
         if isinstance(response_from_llm_api, str):
-            self.llm_handler.thread_history_append(
+            self.llm_ctrl[SLACK_DEFAULT_LLM].thread_history_append(
                 thread_history, response_from_llm_api, "assistant"
             )
 
         self.thread_messages[thread_id] = thread_history
 
         try:
-            if self.llm_handler.is_image_data():
+            if self.llm_ctrl[SLACK_DEFAULT_LLM].is_image_data():
                 self.app.client.files_upload_v2(
                     channel=channel_id,
                     thread_ts=thread_id,

@@ -14,9 +14,10 @@ from geppetto.slack_handler import SlackHandler
 class TestSlack(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.patcher1 = patch("geppetto.slack_handler.OpenAIHandler")
+        # cls.patcher1 = patch("geppetto.slack_handler.OpenAIHandler")
         cls.patcher2 = patch("geppetto.slack_handler.App")
-        cls.MockOpenAIHandler = cls.patcher1.start()
+        cls.controller_patcher = patch("geppetto.llm_controller.LLMController")
+        # cls.MockOpenAIHandler = cls.patcher1.start()
         cls.MockApp = cls.patcher2.start()
 
         SLACK_BOT_TOKEN = "slack_bot_token"
@@ -27,12 +28,13 @@ class TestSlack(unittest.TestCase):
             {"test_user_id": "Test User"},
             BOT_DEFAULT_RESPONSES,
             SLACK_BOT_TOKEN,
-            SIGNING_SECRET
+            SIGNING_SECRET,
+            cls.controller_patcher.start()
         )
 
     @classmethod
     def tearDownClass(cls):
-        cls.patcher1.stop()
+        # cls.patcher1.stop()
         cls.patcher2.stop()
 
     def test_permission_check(self):
