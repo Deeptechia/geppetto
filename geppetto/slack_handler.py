@@ -73,7 +73,7 @@ class SlackHandler:
         self.thread_messages[thread_id] = thread_history
 
         try:
-            if self.llm_ctrl[SLACK_DEFAULT_LLM].is_image_data():
+            if self.llm_ctrl[SLACK_DEFAULT_LLM].is_image_data(response_from_llm_api):
                 self.app.client.files_upload_v2(
                     channel=channel_id,
                     thread_ts=thread_id,
