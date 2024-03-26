@@ -3,12 +3,17 @@ import os
 from slack_bolt import App
 import certifi
 
+from geppetto.utils import is_image_data
+
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # wip: TBD switcher
-SLACK_DEFAULT_LLM = "OpenAI"
+DEFAULT_LLM = "OpenAI"
 
+# UI roles
+USER = "slack_user"
+ASSISTANT = "geppetto"
 
 class SlackHandler:
     thread_messages = {}
@@ -45,12 +50,12 @@ class SlackHandler:
             thread_id,
         )
         thread_history = self.thread_messages.get(thread_id, [])
-        self.llm_ctrl[SLACK_DEFAULT_LLM].thread_history_append(thread_history, msg, "user")
+        thread_history.append({"role": USER, "content": msg})
 
-        response = self.app.client.chat_postMessage(
-            channel=channel_id,
-            text=":geppetto: ... :thought_balloon: ...",
-            thread_ts=thread_id,
+        response = self.send_message(
+            channel_id,
+            thread_id,
+            ":geppetto: :thought_balloon: ..."
         )
 
         if response["ok"]:
@@ -59,25 +64,23 @@ class SlackHandler:
         else:
             logging.error("Failed to post the message.")
 
-        response_from_llm_api = self.llm_ctrl[SLACK_DEFAULT_LLM].llm_generate_content(
-            thread_history,
-            self.send_preparing_image_message,
+        prompt = self.llm_ctrl[DEFAULT_LLM].get_prompt_from_thread(thread_history, ASSISTANT, USER)
+        response_from_llm_api = self.llm_ctrl[DEFAULT_LLM].llm_generate_content(
+            prompt,
+            self.send_message,
             channel_id,
-            thread_id,  # ISSUE: Has the callback args necessary for openai's tool calls, it is not agnostic
+            thread_id,
         )
         if isinstance(response_from_llm_api, str):
-            self.llm_ctrl[SLACK_DEFAULT_LLM].thread_history_append(
-                thread_history, response_from_llm_api, "assistant"
-            )
+            thread_history.append({"role": ASSISTANT, "content": response_from_llm_api})
 
         self.thread_messages[thread_id] = thread_history
 
         try:
-            if self.llm_ctrl[SLACK_DEFAULT_LLM].is_image_data(response_from_llm_api):
+            if is_image_data(response_from_llm_api):
                 self.app.client.files_upload_v2(
                     channel=channel_id,
                     thread_ts=thread_id,
-                    username="image_generator",
                     content=response_from_llm_api,
                     title="Image",
                 )  # TODO: images from other apis might not use bytes as datatype
@@ -93,17 +96,6 @@ class SlackHandler:
                 )
         except Exception as e:
             logging.error("Error posting message: %s", e)
-
-    def send_preparing_image_message(self, channel_id, thread_id):
-        dalle_message = self.bot_default_responses["image_generator"]["preparing_image"]
-        logging.info("Sending dalle default message: %s" % dalle_message)
-
-        self.app.client.chat_postMessage(
-            channel=channel_id,
-            username="image_generator",
-            text=dalle_message,
-            thread_ts=thread_id,
-        )
 
     def handle_event(self, body):
         event = body["event"]
@@ -122,12 +114,19 @@ class SlackHandler:
             permission_denied_message = self.bot_default_responses["user"][
                 "permission_denied"
             ]
-            logging.info(
-                "Sending permission denied default message: %s"
-                % permission_denied_message
-            )
-            self.app.client.chat_postMessage(
-                channel=channel_id,
-                text=permission_denied_message,
-                thread_ts=thread_id,
-            )
+            self.send_message(channel_id,
+                              thread_id,
+                              permission_denied_message,
+                              "permission_denied")
+
+    def send_message(self, channel_id, thread_id, message, tag="general"):
+        logging.info(
+            "Sending %s message: %s"
+            % (tag, message)
+        )
+        return self.app.client.chat_postMessage(
+            channel=channel_id,
+            text=message,
+            thread_ts=thread_id,
+            mrkdwn=True
+        )

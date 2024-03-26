@@ -15,3 +15,7 @@ def load_json(file_name):
     except json.JSONDecodeError:
         logging.error("Error decoding %s file." % file_name)
     return {}
+
+
+def is_image_data(data):
+    return isinstance(data, bytes)

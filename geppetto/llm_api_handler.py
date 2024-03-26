@@ -14,9 +14,3 @@ class LLMHandler(ABC):
     @abstractmethod
     def llm_generate_content(self, prompt: str, callback: Callable, *callback_args):
         pass
-
-    def thread_history_append(self, thread_history: dict, msg: str, role: str):
-        pass
-
-    def is_image_data(self, response_from_llm_api):
-        pass

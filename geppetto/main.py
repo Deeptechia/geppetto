@@ -37,7 +37,7 @@ def initialized_llm_controller():
 
 
 def main():
-    Slack_Handler = SlackHandler(  # WIP: Place Holder Instance with openai credentials
+    Slack_Handler = SlackHandler(
         load_json("allowed-slack-ids.json"),
         DEFAULT_RESPONSES,
         SLACK_BOT_TOKEN,
