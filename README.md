@@ -87,6 +87,13 @@ Follow these steps to deploy Geppetto:
 
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
+## Docker
+To run geppetto in a docker container, when you have Docker & Docker compose installed:
+1. Move docker-compose.example.yml to docker-compose.yml with customizing where your config folder resides
+2. Change the config values in config/.env
+3. Run docker compose build
+4. Run docker compose up -d
+
 ## Tests
 
 In order to run the tests, execute the following command from the root folder:
