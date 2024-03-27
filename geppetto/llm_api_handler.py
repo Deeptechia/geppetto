@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Callable, List, Dict
 
 
 class LLMHandler(ABC):
@@ -13,4 +13,8 @@ class LLMHandler(ABC):
 
     @abstractmethod
     def llm_generate_content(self, prompt: str, callback: Callable, *callback_args):
+        pass
+
+    @abstractmethod
+    def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
         pass

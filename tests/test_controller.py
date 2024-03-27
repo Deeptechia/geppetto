@@ -17,6 +17,9 @@ class HandlerMockA(LLMHandler):
     def llm_generate_content(self, **args):
         pass
 
+    def get_prompt_from_thread(self, **args):
+        pass
+
 
 class HandlerMockB(LLMHandler):
 
@@ -29,6 +32,9 @@ class HandlerMockB(LLMHandler):
         )
 
     def llm_generate_content(self, **args):
+        pass
+
+    def get_prompt_from_thread(self, **args):
         pass
 
 

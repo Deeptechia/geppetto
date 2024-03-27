@@ -91,11 +91,11 @@ class TestSlack(unittest.TestCase):
         self.assertIn(thread_id, self.slack_handler.thread_messages)
         self.assertIn(
             {"role": "slack_user", "content": message},
-            self.slack_handler.thread_messages[thread_id],
+            self.slack_handler.thread_messages[thread_id]["msgs"],
         )
         self.assertIn(
             {"role": "geppetto", "content": mock_open_ai_response},
-            self.slack_handler.thread_messages[thread_id],
+            self.slack_handler.thread_messages[thread_id]["msgs"],
         )
 
         self.MockApp().client.chat_postMessage.assert_called_with(
