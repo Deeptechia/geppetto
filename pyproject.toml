@@ -33,6 +33,8 @@ python-dotenv = "^1.0.0"
 slack-bolt = "^1.18.1"
 slack-sdk = "^3.26.1"
 Pillow = "^10.1.0"
+google-generativeai = { version = "*", python = ">=3.9,<4.0" }
+IPython = "^8.0.0"
 
 [tool.poetry.scripts]
 geppetto = "geppetto.main:main"
