@@ -3,7 +3,8 @@ import sys
 import unittest
 from unittest.mock import patch, ANY
 
-from geppetto.main import initialized_llm_controller
+from geppetto.llm_controller import LLMController
+from tests.test_open_ai import TEST_PERSONALITY
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
@@ -15,11 +16,10 @@ from geppetto.slack_handler import SlackHandler
 
 class TestSlack(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUp(cls):
         cls.patcher1 = patch("geppetto.main.OpenAIHandler")
         cls.MockOpenAIHandler = cls.patcher1.start()
         cls.patcher2 = patch("geppetto.slack_handler.App")
-
         cls.MockApp = cls.patcher2.start()
 
         SLACK_BOT_TOKEN = "slack_bot_token"
@@ -31,12 +31,12 @@ class TestSlack(unittest.TestCase):
             BOT_DEFAULT_RESPONSES,
             SLACK_BOT_TOKEN,
             SIGNING_SECRET,
-            initialized_llm_controller()
+            initialized_test_llm_controller(cls.MockOpenAIHandler)
         )
 
     @classmethod
-    def tearDownClass(cls):
-        # cls.patcher1.stop()
+    def tearDown(cls):
+        cls.patcher1.stop()
         cls.patcher2.stop()
 
     def test_permission_check(self):
@@ -136,6 +136,61 @@ class TestSlack(unittest.TestCase):
             title="Image",
         )
 
+    def test_select_llm_from_msg(self):
+        message_a = "#llma Test message"
+        message_b = "Test #llmb# message"
+        message_c = "Test message #llmc?"
+        message_default_empty = "Test message"
+        message_default_many = "#llmc Test #llmb message #llma"
+        message_default_wrong = "Test message #zeta"
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+            message_a), "LlmA")
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+                    message_b), "LLMb")
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+                    message_c), "LLMC")
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+                    message_default_empty), "LlmA")
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+                            message_default_many), "LlmA")
+
+        self.assertEqual(self.slack_handler.select_llm_from_msg(
+                            message_default_wrong), "LlmA")
+
+
+def initialized_test_llm_controller(mocked_handler):
+    controller = LLMController(
+        [
+            {
+                "name": "LlmA",
+                "handler": mocked_handler,
+                "handler_args": {
+                    "personality": TEST_PERSONALITY
+                }
+            },
+            {
+                "name": "LLMb",
+                "handler": mocked_handler,
+                "handler_args": {
+                    "personality": TEST_PERSONALITY
+                }
+            },
+            {
+                "name": "LLMC",
+                "handler": mocked_handler,
+                "handler_args": {
+                    "personality": TEST_PERSONALITY
+                }
+            }
+        ]
+    )
+    controller.init_controller()
+    return controller
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,7 +14,6 @@ USER = "slack_user"
 ASSISTANT = "geppetto"
 
 class SlackHandler:
-    thread_messages = {}
 
     def __init__(
         self,
@@ -30,6 +29,7 @@ class SlackHandler:
         self.app = App(signing_secret=SIGNING_SECRET, token=SLACK_BOT_TOKEN)
         self.allowed_users = allowed_users
         self.bot_default_responses = bot_default_responses
+        self.thread_messages = {}
 
         # Direct Message Event
         @self.app.event("message")
