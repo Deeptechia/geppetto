@@ -1,7 +1,11 @@
 
 name: Test Geppetto
 
-on: [ push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - develop
 
 jobs:
   Test-Python3:
