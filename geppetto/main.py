@@ -25,16 +25,26 @@ logging.basicConfig(level=logging.INFO)
 
 def initialized_llm_controller():
     controller = LLMController(
-        [{
-            "name": "Gemini",
-            "handler": GeminiHandler,
-            "handler_args": {
-                "personality": DEFAULT_RESPONSES["features"]["personality"]
+        [
+            {
+                "name": "OpenAI",
+                "handler": OpenAIHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
+            },
+            {
+                "name": "Gemini",
+                "handler": GeminiHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
             }
-        }]
+        ]
     )
     controller.init_controller()
     return controller
+
 
 
 def main():

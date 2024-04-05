@@ -25,6 +25,10 @@ ROLE_FIELD = "role"
 MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 
+def to_markdown(text):
+    text = text.replace('•', '  *')
+    return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+
 class GeminiHandler(LLMHandler):
 
     def __init__(
@@ -42,35 +46,17 @@ class GeminiHandler(LLMHandler):
         self.user_role = "user"
         genai.configure(api_key=GOOGLE_API_KEY)
 
-    @staticmethod
-    def download_image(url):
-        pass
-
-    @staticmethod
-    def get_functionalities():
-        pass
-
-    def generate_image(self, prompt, size="1024x1024"): 
-        pass
-
     def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
         logging.info("Sending msg to gemini: %s" % user_prompt)
         response= self.client.generate_content(user_prompt)
-        return str(response.text)
-
+        markdown_response = to_markdown(response.text)
+        return str(markdown_response.data)
+    
     def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
-        prompt = []
-        for msg in thread:
-            formatted_msg = dict(msg)
-            if ROLE_FIELD in formatted_msg:
-                formatted_msg[ROLE_FIELD] = formatted_msg[ROLE_FIELD].replace(assistant_tag, self.assistant_role)
-                formatted_msg[ROLE_FIELD] = formatted_msg[ROLE_FIELD].replace(user_tag, self.user_role)
-                prompt.append(formatted_msg)
-            else:
-                raise InvalidThreadFormatError("The input thread doesn't have the field %s" % ROLE_FIELD)
-            
-            if MSG_INPUT_FIELD in formatted_msg:
-                formatted_msg[MSG_FIELD] = [formatted_msg.pop(MSG_INPUT_FIELD)]
+        prompt = super().get_prompt_from_thread(thread, assistant_tag, user_tag)
+        for msg in prompt:
+            if MSG_INPUT_FIELD in msg:
+                msg[MSG_FIELD] = [msg.pop(MSG_INPUT_FIELD)]
             else:
                 raise InvalidThreadFormatError("The input thread doesn't have the field %s" % MSG_INPUT_FIELD)
         return prompt
