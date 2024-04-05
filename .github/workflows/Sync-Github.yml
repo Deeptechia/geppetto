@@ -1,8 +1,7 @@
 name: GitlabSync
 
 on:
-  - push
-  - delete
+  push:
     branches:
       - main
 
