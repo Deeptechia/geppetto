@@ -50,14 +50,15 @@ class SlackHandler:
         )
 
         thread_history = self.thread_messages.get(thread_id, {"llm": "", "msgs": []})
-        selected_llm = self.select_llm_from_msg(msg)
+        selected_llm = self.select_llm_from_msg(msg, thread_history["llm"])
         if thread_history["llm"] == "":
             thread_history["llm"] = selected_llm
+        current_usr_msg = {"role": USER, "content": msg}
         if thread_history["llm"] == selected_llm:
-            thread_history["msgs"].append({"role": USER, "content": msg})
+            thread_history["msgs"].append(current_usr_msg)
         else:
             thread_history["llm"] = selected_llm
-            thread_history["msgs"] = [thread_history["msgs"][0]]
+            thread_history["msgs"] = [thread_history["msgs"][0], current_usr_msg]
 
         response = self.send_message(
             channel_id,
@@ -138,7 +139,7 @@ class SlackHandler:
             mrkdwn=True
         )
 
-    def select_llm_from_msg(self, message):
+    def select_llm_from_msg(self, message, last_llm=''):
         mentions = re.findall(r'\#[^\ ]*', message)
         clean_mentions = [re.sub(r'[\#\!\?\,\;\.]', "", mention) for mention in mentions]
         hashtags = lower_string_list(clean_mentions)
@@ -147,6 +148,8 @@ class SlackHandler:
         check_list = list(set(controlled_llms_l) & set(hashtags))
         if len(check_list) == 1:
             return controlled_llms[controlled_llms_l.index(check_list[0])]
-        # default first LLM
-        return controlled_llms[0]
-
+        elif len(check_list) == 0 and last_llm != '':
+            return last_llm
+        else:
+            # default first LLM
+            return controlled_llms[0]

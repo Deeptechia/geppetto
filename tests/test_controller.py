@@ -38,6 +38,23 @@ class HandlerMockB(LLMHandler):
         pass
 
 
+class HandlerMockC(LLMHandler):
+
+    def __init__(self, some_arg):
+        self.some_arg = some_arg
+        super().__init__(
+            "Third LLM",
+            "LLM3",
+            ClientMock
+        )
+
+    def llm_generate_content(self, **args):
+        pass
+
+    def get_prompt_from_thread(self, **args):
+        pass
+
+
 sample_llms_cfg = [
     {
         "name": "First LLM",
