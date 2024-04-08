@@ -240,6 +240,86 @@ class TestSlack(unittest.TestCase):
             1
         )
 
+    def test_handle_message_switch_different_thread(self):
+        channel_id = "test_channel"
+
+        thread_id_i = "test_thread_id_i"
+        thread_id_ii = "test_thread_id_ii"
+        non_labeled_msg = "Second message"
+        user_msg_generic = {"role": "slack_user", "content": non_labeled_msg}
+
+        # --- LLM B on thread I ---
+        self.MockLLMHandlerB().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        message_b = "Test message #llmb"
+        self.slack_handler.handle_message(message_b, channel_id, thread_id_i)
+        user_msg_b = {"role": "slack_user", "content": message_b}
+        geppetto_msg_b = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE}
+
+        # --- LLM C on thread II ---
+        self.MockLLMHandlerC().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        message_c = "Test message #llmc"
+        self.slack_handler.handle_message(message_c, channel_id, thread_id_ii)
+        user_msg_c = {"role": "slack_user", "content": message_c}
+        geppetto_msg_c = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE}
+
+        # --- Return to LLM B on thread I ---
+        # check
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b),
+            1
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(geppetto_msg_b),
+            1
+        )
+        # Continue conversation with LLM B without label
+        for _ in range(3):
+            self.slack_handler.handle_message(non_labeled_msg, channel_id, thread_id_i)
+
+        # --- Return to LLM C on thread II ---
+        # check
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c),
+            1
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(geppetto_msg_c),
+            1
+        )
+        # Continue conversation with LLM C without label
+        for _ in range(9):
+            self.slack_handler.handle_message(non_labeled_msg, channel_id, thread_id_ii)
+
+        # --- Return to LLM B on thread I ---
+        # check
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b),
+            1
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_generic),
+            3
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(geppetto_msg_b),
+            4
+        )
+
+        # --- Return to LLM C on thread II ---
+        # check
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c),
+            1
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_generic),
+            9
+        )
+        self.assertEqual(
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(geppetto_msg_c),
+            10
+        )
+
     def test_handle_image(self):
         channel_id = "test_channel"
         thread_id = "test_thread_id"
