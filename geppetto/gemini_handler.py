@@ -17,7 +17,7 @@ from IPython.display import Markdown
 load_dotenv(os.path.join("config", ".env"))
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GEMINI_MODEL=os.getenv("GEMINI_MODEL")
+GEMINI_MODEL=os.getenv("GEMINI_MODEL", "gemini-pro")
 MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 
