@@ -22,6 +22,7 @@ class TestGemini(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.patcher = patch("geppetto.gemini_handler.genai")
+        GEMINI_MODEL = "gemini-pro"
         cls.mock_genai = cls.patcher.start()
         cls.gemini_handler = GeminiHandler(personality="Your AI personality")
 
