@@ -25,6 +25,7 @@ class SlackHandler:
         bot_default_responses,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
+        GEMINI_MODEL,
         llm_controller
     ):
         self.name = 'Geppetto Slack handler'
