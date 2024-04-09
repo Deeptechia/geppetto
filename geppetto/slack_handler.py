@@ -9,8 +9,8 @@ from geppetto.utils import is_image_data
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # wip: TBD switcher
-# DEFAULT_LLM = "OpenAI"
-DEFAULT_LLM = "Gemini"
+DEFAULT_LLM = "OpenAI"
+# DEFAULT_LLM = "Gemini"
 
 # UI roles
 USER = "slack_user"

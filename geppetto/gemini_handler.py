@@ -9,8 +9,6 @@ from .llm_api_handler import LLMHandler
 from dotenv import load_dotenv
 from typing import List, Dict
 import os
-
-import pathlib
 import textwrap
 import google.generativeai as genai
 from IPython.display import display
@@ -19,9 +17,7 @@ from IPython.display import Markdown
 load_dotenv(os.path.join("config", ".env"))
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-GEMINI_IMG_FUNCTION = "generate_image"
 GEMINI_MODEL=os.getenv("GEMINI_MODEL")
-ROLE_FIELD = "role"
 MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 

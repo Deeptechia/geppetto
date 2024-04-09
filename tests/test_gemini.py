@@ -7,6 +7,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
+from geppetto.exceptions import InvalidThreadFormatError
 from geppetto.gemini_handler import GeminiHandler
 
 def OF(**kw):
@@ -45,10 +46,32 @@ class TestGemini(unittest.TestCase):
         mock_to_markdown.assert_called_once_with("Mocked Gemini response")
 
     def test_get_prompt_from_thread(self):
-        thread = [{"role": "assistant", "content": "Message 1"}, {"role": "user", "content": "Message 2"}]
-        self.gemini_handler.get_prompt_from_thread(thread, assistant_tag="assistant", user_tag="user")
+        thread = [
+            {"role": "slack_user", "content": "Message 1"},
+            {"role": "geppetto", "content": "Message 2"}
+        ]
+    
+        ROLE_FIELD = "role"
+        MSG_FIELD = "parts"
 
-        self.gemini_handler.get_prompt_from_thread(thread, assistant_tag="assistant", user_tag="user")
+        prompt = self.gemini_handler.get_prompt_from_thread(
+            thread, assistant_tag="geppetto", user_tag="slack_user"
+        )
+    
+        self.assertIsInstance(prompt, list)
+    
+        for msg in prompt:
+            self.assertIsInstance(msg, dict)
+            self.assertIn(ROLE_FIELD, msg)
+            self.assertIn(MSG_FIELD, msg)
+            self.assertIsInstance(msg[MSG_FIELD], list)
+            self.assertTrue(msg[MSG_FIELD])
+
+        with self.assertRaises(InvalidThreadFormatError):
+            incomplete_thread = [{"role": "geppetto"}]
+            self.gemini_handler.get_prompt_from_thread(
+                incomplete_thread, assistant_tag="geppetto", user_tag="slack_user"
+            )
 
 if __name__ == "__main__":
     unittest.main()

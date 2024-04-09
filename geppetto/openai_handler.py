@@ -134,7 +134,3 @@ class OpenAIHandler(LLMHandler):
             return response
         else:
             return response.choices[0].message.content
-
-    def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
-        prompt = super().get_prompt_from_thread(thread, assistant_tag, user_tag)
-        return prompt
