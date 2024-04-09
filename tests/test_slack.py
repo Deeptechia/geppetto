@@ -24,6 +24,7 @@ class TestSlack(unittest.TestCase):
 
         SLACK_BOT_TOKEN = "slack_bot_token"
         SIGNING_SECRET = "signing_secret"
+        GEMINI_MODEL = "gemini-pro"
         BOT_DEFAULT_RESPONSES = load_json("default_responses.json")
 
         cls.slack_handler = SlackHandler(
@@ -31,6 +32,7 @@ class TestSlack(unittest.TestCase):
             BOT_DEFAULT_RESPONSES,
             SLACK_BOT_TOKEN,
             SIGNING_SECRET,
+            GEMINI_MODEL,
             initialized_llm_controller()
         )
 
