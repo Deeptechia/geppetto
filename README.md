@@ -1,6 +1,7 @@
 # Geppetto
 
-![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
+![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
+[![Test Geppetto](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg?branch=main)](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml)
 
 <p align="center">
   <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
