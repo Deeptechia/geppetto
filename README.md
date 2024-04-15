@@ -107,7 +107,7 @@ or `python -m unittest -v` for a verbose more specific output
 
 ## About DeepTechia
 
-We are DeepTechia, where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
+We are [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
 Born from a passion for cutting-edge technology and a vision for a digitally integrated future, DeepTechia was established to be more than just a tech consultancy. We are visionaries, strategists, and implementers, dedicated to pushing the boundaries of what’s possible while ensuring real-world applicability.
 
