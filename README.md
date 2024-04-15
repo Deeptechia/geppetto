@@ -9,16 +9,6 @@
 
 Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
 
-
-## Features
-
-1. **Interaction with ChatGPT-4:**
-   - You can send direct messages to the application and receive responses from ChatGPT-4.
-   - Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
-
-2. **Image Generation with DALL-E-3:**
-   - The application uses DALL-E-3 to generate an image based on the message.
-
 ## Features
 
 1. **Flexible AI Model Integration and System Management:**
