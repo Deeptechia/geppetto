@@ -75,6 +75,8 @@ Before running the application, copy the `.configuration/.env.example` file into
 - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
 - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
 - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
+- `GEMINI_MODEL`: The Gemini model.
+- `GOOGLE_API_KEY`: The Google Gemini API key.
 
 ## Deployment
 
