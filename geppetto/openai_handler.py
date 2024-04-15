@@ -134,15 +134,3 @@ class OpenAIHandler(LLMHandler):
             return response
         else:
             return response.choices[0].message.content
-
-    def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
-        prompt = []
-        for msg in thread:
-            formatted_msg = dict(msg)
-            if ROLE_FIELD in formatted_msg:
-                formatted_msg[ROLE_FIELD] = formatted_msg[ROLE_FIELD].replace(assistant_tag, self.assistant_role)
-                formatted_msg[ROLE_FIELD] = formatted_msg[ROLE_FIELD].replace(user_tag, self.user_role)
-                prompt.append(formatted_msg)
-            else:
-                raise InvalidThreadFormatError("The input thread doesn't have the field %s" % ROLE_FIELD)
-        return prompt

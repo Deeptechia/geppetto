@@ -5,13 +5,13 @@ import certifi
 import re
 
 from geppetto.utils import is_image_data, lower_string_list
-
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # UI roles
 USER = "slack_user"
 ASSISTANT = "geppetto"
+
 
 class SlackHandler:
 
@@ -140,7 +140,7 @@ class SlackHandler:
         )
 
     def select_llm_from_msg(self, message, last_llm=''):
-        mentions = re.findall(r'\#[^\ ]*', message)
+        mentions = re.findall(r'(?<=\bllm_)\w+', message)
         clean_mentions = [re.sub(r'[\#\!\?\,\;\.]', "", mention) for mention in mentions]
         hashtags = lower_string_list(clean_mentions)
         controlled_llms = self.llm_ctrl.list_llms()
