@@ -25,7 +25,7 @@ Geppetto is a sophisticated Slack bot that facilitates seamless interaction with
    - Users can seamlessly switch between ChatGPT-4-turbo and Gemini to suit their specific interaction needs. ChatGPT-4-turbo is set as the default model.
    - You can send direct messages to the application and receive responses from Geppetto. Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
    - The newly introduced LLM controller component allows the user to manage multiple AI models.
-   - Simplified installation and management process, facilitated by Docker deployment thanks to contributions from @Wobak.
+   - Simplified installation and management process, facilitated by Docker deployment.
 
 2. **Advanced Image Generation with DALL-E-3:**
    - Leverage DALL-E-3 to generate creative and contextually relevant images directly within Slack conversations.
