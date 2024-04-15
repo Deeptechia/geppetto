@@ -1,0 +1,8 @@
+version: "3.5"
+
+services:
+  geppetto:
+    build: .
+    container_name: geppetto
+    volumes:
+      - "./config:/app/config" #To customize with your own config folder.

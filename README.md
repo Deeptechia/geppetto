@@ -1,6 +1,7 @@
 # Geppetto
 
-![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)
+![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
+[![Test Geppetto](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg?branch=main)](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml)
 
 <p align="center">
   <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
@@ -86,6 +87,13 @@ Follow these steps to deploy Geppetto:
 3. Run the application by entering `poetry run geppetto` in the terminal.
 
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
+
+## Docker
+To run geppetto in a docker container, when you have Docker & Docker compose installed:
+1. Move docker-compose.example.yml to docker-compose.yml with customizing where your config folder resides
+2. Change the config values in config/.env
+3. Run docker compose build
+4. Run docker compose up -d
 
 ## Tests
 
