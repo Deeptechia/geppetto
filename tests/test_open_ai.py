@@ -11,6 +11,7 @@ sys.path.append(parent_dir)
 
 from geppetto.openai_handler import OpenAIHandler
 
+TEST_PERSONALITY = "Your AI assistant"
 
 def OF(**kw):
     class OF:
@@ -27,16 +28,14 @@ class TestOpenAI(unittest.TestCase):
     def setUpClass(cls):
         cls.patcher = patch("geppetto.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
-        cls.openai_handler = OpenAIHandler(
-            "openai_api_key",
-            "dall-e-3",
-            "gpt-4",
-            {"features": {"personality": "_"}},
-        )
+        cls.openai_handler = OpenAIHandler(personality=TEST_PERSONALITY)
 
     @classmethod
     def tearDownClass(cls):
         cls.patcher.stop()
+
+    def test_personality(self):
+        self.assertEqual(self.openai_handler.personality, TEST_PERSONALITY)
 
     def test_send_text_message(self):
         user_prompt = [{"role": "user", "content": "Hello"}]
@@ -48,10 +47,10 @@ class TestOpenAI(unittest.TestCase):
         self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
-        response = self.openai_handler.send_message(user_prompt, None, None)
+        response = self.openai_handler.llm_generate_content(user_prompt, self.my_callback, None)
         self.assertEqual(response, "Mocked ChatGPT Response")
 
-    def my_callback(self, result):
+    def my_callback(self, *args):
         logging.info("Image sent successfully")
 
     @patch("geppetto.openai_handler.OpenAIHandler.download_image")
@@ -78,9 +77,7 @@ class TestOpenAI(unittest.TestCase):
 
         user_prompt = [{"role": "user", "content": "Generate an image of a mountain"}]
 
-        callback = self.my_callback
-
-        response = self.openai_handler.send_message(user_prompt, callback, None)
+        response = self.openai_handler.llm_generate_content(user_prompt, self.my_callback, None)
 
         # Assuming download_image returns bytes
         self.assertIsInstance(response, bytes)

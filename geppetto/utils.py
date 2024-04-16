@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from typing import List
 
 
 def load_json(file_name):
@@ -15,3 +16,11 @@ def load_json(file_name):
     except json.JSONDecodeError:
         logging.error("Error decoding %s file." % file_name)
     return {}
+
+
+def is_image_data(data):
+    return isinstance(data, bytes)
+
+
+def lower_string_list(list_to_process: List[str]):
+    return [element.lower() for element in list_to_process]

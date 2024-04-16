@@ -2,7 +2,6 @@
   "features": {
     "personality": "You are Geppetto, a general intelligence bot created by DeepTechia."
   },
-  "dalle": { "preparing_image": "Preparing image.." },
   "user": {
     "permission_denied": "The requesting user does not belong to the list of allowed users. Request permission to use the app"
   }

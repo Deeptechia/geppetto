@@ -5,30 +5,55 @@ from PIL import Image
 from urllib.request import urlopen
 import logging
 
+from .exceptions import InvalidThreadFormatError
+from .llm_api_handler import LLMHandler
+from dotenv import load_dotenv
+from typing import List, Dict
+import os
 
-class OpenAIHandler:
+load_dotenv(os.path.join("config", ".env"))
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+DALLE_MODEL = os.getenv("DALLE_MODEL")
+CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
+
+OPENAI_IMG_FUNCTION = "generate_image"
+ROLE_FIELD = "role"
+
+
+class OpenAIHandler(LLMHandler):
+
     def __init__(
-        self, openai_api_key, dalle_model, chatgpt_model, bot_default_responses
+        self,
+        personality,
     ):
-        self.client = OpenAI(api_key=openai_api_key)
-        self.dalle_model = dalle_model
-        self.chatgpt_model = chatgpt_model
-        self.bot_default_responses = bot_default_responses
+        super().__init__(
+            'OpenAI',
+            CHATGPT_MODEL,
+            OpenAI(api_key=OPENAI_API_KEY)
+        )
+        self.dalle_model = DALLE_MODEL
+        self.personality = personality
+        self.system_role = "system"
+        self.assistant_role = "assistant"
+        self.user_role = "user"
 
-    def get_functionalities(self):
+    @staticmethod
+    def download_image(url):
+        img = Image.open(urlopen(url=url))
+        img_byte_arr = BytesIO()
+        img.save(img_byte_arr, format="PNG")
+        img_byte_arr = img_byte_arr.getvalue()
+        return img_byte_arr
+
+    @staticmethod
+    def get_functionalities():
         return json.dumps(
             [
                 "Generate an image from text",
                 "Get app functionalities",
             ]
         )
-
-    def download_image(self, url):
-        img = Image.open(urlopen(url=url))
-        img_byte_arr = BytesIO()
-        img.save(img_byte_arr, format="PNG")
-        img_byte_arr = img_byte_arr.getvalue()
-        return img_byte_arr
 
     def generate_image(self, prompt, size="1024x1024"):
         logging.info("Generating image: %s with size: %s" % (prompt, size))
@@ -44,13 +69,13 @@ class OpenAIHandler:
         except Exception as e:
             logging.error(f"Error generating image: {e}")
 
-    def send_message(self, user_prompt, callback, *callback_args):
-        logging.info("Sending msg to chatgpt: %s" % (user_prompt))
+    def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
+        logging.info("Sending msg to chatgpt: %s" % user_prompt)
         tools = [
             {
                 "type": "function",
                 "function": {
-                    "name": "generate_image",
+                    "name": OPENAI_IMG_FUNCTION,
                     "description": "Generate an image from text",
                     "parameters": {
                         "type": "object",
@@ -80,13 +105,13 @@ class OpenAIHandler:
         # Initial conversation message
         messages = [
             {
-                "role": "system",
-                "content": self.bot_default_responses["features"]["personality"],
+                "role": self.system_role,
+                "content": self.personality,
             },
             *user_prompt,
         ]
         response = self.client.chat.completions.create(
-            model=self.chatgpt_model,
+            model=self.model,
             messages=messages,
             tools=tools,
             tool_choice="auto",
@@ -95,15 +120,16 @@ class OpenAIHandler:
         tool_calls = response.choices[0].message.tool_calls
         if tool_calls:
             available_functions = {
-                "generate_image": self.generate_image,
+                OPENAI_IMG_FUNCTION: self.generate_image,
                 "get_functionalities": self.get_functionalities,
             }
             tool_call = tool_calls[0]
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
-            if function_name == "generate_image":
-                callback(*callback_args)
+            if function_name == OPENAI_IMG_FUNCTION and status_callback:
+                status_callback(*status_callback_args, ":geppetto: I'm preparing the image, please be patient "
+                                         ":lower_left_paintbrush: ...")
             response = function(**function_args)
             return response
         else:
