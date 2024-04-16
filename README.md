@@ -7,16 +7,19 @@
   <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
 </p>
 
-Geppetto is a Slack bot for teams to easily interact with ChatGPT. It integrates with OpenAI's ChatGPT-4 and DALL-E-3 models. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
+Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
 
 ## Features
 
-1. **Interaction with ChatGPT-4:**
-   - You can send direct messages to the application and receive responses from ChatGPT-4.
-   - Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
+1. **Flexible AI Model Integration and System Management:**
+   - Users can seamlessly switch between ChatGPT-4-turbo and Gemini to suit their specific interaction needs. ChatGPT-4-turbo is set as the default model.
+   - You can send direct messages to the application and receive responses from Geppetto. Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
+   - The newly introduced LLM controller component allows the user to manage multiple AI models.
+   - Simplified installation and management process, facilitated by Docker deployment.
 
-2. **Image Generation with DALL-E-3:**
-   - The application uses DALL-E-3 to generate an image based on the message.
+2. **Advanced Image Generation with DALL-E-3:**
+   - Leverage DALL-E-3 to generate creative and contextually relevant images directly within Slack conversations.
+
 
 ![Geppetto](/assets/Geppetto.gif)
 
@@ -72,6 +75,8 @@ Before running the application, copy the `.configuration/.env.example` file into
 - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
 - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
 - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
+- `GEMINI_MODEL`: The Gemini model.
+- `GOOGLE_API_KEY`: The Google Gemini API key.
 
 ## Deployment
 
@@ -89,11 +94,11 @@ Follow these steps to deploy Geppetto:
 Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
 
 ## Docker
-To run geppetto in a docker container, when you have Docker & Docker compose installed:
-1. Move docker-compose.example.yml to docker-compose.yml with customizing where your config folder resides
-2. Change the config values in config/.env
-3. Run docker compose build
-4. Run docker compose up -d
+To run geppetto in a docker container, when you have Docker and Docker compose installed:
+1. Move `docker-compose.example.yml` to `docker-compose.yml`, specifying where your config folder resides.
+2. Change the config values in `config/.env`.
+3. Run `docker compose build`.
+4. Run `docker compose up -d`.
 
 ## Tests
 
@@ -104,7 +109,7 @@ or `python -m unittest -v` for a verbose more specific output
 
 ## About DeepTechia
 
-We are DeepTechia, where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
+We are [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
 Born from a passion for cutting-edge technology and a vision for a digitally integrated future, DeepTechia was established to be more than just a tech consultancy. We are visionaries, strategists, and implementers, dedicated to pushing the boundaries of what’s possible while ensuring real-world applicability.
 
