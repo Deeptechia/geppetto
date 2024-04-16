@@ -2,21 +2,18 @@ import logging
 import os
 from slack_bolt import App
 import certifi
+import re
 
-from geppetto.utils import is_image_data
-
+from geppetto.utils import is_image_data, lower_string_list
 # Set SSL certificate for secure requests
 os.environ["SSL_CERT_FILE"] = certifi.where()
-
-# wip: TBD switcher
-DEFAULT_LLM = "OpenAI"
 
 # UI roles
 USER = "slack_user"
 ASSISTANT = "geppetto"
 
+
 class SlackHandler:
-    thread_messages = {}
 
     def __init__(
         self,
@@ -27,10 +24,12 @@ class SlackHandler:
         llm_controller
     ):
         self.name = 'Geppetto Slack handler'
-        self.llm_ctrl = llm_controller.handlers
+        self.llm_ctrl = llm_controller
+        self.llm = llm_controller.handlers
         self.app = App(signing_secret=SIGNING_SECRET, token=SLACK_BOT_TOKEN)
         self.allowed_users = allowed_users
         self.bot_default_responses = bot_default_responses
+        self.thread_messages = {}
 
         # Direct Message Event
         @self.app.event("message")
@@ -49,8 +48,17 @@ class SlackHandler:
             channel_id,
             thread_id,
         )
-        thread_history = self.thread_messages.get(thread_id, [])
-        thread_history.append({"role": USER, "content": msg})
+
+        thread_history = self.thread_messages.get(thread_id, {"llm": "", "msgs": []})
+        selected_llm = self.select_llm_from_msg(msg, thread_history["llm"])
+        if thread_history["llm"] == "":
+            thread_history["llm"] = selected_llm
+        current_usr_msg = {"role": USER, "content": msg}
+        if thread_history["llm"] == selected_llm:
+            thread_history["msgs"].append(current_usr_msg)
+        else:
+            thread_history["llm"] = selected_llm
+            thread_history["msgs"] = [thread_history["msgs"][0], current_usr_msg]
 
         response = self.send_message(
             channel_id,
@@ -64,15 +72,15 @@ class SlackHandler:
         else:
             logging.error("Failed to post the message.")
 
-        prompt = self.llm_ctrl[DEFAULT_LLM].get_prompt_from_thread(thread_history, ASSISTANT, USER)
-        response_from_llm_api = self.llm_ctrl[DEFAULT_LLM].llm_generate_content(
+        prompt = self.llm[selected_llm].get_prompt_from_thread(thread_history["msgs"], ASSISTANT, USER)
+        response_from_llm_api = self.llm[selected_llm].llm_generate_content(
             prompt,
             self.send_message,
             channel_id,
             thread_id,
         )
         if isinstance(response_from_llm_api, str):
-            thread_history.append({"role": ASSISTANT, "content": response_from_llm_api})
+            thread_history["msgs"].append({"role": ASSISTANT, "content": response_from_llm_api})
 
         self.thread_messages[thread_id] = thread_history
 
@@ -130,3 +138,18 @@ class SlackHandler:
             thread_ts=thread_id,
             mrkdwn=True
         )
+
+    def select_llm_from_msg(self, message, last_llm=''):
+        mentions = re.findall(r'(?<=\bllm_)\w+', message)
+        clean_mentions = [re.sub(r'[\#\!\?\,\;\.]', "", mention) for mention in mentions]
+        hashtags = lower_string_list(clean_mentions)
+        controlled_llms = self.llm_ctrl.list_llms()
+        controlled_llms_l = lower_string_list(controlled_llms)
+        check_list = list(set(controlled_llms_l) & set(hashtags))
+        if len(check_list) == 1:
+            return controlled_llms[controlled_llms_l.index(check_list[0])]
+        elif len(check_list) == 0 and last_llm != '':
+            return last_llm
+        else:
+            # default first LLM
+            return controlled_llms[0]

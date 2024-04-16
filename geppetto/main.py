@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from .llm_controller import LLMController
 from .slack_handler import SlackHandler
 from .openai_handler import OpenAIHandler
+from .gemini_handler import GeminiHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from .utils import load_json
 
@@ -24,16 +25,26 @@ logging.basicConfig(level=logging.INFO)
 
 def initialized_llm_controller():
     controller = LLMController(
-        [{
-            "name": "OpenAI",
-            "handler": OpenAIHandler,
-            "handler_args": {
-                "personality": DEFAULT_RESPONSES["features"]["personality"]
+        [
+            {
+                "name": "OpenAI",
+                "handler": OpenAIHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
+            },
+            {
+                "name": "Gemini",
+                "handler": GeminiHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
             }
-        }]
+        ]
     )
     controller.init_controller()
     return controller
+
 
 
 def main():

@@ -11,6 +11,7 @@ sys.path.append(parent_dir)
 
 from geppetto.openai_handler import OpenAIHandler
 
+TEST_PERSONALITY = "Your AI assistant"
 
 def OF(**kw):
     class OF:
@@ -27,14 +28,14 @@ class TestOpenAI(unittest.TestCase):
     def setUpClass(cls):
         cls.patcher = patch("geppetto.openai_handler.OpenAI")
         cls.mock_openai = cls.patcher.start()
-        cls.openai_handler = OpenAIHandler(personality="Your AI assistant")
+        cls.openai_handler = OpenAIHandler(personality=TEST_PERSONALITY)
 
     @classmethod
     def tearDownClass(cls):
         cls.patcher.stop()
 
     def test_personality(self):
-        self.assertEqual(self.openai_handler.personality, "Your AI assistant")
+        self.assertEqual(self.openai_handler.personality, TEST_PERSONALITY)
 
     def test_send_text_message(self):
         user_prompt = [{"role": "user", "content": "Hello"}]
