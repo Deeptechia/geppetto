@@ -1,3 +1,4 @@
+import re
 from urllib.request import urlopen
 import logging
 
@@ -19,8 +20,11 @@ MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 
 def to_markdown(text):
-    text = text.replace('•', '  *')
-    return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+    formatted_text = text.replace("**", "*")
+    formatted_text = formatted_text.replace("__", "_")
+    formatted_text = formatted_text.replace("- ", "• ")
+    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
+    return formatted_text
 
 class GeminiHandler(LLMHandler):
 
@@ -49,7 +53,7 @@ class GeminiHandler(LLMHandler):
             user_prompt = [merged_prompt] + user_prompt[2:]
         response= self.client.generate_content(user_prompt)
         markdown_response = to_markdown(response.text)
-        return str(markdown_response.data)
+        return markdown_response
     
     def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
         prompt = super().get_prompt_from_thread(thread, assistant_tag, user_tag)
