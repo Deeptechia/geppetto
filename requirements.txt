@@ -6,5 +6,3 @@ slack-sdk>=3.26.1
 pillow>=10.1.0
 google-generativeai>=0.5.0
 IPython>=8.0.0
-unittest2>=1.1.0
-xmlrunner>=1.7.0
