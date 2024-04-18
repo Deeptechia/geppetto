@@ -25,7 +25,7 @@ jobs:
           
       - name: Run Test 
         run: |
-          python -m unittest discover tests -v -o test_reports
+          python -m xmlrunner discover tests -v -o test_reports
           
       - name: Test Report
         uses: dorny/test-reporter@v1
