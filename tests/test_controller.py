@@ -1,6 +1,7 @@
 import unittest
 from geppetto.llm_api_handler import LLMHandler
 from geppetto.llm_controller import LLMController
+import xmlrunner
 
 ClientMock = {}
 
@@ -116,4 +117,4 @@ class TestController(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(testRunner=xmlrunner.XMLTestRunner(output='./test_results'))
