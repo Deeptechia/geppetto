@@ -32,3 +32,4 @@ jobs:
         if: always()
         with:
           report_paths: 'test_reports/*.xml'
+          detailed_summary: true
