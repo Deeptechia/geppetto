@@ -32,7 +32,7 @@ class TestGemini(unittest.TestCase):
     def test_personality(self):
         self.assertEqual(self.gemini_handler.personality, "Your AI personality")
 
-    @patch("geppetto.gemini_handler.to_markdown")
+    @patch("geppetto.gemini_handler.convert_gemini_to_slack")
     def test_llm_generate_content(self, mock_to_markdown):
         user_prompt = [
         {"role": "user", "parts": ["Hello"]},
