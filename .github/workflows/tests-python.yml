@@ -1,5 +1,5 @@
 
-name: Execute Geppetto Tests
+name: Geppetto Tests
 
 on:
   push:
@@ -33,3 +33,4 @@ jobs:
         with:
           report_paths: 'test_reports/*.xml'
           detailed_summary: true
+          include_passed: true
