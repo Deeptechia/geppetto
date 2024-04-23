@@ -14,7 +14,7 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "staging" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}                                          # GKE_PROJECT  creado en secrets del proyecto - Devops-Tools
@@ -45,8 +45,10 @@ jobs:
       uses: 'google-github-actions/auth@v0'
       with:
         token_format: 'access_token'
-        workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-        service_account: 'my-service-account@my-project.iam.gserviceaccount.com'
+        workload_identity_provider: 'projects/99059079106/locations/global/workloadIdentityPools/github/subject/SUBJECT_ATTRIBUTE_VALUE'
+        service_account: 'deploy-geppetto-from-github@geppetto-408614.iam.gserviceaccount.com'
+
+   
 
     # Alternative option - authentication via credentials json
     # - id: 'auth'
@@ -76,16 +78,16 @@ jobs:
     - name: Publish
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA"
+
     # Set up kustomize
     - name: Set up Kustomize
       run: |-
         curl -sfLo kustomize https://github.com/kubernetes-sigs/kustomize/releases/download/v3.1.0/kustomize_3.1.0_linux_amd64
         chmod u+x ./kustomize
+
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
         # replacing the image name in the k8s template
         ./kustomize edit set image LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA
         ./kustomize build . | kubectl apply -f -
-        kubectl rollout status deployment/$DEPLOYMENT_NAME
-        kubectl get services -o wide
