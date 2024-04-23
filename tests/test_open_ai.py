@@ -48,7 +48,8 @@ class TestOpenAI(unittest.TestCase):
             mock_chat_completion_response
         )
         response = self.openai_handler.llm_generate_content(user_prompt, self.my_callback, None)
-        self.assertEqual(response, "Mocked ChatGPT Response")
+        main_content = response.split('\n\n_(Geppetto', 1)[0].strip()
+        self.assertEqual(main_content, "Mocked ChatGPT Response")
 
     def my_callback(self, *args):
         logging.info("Image sent successfully")

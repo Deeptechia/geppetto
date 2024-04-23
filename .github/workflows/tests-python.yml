@@ -1,5 +1,5 @@
 
-name: Test Geppetto
+name: Geppetto Tests
 
 on:
   push:
@@ -25,5 +25,12 @@ jobs:
           
       - name: Run Test 
         run: |
-          python -m unittest discover tests -v
-      
+          python -m xmlrunner discover tests -v -o test_reports
+          
+      - name: Publish Test Results
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: 'test_reports/*.xml'
+          detailed_summary: true
+          include_passed: true

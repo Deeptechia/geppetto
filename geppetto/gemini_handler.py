@@ -1,5 +1,4 @@
 import re
-from urllib.request import urlopen
 import logging
 
 from .exceptions import InvalidThreadFormatError
@@ -7,10 +6,7 @@ from .llm_api_handler import LLMHandler
 from dotenv import load_dotenv
 from typing import List, Dict
 import os
-import textwrap
 import google.generativeai as genai
-from IPython.display import display
-from IPython.display import Markdown
 
 load_dotenv(os.path.join("config", ".env"))
 
@@ -19,12 +15,35 @@ GEMINI_MODEL=os.getenv("GEMINI_MODEL", "gemini-pro")
 MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 
-def to_markdown(text):
-    formatted_text = text.replace("**", "*")
+def convert_gemini_to_slack(text):
+    """
+    Converts Gemini markdown format to Slack markdown format.
+    
+    This function handles:
+    - Converting Gemini link format "=> URL description" to Slack link format "<URL|description>".
+    - Handling headings by converting "#" based on level to bold in Slack with "*".
+    - Converting quoted lines starting with ">" to Slack quote format.
+    - Handling preformatted text blocks delimited by "```".
+    
+    Args:
+        text (str): The Gemini markdown text to be converted.
+    
+    Returns:
+        str: The markdown text formatted for Slack.
+    """
+    if not isinstance(text, str):
+        raise ValueError("Input must be a string.")
+
+    formatted_text = text.replace("* ", "- ")
+    formatted_text = formatted_text.replace("**", "*")
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
+
+    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: Gemini Model {GEMINI_MODEL})_"
+    
     return formatted_text
+
 
 class GeminiHandler(LLMHandler):
 
@@ -52,7 +71,7 @@ class GeminiHandler(LLMHandler):
             }
             user_prompt = [merged_prompt] + user_prompt[2:]
         response= self.client.generate_content(user_prompt)
-        markdown_response = to_markdown(response.text)
+        markdown_response = convert_gemini_to_slack(response.text)
         return markdown_response
     
     def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):

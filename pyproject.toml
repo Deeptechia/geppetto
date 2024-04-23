@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "geppetto"
-version = "0.0.1"
+version = "0.2.1"
 authors = [
     "Lucas Arbues <lucas.arbues@coinfabrik.com>",
     "Ignacio Peña <ignacio.penia@coinfabrik.com>",
@@ -13,9 +13,10 @@ authors = [
     "José Garcia Crosta <jose.garcia.crosta@coinfabrik.com>",
     "David Weil <david.weil@coinfabrik.com>",
     "Diego Kelyacoubian <diego.kelyacoubian@coinfabrik.com>",
-    "Sebastian Wain <sebastian.wain@coifabrik.com>"
+    "Sebastian Wain <sebastian.wain@coifabrik.com>",
+    "Carlos Sims <carlos.sims@coinfabrik.com>"
 ]
-description = "Geppetto is a Slack bot that integrates with OpenAIs and DALL-E-3 models."
+description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model."
 readme = "README.md" 
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -27,7 +28,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-certifi = "^2023.11.17"
+certifi = "^2024.2.2"
 openai = "^1.4.0"
 python-dotenv = "^1.0.0"
 slack-bolt = "^1.18.1"
@@ -35,10 +36,11 @@ slack-sdk = "^3.26.1"
 Pillow = "^10.1.0"
 google-generativeai = "^0.5.0"
 IPython = "^8.0.0"
+unittest-xml-reporting = "^3.2.0"
 
 [tool.poetry.scripts]
 geppetto = "geppetto.main:main"
 
 [project.urls]
-Homepage = "https://github.com/CoinFabrik/geppetto"
-Issues = "https://github.com/CoinFabrik/geppetto/issues"
+Homepage = "https://github.com/Deeptechia/geppetto"
+Issues = "https://github.com/Deeptechia/geppetto/issues"
