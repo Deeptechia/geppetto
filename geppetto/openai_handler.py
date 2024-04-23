@@ -39,20 +39,12 @@ def convert_openai_markdown_to_slack(text):
     Returns:
         str: The markdown text formatted for Slack.
     """
-    #if not isinstance(text, str):
-    #    raise ValueError("Input must be a string.")
-    
-    # Convert bold from **text** to *text*
-    formatted_text = re.sub(r"\*\*(.*?)\*\*", r"*\1*", text)
-    
-    # Convert links from [text](url) to <url|text>
-    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text)
-    
-    # Convert bullet points from "-" to "•"
-    formatted_text = re.sub(r"^\s*-\s", "• ", formatted_text, flags=re.MULTILINE)
-    
-    # Convert strikethrough from ~~text~~ to ~text~
-    formatted_text = re.sub(r"~~(.*?)~~", r"~\1~", formatted_text)
+    formatted_text = text.replace("* ", "- ")
+    formatted_text = formatted_text.replace("**", "*")
+    formatted_text = formatted_text.replace("__", "_")
+    formatted_text = formatted_text.replace("- ", "• ")
+    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
+    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: OpenAI Model {CHATGPT_MODEL})_"
     
     # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
     return formatted_text

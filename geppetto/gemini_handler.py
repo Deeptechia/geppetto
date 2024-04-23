@@ -33,18 +33,14 @@ def convert_gemini_to_slack(text):
     """
     if not isinstance(text, str):
         raise ValueError("Input must be a string.")
-    
-    # Convert links from Gemini to Slack format
-    formatted_text = re.sub(r"=>\s*(\S+)\s*(.*)", r"<\1|\2>", text)
-    
-    # Convert headers, treat all headers as bold in Slack
-    formatted_text = re.sub(r"^#+\s*(.*)", r"*\1*", formatted_text, flags=re.MULTILINE)
-    
-    # Maintain quotes directly compatible
-    formatted_text = re.sub(r"^>\s*(.*)", r">\1", formatted_text, flags=re.MULTILINE)
-    
-    # Handle preformatted text, assuming it is correctly closed in the input
-    formatted_text = re.sub(r"```(.*?)```", r"```\1```", formatted_text, flags=re.DOTALL)
+
+    formatted_text = text.replace("* ", "- ")
+    formatted_text = formatted_text.replace("**", "*")
+    formatted_text = formatted_text.replace("__", "_")
+    formatted_text = formatted_text.replace("- ", "• ")
+    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
+
+    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: Gemini Model {GEMINI_MODEL})_"
     
     return formatted_text
 
