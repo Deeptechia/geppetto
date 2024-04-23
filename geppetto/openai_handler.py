@@ -10,6 +10,7 @@ from .llm_api_handler import LLMHandler
 from dotenv import load_dotenv
 from typing import List, Dict
 import os
+import re
 
 load_dotenv(os.path.join("config", ".env"))
 
@@ -19,6 +20,34 @@ CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
 
 OPENAI_IMG_FUNCTION = "generate_image"
 ROLE_FIELD = "role"
+
+def convert_openai_markdown_to_slack(text):
+    """
+    Converts markdown text from the OpenAI format to Slack's "mrkdwn" format.
+    
+    This function handles:
+    - Bold text conversion from double asterisks (**text**) to single asterisks (*text*).
+    - Italics remain unchanged as they use underscores (_text_) in both formats.
+    - Links are transformed from [text](url) to <url|text>.
+    - Bullet points are converted from hyphens (-) to Slack-friendly bullet points (•).
+    - Code blocks with triple backticks remain unchanged.
+    - Strikethrough conversion from double tildes (~~text~~) to single tildes (~text~).
+    
+    Args:
+        text (str): The markdown text to be converted.
+    
+    Returns:
+        str: The markdown text formatted for Slack.
+    """
+    formatted_text = text.replace("* ", "- ")
+    formatted_text = formatted_text.replace("**", "*")
+    formatted_text = formatted_text.replace("__", "_")
+    formatted_text = formatted_text.replace("- ", "• ")
+    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
+    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: OpenAI Model {CHATGPT_MODEL})_"
+    
+    # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
+    return formatted_text
 
 
 class OpenAIHandler(LLMHandler):
@@ -133,4 +162,7 @@ class OpenAIHandler(LLMHandler):
             response = function(**function_args)
             return response
         else:
-            return response.choices[0].message.content
+            response = response.choices[0].message.content
+            markdown_response = convert_openai_markdown_to_slack(response)
+            return markdown_response
+        
