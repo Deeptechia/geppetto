@@ -63,7 +63,7 @@ class SlackHandler:
         response = self.send_message(
             channel_id,
             thread_id,
-            ":geppetto: :thought_balloon: ..."
+            ":thought_balloon:"
         )
 
         if response["ok"]:
@@ -140,16 +140,25 @@ class SlackHandler:
         )
 
     def select_llm_from_msg(self, message, last_llm=''):
+        # Find all matches in the message that follow 'llm_' and capture subsequente word characters
         mentions = re.findall(r'(?<=\bllm_)\w+', message)
+        
+        # Remove special characters from the expected mentions
         clean_mentions = [re.sub(r'[\#\!\?\,\;\.]', "", mention) for mention in mentions]
+        
+        # convert mentions to lowercase
         hashtags = lower_string_list(clean_mentions)
+        
+        # get the controlled list of LLMs and convert to lowercase
         controlled_llms = self.llm_ctrl.list_llms()
         controlled_llms_l = lower_string_list(controlled_llms)
+    
+        # Find common elements between hashtags and controlled LLMs
         check_list = list(set(controlled_llms_l) & set(hashtags))
         if len(check_list) == 1:
             return controlled_llms[controlled_llms_l.index(check_list[0])]
         elif len(check_list) == 0 and last_llm != '':
             return last_llm
         else:
-            # default first LLM
+            # default first LLM if no specific conditions met
             return controlled_llms[0]

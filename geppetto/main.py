@@ -15,6 +15,7 @@ load_dotenv(os.path.join("config", ".env"))
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN")
 SIGNING_SECRET = os.getenv("SIGNING_SECRET")
+GEPPETTO_VERSION = os.getenv("GEPPETTO_VERSION", "0.2.2")
 
 DEFAULT_RESPONSES = load_json("default_responses.json")
 
