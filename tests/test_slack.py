@@ -84,7 +84,7 @@ class TestSlack(unittest.TestCase):
 
         self.MockApp().client.chat_postMessage.assert_called_with(
             channel="test_channel",
-            text=":thought_balloon:",
+            text=":geppetto: :thought_balloon: ...",
             thread_ts="1",
             mrkdwn=True
         )
@@ -110,7 +110,7 @@ class TestSlack(unittest.TestCase):
 
         self.MockApp().client.chat_postMessage.assert_called_with(
             channel=channel_id,
-            text=":thought_balloon:",
+            text=":geppetto: :thought_balloon: ...",
             thread_ts=thread_id,
             mrkdwn=True
         )

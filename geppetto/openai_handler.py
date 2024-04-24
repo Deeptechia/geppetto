@@ -17,18 +17,9 @@ load_dotenv(os.path.join("config", ".env"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
 CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
-GEPPETTO_VERSION = os.getenv("GEPPETTO_VERSION", "0.2.2")
 
 OPENAI_IMG_FUNCTION = "generate_image"
 ROLE_FIELD = "role"
-
-def add_footnote(text):
-    if type(text) is str:
-        text=text.encode() 
-    #print(text)
-    footnote = f"\n\n_(Geppetto v{GEPPETTO_VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
-    text = text + footnote.encode() 
-    return text
 
 def convert_openai_markdown_to_slack(text):
     """
@@ -53,7 +44,7 @@ def convert_openai_markdown_to_slack(text):
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
-    #formatted_text += f"\n\n_(Geppetto v0.2.1 Source: OpenAI Model {CHATGPT_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: OpenAI Model {CHATGPT_MODEL})_"
     
     # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
     return formatted_text
@@ -162,27 +153,16 @@ class OpenAIHandler(LLMHandler):
                 "get_functionalities": self.get_functionalities,
             }
             tool_call = tool_calls[0]
-            # Extract the function name to identify which function to call.
             function_name = tool_call.function.name
-            # Deserialize the JSON arguments needed for the function call.
             function_args = json.loads(tool_call.function.arguments)
-            # Retrieve the function to call from the available functions dictionary using the function name.
             function = available_functions[function_name]
-            # Special case: if the function is related to image generation and a status callback is provided,
-            # notify the user that the image is being prepared.
             if function_name == OPENAI_IMG_FUNCTION and status_callback:
-                status_callback(*status_callback_args, "I'm preparing the image, please be patient "
+                status_callback(*status_callback_args, ":geppetto: I'm preparing the image, please be patient "
                                          ":lower_left_paintbrush: ...")
-            # Call the function with its appropriate arguments.
             response = function(**function_args)
-  
+            return response
         else:
-            # If there are no tool calls, process the content response from the first choice.
             response = response.choices[0].message.content
-            # Convert the response from markdown to a specific format (e.g., for Slack).
-            response = convert_openai_markdown_to_slack(response)
-
-        response = add_footnote( response )
-        return response
-
+            markdown_response = convert_openai_markdown_to_slack(response)
+            return markdown_response
         
