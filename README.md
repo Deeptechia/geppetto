@@ -1,63 +1,64 @@
-# Geppetto
-
-![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
-![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
 
 <p align="center">
   <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
 </p>
 
-Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
+# 🤖 Geppetto
 
-## Key Features
+![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
+![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
 
-### Flexible AI Model Integration and System Management
+Geppetto is a sophisticated Slack bot 🤖 that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. 🚀
 
-- Effortlessly switch between AI models such as ChatGPT and Gemini based on your needs. ChatGPT model gpt4-turbo is set as the default model
-- Directly message Geppetto to initiate dynamic conversation threads.
+## ⭐️ Key Features
+
+### 🔄 Flexible AI Model Integration and System Management
+
+- Toggle effortlessly between AI models like ChatGPT and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model
+- Initiate dynamic conversation threads by directly messaging Geppetto.
 - Manage multiple AI models with the advanced LLM controller component.
-- Enjoy an easy setup and management experience, powered by Docker.
+- Enjoy an easy setup and management experience, powered by Docker 🐳.
 
-### Advanced Image Generation
+### 🎨 Advanced Image Generation
 
 - Utilize DALL-E-3 to create innovative and contextually apt images during your Slack conversations.
 
 ![Geppetto](/assets/Geppetto.gif)
 
-## Usage Guidelines
+## 👨‍💻 Usage Guidelines
 
-### Direct Messages
+### 📩 Direct Messages
 
 - Directly messaging the bot does not require mentioning it with "@".
 - Each direct message generates a conversation thread.
 
-### Slack Channels
+### 💬 Slack Channels
 
-- Mention Geppetto with "@" to engage it in channel discussions.
+- Invoke Geppetto in channel discussions by mentioning it with "@".
 
-### Allowed Users
+### 🔒 Allowed Users 🔒
 
-- Interaction is limited to users defined in the [allowed users configuration file](./config/allowed-slack-ids.json).
+- Access is granted only to users listed in the [allowed users configuration file](./config/allowed-slack-ids.json).
 
-## Changing LLM Models
+## 🔀 Switching AI Models
 
-- Geppetto allows you to seamlessly switch between different AI models, including ChatGPT and Gemini. To change the active model include the following in the message:
+- To switch between ChatGPT and Gemini, or other models, include the following commands in your message:
   - `llm_openai` to use ChatGPT
   - `llm_gemini` to use Gemini
 
-## Configuration and Setup
+## 🛠️ Setup and Configuration
 
-### Slack App Configuration
+### 🔧 Slack App Configuration
 
-1. **Modify and Create App**:
-   - **Modify `manifest-dev.yaml`**: Update fields under `display_information` and `bot_user` to customize Geppetto for your personal use.
+1. **Modify App**:
+   - **Edit `manifest-dev.yaml`**: Adjust fields under `display_information` and `bot_user` to tailor Geppetto for your needs.
 2. **Create App**:
    - Go to the  [Slack API](https://api.slack.com) and navigate to *Your Apps*.
    - Click on *Create New App*.
    - Choose *Create from manifest*, select *yaml* and paste the contents of the modified `manifest-dev.yaml` file.
    - Click *Next* and then *Create* the application.
 
-3. **Save App Credentials**
+3. **Save App Credentials** 🗝️
 
    At the **Basic Information** section:
      1. Under the *App Credentials* subsection, save the following:
@@ -74,79 +75,38 @@ Geppetto is a sophisticated Slack bot that facilitates seamless interaction with
 
 4. **Environment Setup**
 
-    Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
+    Copy `.configuration/.env.example` into a new `.configuration/.env`, and adjust the environment variables accordingly:
+    
+    - `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
+    - `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
+    - `OPENAI_API_KEY`: Your OpenAI API key.
+    - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
+    - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
+    - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
+    - `GEMINI_MODEL`: The Gemini model.
+    - `GOOGLE_API_KEY`: The Google Gemini API key.
 
-- Include keys and tokens such as SLACK_BOT_TOKEN, SLACK_APP_TOKEN, and various API keys from Google and OpenAI.
+## 🚀 Deployment
+Ensure you have Python (3.x), pip, and poetry installed. To deploy Geppetto:
 
-#### Create App
+- Clone the repository and navigate to its directory.
+- Install dependencies using `poetry install`.
+- Launch the application with `poetry run geppetto`.
 
-1. **Modify `manifest-dev.yaml`**: Update fields under `display_information` and `bot_user` to customize Geppetto for your personal use.
-2. **Create New App**:
-    - Go to the [Slack API](https://api.slack.com) and navigate to *Your Apps*.
-    - Click on *Create New App*.
-    - Choose *Create from manifest*, select *yaml* and paste the contents of the modified `manifest-dev.yaml` file.
-    - Click *Next* and then *Create* the application.
+## 🐳 Docker Deployment
+With Docker and Docker Compose ready:
 
-#### Save App Credentials
+- Rename `docker-compose.example.yml` to `docker-compose.yml` and update your config folder location.
+- Adjust configuration values in `config/.env`.
+- Execute `docker compose` build followed by `docker compose up -d`.
 
-At the **Basic Information** section:
+## 🧪 Testing
+Run the following from the root directory to execute tests:
 
-  1. Under the *App Credentials* subsection, save the following:
-     - **Signing Secret**.
-  2. In the *App-Level Tokens* subsection:
-     - Click on *Generate Tokens and Scopes*.
-     - Set a Token Name and assign the scope to `connections:write`.
-     - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
+- `python -m unittest` for standard testing.
+- `python -m unittest -v` for verbose output.
 
-At the **Install App** section:
-  3. Under the Install App to Your Team subsection:
-     - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`).
-     - Install or Request the installation of your app to your Workspace (if it requires approval from an owner of your Slack workspace).
-
-### Environment Configuration
-
-Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
-
-- `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
-- `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
-- `OPENAI_API_KEY`: Your OpenAI API key.
-- `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
-- `DALLE_MODEL`: The OpenAI DALL-E-3 model.
-- `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
-- `GEMINI_MODEL`: The Gemini model.
-- `GOOGLE_API_KEY`: The Google Gemini API key.
-
-## Deployment
-
-Before you begin, ensure you have the following installed:
-
-- Python (version 3.x recommended)
-- pip (Python package manager)
-- poetry
-
-Follow these steps to deploy Geppetto:
-
-1. Download the repository and open your terminal.
-2. Navigate to the repository directory and install dependencies with `poetry install`.
-3. Run the application by entering `poetry run geppetto` in the terminal.
-
-## Docker deployment
-To run geppetto in a docker container, when you have Docker and Docker compose installed:
-
-1. Move `docker-compose.example.yml` to `docker-compose.yml`, specifying where your config folder resides.
-2. Change the config values in `config/.env`.
-3. Run `docker compose build`.
-4. Run `docker compose up -d`.
-
-## Tests
-
-In order to run the tests, execute the following command from the root folder:
-`python -m unittest`
-
-or `python -m unittest -v` for a verbose more specific output
-
-## About DeepTechia
-
+## 🌐 About DeepTechia
 We are [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
 Born from a passion for cutting-edge technology and a vision for a digitally integrated future, DeepTechia was established to be more than just a tech consultancy. We are visionaries, strategists, and implementers, dedicated to pushing the boundaries of what’s possible while ensuring real-world applicability.
@@ -157,6 +117,5 @@ At DeepTechia, we believe in a future where technology enhances every facet of b
 
 We’re not just your tech consultants; we’re your partners in crafting a digital future that’s bright, secure, and boundless.
 
-## License
-
-Geppetto is licensed and distributed under the [AGPLv3 license](LICENSE). [Contact us](https://deeptechia.io/contact/) if you're looking for an exception to the terms.
+## 📜 License
+Geppetto is licensed and distributed under the AGPLv3 license. [Contact us](https://deeptechia.io/contact/) if you're looking for an exception to the terms.
