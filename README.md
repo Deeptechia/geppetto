@@ -1,113 +1,111 @@
+
+<img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
+
 # Geppetto
 
 ![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
 ![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
 
-<p align="center">
-  <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
-</p>
+[DeepTechia](https://deeptechia.io/), is proud to introduce Geppetto, a versatile Slack bot that seamlessly integrates with various AI models, empowering your team with the power of cutting-edge AI technology 🚀
 
-Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs.
+## ⭐️ Key Features
 
-## Features
+- 🔀 **Multi-Model Support:** Toggle effortlessly between AI models like ChatGPT and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model
+- 💬 **Streamlined Communication:** Initiate dynamic conversation threads by directly messaging Geppetto.
+- ➡️ **Advanced LLM Control:** Manage multiple AI models with the advanced LLM controller component.
+- 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
+- 🎨 **Creative Image Generation:** Unleash the power of DALL-E-3 to generate innovative images directly within your Slack conversations.
 
-1. **Flexible AI Model Integration and System Management:**
-   - Users can seamlessly switch between ChatGPT-4-turbo and Gemini to suit their specific interaction needs. ChatGPT-4-turbo is set as the default model.
-   - You can send direct messages to the application and receive responses from Geppetto. Each message generates a conversation thread, and the application uses the message history to formulate coherent responses.
-   - The newly introduced LLM controller component allows the user to manage multiple AI models.
-   - Simplified installation and management process, facilitated by Docker deployment.
+## 🚀 **Demo**
 
-2. **Advanced Image Generation with DALL-E-3:**
-   - Leverage DALL-E-3 to generate creative and contextually relevant images directly within Slack conversations.
+![Geppetto](/assets/Geppetto_demo.png)
+![Geppetto](/assets/Geppetto_demo2.png)
 
+## 👨‍💻 Usage Guidelines
 
-![Geppetto](/assets/Geppetto.gif)
+### 📩 Direct Messages
 
-## Usage Rules
+- Directly messaging the bot does not require mentioning it with "@".
+- Each direct message generates a conversation thread.
 
-- **Direct Messages:**
-   - It is not necessary to mention the application with "@" in direct messages.
-   - Each direct message generates a conversation thread.
+### 💬 Slack Channels
 
-- **Slack Channels:**
-   - You must mention the application with "@" to interact in channels.
+- Invoke Geppetto in channel discussions by mentioning it with "@".
 
-- **Allowed Users:**
-   - Only authorized users can interact with the application. Set allowed users in [./config/allowed-slack-ids.json](https://github.com/CoinFabrik/geppetto/blob/main/config/allowed-slack-ids.json).
+### 🔒 Allowed Users
 
-## Configuration
+- Access is granted only to users listed in the [allowed users configuration file](./config/allowed-slack-ids.json).
 
-### Slack Configuration
+## 🔀 Switching AI Models
 
-Follow these steps to configure Slack for your application:
+- To switch between ChatGPT and Gemini, or other models, include the following commands in your message:
+  - `llm_openai` to use ChatGPT
+  - `llm_gemini` to use Gemini
 
-#### Create App
-1. **Modify `manifest-dev.yaml`**: Update fields under `display_information` and `bot_user` to customize Geppetto for your personal use.
-2. **Create New App**:
-    - Go to the [Slack API](https://api.slack.com) and navigate to *Your Apps*.
-    - Click on *Create New App*.
-    - Choose *Create from manifest*, select *yaml* and paste the contents of the modified `manifest-dev.yaml` file.
-    - Click *Next* and then *Create* the application.
+## 🛠️ Setup and Configuration
 
-#### Save App Credentials
+### 🔧 Slack App Configuration
 
-At the **Basic Information** section:
-  1. Under the *App Credentials* subsection, save the following:
-     - **Signing Secret**.
-  2. In the *App-Level Tokens* subsection:
-     - Click on *Generate Tokens and Scopes*.
-     - Set a Token Name and assign the scope to `connections:write`.
-     - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
+1. **Modify App**:
+   - **Edit `manifest-dev.yaml`**: Adjust fields under `display_information` and `bot_user` to tailor Geppetto for your needs.
+2. **Create App**:
+   - Go to the  [Slack API](https://api.slack.com) and navigate to *Your Apps*.
+   - Click on *Create New App*.
+   - Choose *Create from manifest*, select *yaml* and paste the contents of the modified `manifest-dev.yaml` file.
+   - Click *Next* and then *Create* the application.
 
-At the **Install App** section:
-  3. Under the Install App to Your Team subsection:
-     - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`).
-     - Install or Request the installation of your app to your Workspace (if it requires approval from an owner of your Slack workspace).
+3. **Save App Credentials** 🗝️
 
+   At the **Basic Information** section:
+     1. Under the *App Credentials* subsection, save the following:
+        - **Signing Secret**.
+     2. In the *App-Level Tokens* subsection:
+        - Click on *Generate Tokens and Scopes*.
+        - Set a Token Name and assign the scope to `connections:write`.
+        - Generate and save the **App-Level Token** for later use (this will be your `SLACK_APP_TOKEN`).
 
-### Environment Configuration
+   At the **Install App** section:
+      3. Under the Install App to Your Team subsection:
+        - Save the **Bot User OAuth Token** (this will be your `SLACK_BOT_TOKEN`).
+        - Install or Request the installation of your app to your Workspace (if it requires approval from an owner of your Slack workspace).
 
-Before running the application, copy the `.configuration/.env.example` file into a new `.configuration/.env` file. Modify the following environment variables in this file:
+4. **Environment Setup**
 
-- `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
-- `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
-- `OPENAI_API_KEY`: Your OpenAI API key.
-- `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
-- `DALLE_MODEL`: The OpenAI DALL-E-3 model.
-- `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
-- `GEMINI_MODEL`: The Gemini model.
-- `GOOGLE_API_KEY`: The Google Gemini API key.
+    Copy `.configuration/.env.example` into a new `.configuration/.env`, and adjust the environment variables accordingly:
 
-## Deployment
+    - `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
+    - `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
+    - `OPENAI_API_KEY`: Your OpenAI API key.
+    - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
+    - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
+    - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
+    - `GEMINI_MODEL`: The Gemini model.
+    - `GOOGLE_API_KEY`: The Google Gemini API key.
 
-Before you begin, ensure you have the following installed:
-- Python (version 3.x recommended)
-- pip (Python package manager)
-- poetry
+## 🚀 Deployment
 
-Follow these steps to deploy Geppetto:
+Ensure you have Python (3.x), pip, and poetry installed. To deploy Geppetto:
 
-1. Download the repository and open your terminal.
-2. Navigate to the repository directory and install dependencies with `poetry install`.
-3. Run the application by entering `poetry run geppetto` in the terminal.
+- Clone the repository and navigate to its directory.
+- Install dependencies using `poetry install`.
+- Launch the application with `poetry run geppetto`.
 
-Enjoy interacting with ChatGPT-4 and DALL-E-3 on Slack!
+## 🐳 Docker Deployment
 
-## Docker
-To run geppetto in a docker container, when you have Docker and Docker compose installed:
-1. Move `docker-compose.example.yml` to `docker-compose.yml`, specifying where your config folder resides.
-2. Change the config values in `config/.env`.
-3. Run `docker compose build`.
-4. Run `docker compose up -d`.
+With Docker and Docker Compose ready:
 
-## Tests
+- Rename `docker-compose.example.yml` to `docker-compose.yml` and update your config folder location.
+- Adjust configuration values in `config/.env`.
+- Execute `docker compose` build followed by `docker compose up -d`.
 
-In order to run the tests, execute the following command from the root folder:
-`python -m unittest`
+## 🧪 Testing
 
-or `python -m unittest -v` for a verbose more specific output
+Run the following from the root directory to execute tests:
 
-## About DeepTechia
+- `python -m unittest` for standard testing.
+- `python -m unittest -v` for verbose output.
+
+## 🌐 About DeepTechia
 
 We are [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
@@ -119,6 +117,6 @@ At DeepTechia, we believe in a future where technology enhances every facet of b
 
 We’re not just your tech consultants; we’re your partners in crafting a digital future that’s bright, secure, and boundless.
 
-## License
+## 📜 License
 
 Geppetto is licensed and distributed under the AGPLv3 license. [Contact us](https://deeptechia.io/contact/) if you're looking for an exception to the terms.
