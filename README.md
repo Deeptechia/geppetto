@@ -8,20 +8,15 @@
 ![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
 ![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
 
-Geppetto is a sophisticated Slack bot 🤖 that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model. This versatility allows for a variety of AI-driven interactions tailored to team requirements. This project is brought to you by [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. 🚀
+[DeepTechia](https://deeptechia.io/), is proud to introduce Geppetto, a versatile Slack bot that seamlessly integrates with various AI models, empowering your team with the power of cutting-edge AI technology 🚀
 
 ## ⭐️ Key Features
 
-### 🔄 Flexible AI Model Integration and System Management
-
-- Toggle effortlessly between AI models like ChatGPT and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model
-- Initiate dynamic conversation threads by directly messaging Geppetto.
-- Manage multiple AI models with the advanced LLM controller component.
-- Enjoy an easy setup and management experience, powered by Docker 🐳.
-
-### 🎨 Advanced Image Generation
-
-- Utilize DALL-E-3 to create innovative and contextually apt images during your Slack conversations.
+- 🔀 **Multi-Model Support:** Toggle effortlessly between AI models like ChatGPT and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model
+- 💬 **Streamlined Communication:** Initiate dynamic conversation threads by directly messaging Geppetto.
+- ➡️ **Advanced LLM Control:** Manage multiple AI models with the advanced LLM controller component.
+- 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
+- 🎨 **Creative Image Generation:** Unleash the power of DALL-E-3 to generate innovative images directly within your Slack conversations.
 
 ![Geppetto](/assets/Geppetto.gif)
 
@@ -76,7 +71,7 @@ Geppetto is a sophisticated Slack bot 🤖 that facilitates seamless interaction
 4. **Environment Setup**
 
     Copy `.configuration/.env.example` into a new `.configuration/.env`, and adjust the environment variables accordingly:
-    
+
     - `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
     - `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
     - `OPENAI_API_KEY`: Your OpenAI API key.
@@ -87,6 +82,7 @@ Geppetto is a sophisticated Slack bot 🤖 that facilitates seamless interaction
     - `GOOGLE_API_KEY`: The Google Gemini API key.
 
 ## 🚀 Deployment
+
 Ensure you have Python (3.x), pip, and poetry installed. To deploy Geppetto:
 
 - Clone the repository and navigate to its directory.
@@ -94,6 +90,7 @@ Ensure you have Python (3.x), pip, and poetry installed. To deploy Geppetto:
 - Launch the application with `poetry run geppetto`.
 
 ## 🐳 Docker Deployment
+
 With Docker and Docker Compose ready:
 
 - Rename `docker-compose.example.yml` to `docker-compose.yml` and update your config folder location.
@@ -101,12 +98,14 @@ With Docker and Docker Compose ready:
 - Execute `docker compose` build followed by `docker compose up -d`.
 
 ## 🧪 Testing
+
 Run the following from the root directory to execute tests:
 
 - `python -m unittest` for standard testing.
 - `python -m unittest -v` for verbose output.
 
 ## 🌐 About DeepTechia
+
 We are [DeepTechia](https://deeptechia.io/), where the future of technology meets today’s business needs. As pioneers in the digital realm, we’ve made it our mission to bridge the gap between innovation and practicality, ensuring that businesses not only survive but thrive in an ever-evolving technological landscape.
 
 Born from a passion for cutting-edge technology and a vision for a digitally integrated future, DeepTechia was established to be more than just a tech consultancy. We are visionaries, strategists, and implementers, dedicated to pushing the boundaries of what’s possible while ensuring real-world applicability.
@@ -118,4 +117,5 @@ At DeepTechia, we believe in a future where technology enhances every facet of b
 We’re not just your tech consultants; we’re your partners in crafting a digital future that’s bright, secure, and boundless.
 
 ## 📜 License
+
 Geppetto is licensed and distributed under the AGPLv3 license. [Contact us](https://deeptechia.io/contact/) if you're looking for an exception to the terms.
