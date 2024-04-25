@@ -16,7 +16,10 @@
 - 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
 - 🎨 **Creative Image Generation:** Unleash the power of DALL-E-3 to generate innovative images directly within your Slack conversations.
 
-![Geppetto](/assets/Geppetto.gif)
+## 🚀 **Demo**
+
+![Geppetto](/assets/Geppetto_demo.png)
+![Geppetto](/assets/Geppetto_demo2.png)
 
 ## 👨‍💻 Usage Guidelines
 
@@ -29,7 +32,7 @@
 
 - Invoke Geppetto in channel discussions by mentioning it with "@".
 
-### 🔒 Allowed Users 🔒
+### 🔒 Allowed Users
 
 - Access is granted only to users listed in the [allowed users configuration file](./config/allowed-slack-ids.json).
 
