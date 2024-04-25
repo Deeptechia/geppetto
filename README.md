@@ -1,9 +1,7 @@
 
-<p align="center">
-  <img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
-</p>
+<img src="./assets/GeppettoMini.png" alt="Geppetto Logo"/>
 
-# 🤖 Geppetto
+# Geppetto
 
 ![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
 ![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
