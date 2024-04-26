@@ -164,5 +164,10 @@ class OpenAIHandler(LLMHandler):
         else:
             response = response.choices[0].message.content
             markdown_response = convert_openai_markdown_to_slack(response)
-            return markdown_response
+            if len(markdown_response) > 4000:
+                # Split the message if it's too long
+                response_parts = self.split_message(markdown_response)
+                return response_parts
+            else:
+                return markdown_response
         

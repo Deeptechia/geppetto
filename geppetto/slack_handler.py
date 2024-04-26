@@ -96,12 +96,23 @@ class SlackHandler:
                 logging.info(
                     "response from %s: %s" % (self.name, response_from_llm_api)
                 )
-                self.app.client.chat_update(
-                    channel=channel_id,
-                    text=response_from_llm_api,
-                    thread_ts=thread_id,
-                    ts=timestamp,
-                )
+                # If there are multiple parts, send each part separately
+                if isinstance(response_from_llm_api, list):
+                    for part in response_from_llm_api:
+                        self.app.client.chat_postMessage(
+                            channel=channel_id,
+                            text=part,
+                            thread_ts=thread_id,
+                            mrkdwn=True
+                        )
+                else:
+                    # If it is a single message, send it normally
+                    self.app.client.chat_update(
+                        channel=channel_id,
+                        text=response_from_llm_api,
+                        thread_ts=thread_id,
+                        ts=timestamp,
+                    )
         except Exception as e:
             logging.error("Error posting message: %s", e)
 
