@@ -44,7 +44,7 @@ def convert_openai_markdown_to_slack(text):
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
-    formatted_text += f"\n\n_(Geppetto v0.2.1 Source: OpenAI Model {CHATGPT_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v0.2.3 Source: OpenAI Model {CHATGPT_MODEL})_"
     
     # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
     return formatted_text
@@ -157,12 +157,17 @@ class OpenAIHandler(LLMHandler):
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
             if function_name == OPENAI_IMG_FUNCTION and status_callback:
-                status_callback(*status_callback_args, ":geppetto: I'm preparing the image, please be patient "
+                status_callback(*status_callback_args, "I'm preparing the image, please be patient "
                                          ":lower_left_paintbrush: ...")
             response = function(**function_args)
             return response
         else:
             response = response.choices[0].message.content
             markdown_response = convert_openai_markdown_to_slack(response)
-            return markdown_response
+            if len(markdown_response) > 4000:
+                # Split the message if it's too long
+                response_parts = self.split_message(markdown_response)
+                return response_parts
+            else:
+                return markdown_response
         
