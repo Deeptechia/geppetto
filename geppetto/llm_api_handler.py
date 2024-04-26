@@ -28,3 +28,16 @@ class LLMHandler(ABC):
             else:
                 raise InvalidThreadFormatError("The input thread doesn't have the field %s" % ROLE_FIELD)
         return prompt
+    
+    def split_message(self, message):
+        """
+        Split a message into parts if it exceeds 4000 characters.
+        
+        Args:
+            message (str): The message to split.
+        
+        Returns:
+            List[str]: A list of message parts.
+        """
+        max_length = 4000
+        return [message[i:i+max_length] for i in range(0, len(message), max_length)]

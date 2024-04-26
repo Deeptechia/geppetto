@@ -41,11 +41,11 @@ class TestGemini(unittest.TestCase):
         mock_response = Mock()
         mock_response.text = "Mocked Gemini response"
         self.gemini_handler.client.generate_content.return_value = mock_response
-        mock_to_markdown.return_value = Mock(data="Mocked Markdown data")
+        mock_to_markdown.return_value = "Mocked Markdown data"
 
         response = self.gemini_handler.llm_generate_content(user_prompt)
 
-        self.assertEqual(response.data, "Mocked Markdown data")
+        self.assertEqual(response, "Mocked Markdown data")
         mock_to_markdown.assert_called_once_with("Mocked Gemini response")
 
     def test_get_prompt_from_thread(self):
