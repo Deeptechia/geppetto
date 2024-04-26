@@ -44,7 +44,6 @@ def convert_gemini_to_slack(text):
     
     return formatted_text
 
-
 class GeminiHandler(LLMHandler):
 
     def __init__(
@@ -72,7 +71,12 @@ class GeminiHandler(LLMHandler):
             user_prompt = [merged_prompt] + user_prompt[2:]
         response= self.client.generate_content(user_prompt)
         markdown_response = convert_gemini_to_slack(response.text)
-        return markdown_response
+        if len(markdown_response) > 4000:
+            # Split the message if it's too long
+            response_parts = self.split_message(markdown_response)
+            return response_parts
+        else:
+            return markdown_response
     
     def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
         prompt = super().get_prompt_from_thread(thread, assistant_tag, user_tag)
