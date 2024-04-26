@@ -63,7 +63,7 @@ class SlackHandler:
         response = self.send_message(
             channel_id,
             thread_id,
-            ":geppetto: :thought_balloon: ..."
+            ":thought_balloon:"
         )
 
         if response["ok"]:
