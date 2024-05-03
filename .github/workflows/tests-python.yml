@@ -37,7 +37,7 @@ jobs:
       - name: Run Test 
         run: |
           python -m xmlrunner discover tests -v -o test_reports
-          pytest  -v --cov=./ tests/ 
+          pytest  -v --cov=./ tests/ --cov-report=html
 
           
       - name: Publish Test Results
