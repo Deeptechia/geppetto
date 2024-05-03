@@ -55,3 +55,4 @@ jobs:
         with:
           name: test-reports  # Name of the artifact
           path: htmlcov/*.html  # Path to the test reports to be archived
+          compression-level: 0 # no compression
