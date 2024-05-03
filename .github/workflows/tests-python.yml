@@ -26,7 +26,12 @@ jobs:
       - name: Run Test 
         run: |
           python -m xmlrunner discover tests -v -o test_reports
-          pytest --cov=./ tests/
+          pytest --cov=./ tests/ --cov-report=xml
+
+      - uses: 5monkeys/cobertura-action@master
+        with:
+          path: coverage.xml
+          minimum_coverage: 75
           
       - name: Publish Test Results
         uses: mikepenz/action-junit-report@v4
