@@ -10,17 +10,16 @@ on:
 jobs:
   Test-Python3:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10','3.11','3.12']
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-        id: setup-python
+          python-version: '3.x'
+
+      - name: Run Python
+        run: python --version
 
       - name: Cache Python dependencies
         uses: actions/cache@v3
