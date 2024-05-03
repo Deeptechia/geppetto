@@ -44,7 +44,7 @@ jobs:
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: 'test_reports/*.html'
+          report_paths: 'test_reports/*.xml'
           detailed_summary: true
           include_passed: true
 
@@ -54,4 +54,4 @@ jobs:
         if: always()  # This step will also run regardless of the success or failure of previous steps
         with:
           name: test-reports  # Name of the artifact
-          path: test_reports/*.xml  # Path to the test reports to be archived
+          path: test_reports/*.html  # Path to the test reports to be archived
