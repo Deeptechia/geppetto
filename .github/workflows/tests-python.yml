@@ -26,6 +26,7 @@ jobs:
       - name: Run Test 
         run: |
           python -m xmlrunner discover tests -v -o test_reports
+          pytest --cov=./ tests/
           
       - name: Publish Test Results
         uses: mikepenz/action-junit-report@v4
