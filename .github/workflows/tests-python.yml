@@ -12,20 +12,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: PaulHatch/semantic-version@v5.4.0
-      - uses: actions/setup-python@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-     
+
       - name: Run Python
         run: python --version
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-    
+     
       - name: install requirements
         run: |
           pip install -r requirements.txt
+          python --version
           
       - name: Run Test 
         run: |
           python -m xmlrunner discover tests -v -o test_reports
+          pytest  -v --cov=./ tests/ --cov-report=html
+
           
       - name: Publish Test Results
         uses: mikepenz/action-junit-report@v4
@@ -34,3 +47,12 @@ jobs:
           report_paths: 'test_reports/*.xml'
           detailed_summary: true
           include_passed: true
+
+
+      - name: Archive Test Reports
+        uses: actions/upload-artifact@v4  # Uploads artifacts (test reports) for access from the GitHub UI
+        if: always()  # This step will also run regardless of the success or failure of previous steps
+        with:
+          name: test-reports  # Name of the artifact
+          path: htmlcov/*.html  # Path to the test reports to be archived
+          compression-level: 0 # no compression
