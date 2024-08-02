@@ -6,6 +6,7 @@ from .llm_controller import LLMController
 from .slack_handler import SlackHandler
 from .openai_handler import OpenAIHandler
 from .gemini_handler import GeminiHandler
+from .claude_handler import ClaudeHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from .utils import load_json
 
@@ -36,6 +37,12 @@ def initialized_llm_controller():
             {
                 "name": "Gemini",
                 "handler": GeminiHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
+            },
+                        {   "name": "Claude",
+                "handler": ClaudeHandler,
                 "handler_args": {
                     "personality": DEFAULT_RESPONSES["features"]["personality"]
                 }
