@@ -41,6 +41,7 @@
 - To switch between ChatGPT and Gemini, or other models, include the following commands in your message:
   - `llm_openai` to use ChatGPT
   - `llm_gemini` to use Gemini
+  - `llm_claude` to use Claude
 
 ## 🛠️ Setup and Configuration
 

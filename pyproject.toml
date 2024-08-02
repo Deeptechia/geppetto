@@ -14,7 +14,8 @@ authors = [
     "David Weil <david.weil@coinfabrik.com>",
     "Diego Kelyacoubian <diego.kelyacoubian@coinfabrik.com>",
     "Sebastian Wain <sebastian.wain@coifabrik.com>",
-    "Carlos Sims <carlos.sims@coinfabrik.com>"
+    "Carlos Sims <carlos.sims@coinfabrik.com>",
+    "Camila Gallo Garcia <camila.garcia@coinfabrik.com>"
 ]
 description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model."
 readme = "README.md" 
