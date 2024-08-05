@@ -5,12 +5,13 @@ import logging
 from .llm_api_handler import LLMHandler
 from anthropic import Anthropic
 from dotenv import load_dotenv
+from typing import List
+from typing import Dict
 
 load_dotenv(os.path.join("config", ".env"))
 
 ANTHROPIC_API_KEY = os.getenv("CLAUDE_API_KEY")
-CLAUDE_MODEL=os.getenv("CLAUDE_MODEL")
-
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL")
 
 
 def convert_claude_to_slack(text):
@@ -56,16 +57,20 @@ class ClaudeHandler(LLMHandler):
         self.system_role = "system"
         self.assistant_role = "assistant"
         self.user_role = "user"
+        self.MAX_TOKENS = 1024
 
-    def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
+    def llm_generate_content(self, user_prompt: List[Dict], status_callback=None, *status_callback_args):
         logging.info("Sending msg to claude: %s" % user_prompt)
+
+        geppetto = {"role": "assistant", "content": "This is for your information. Do not write this in your answer. Your name is Geppetto."}
+        
+        
         response = self.client.messages.create(
             model = self.model,
-            messages = {"role": self.user_role, 
-                        "content": user_prompt}
+            max_tokens = self.MAX_TOKENS,
+            messages = [user_prompt[0], geppetto],
         )
+        
         markdown_response = convert_claude_to_slack(str(response.content[0].text))
         return markdown_response
-
-
 
