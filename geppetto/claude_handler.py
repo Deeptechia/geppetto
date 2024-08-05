@@ -62,8 +62,7 @@ class ClaudeHandler(LLMHandler):
     def llm_generate_content(self, user_prompt: List[Dict], status_callback=None, *status_callback_args):
         logging.info("Sending msg to claude: %s" % user_prompt)
 
-        geppetto = {"role": "assistant", "content": "This is for your information. Do not write this in your answer. Your name is Geppetto."}
-        
+        geppetto = {"role": "assistant", "content": f"This is for your information. Do not write this in your answer. {self.personality}."}
         
         response = self.client.messages.create(
             model = self.model,
