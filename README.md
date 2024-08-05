@@ -82,6 +82,8 @@
     - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
     - `GEMINI_MODEL`: The Gemini model.
     - `GOOGLE_API_KEY`: The Google Gemini API key.
+    - `CLAUDE_MODEL`: The Claude model.
+    - `CLAUDE_API_KEY`: The Anthropic Claude API key.
 
 ## 🚀 Deployment
 
