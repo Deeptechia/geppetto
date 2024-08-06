@@ -36,7 +36,7 @@ def convert_claude_to_slack(text):
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
 
-    formatted_text += f"\n\n_(Geppetto v0.2.3 Source: Claude Model {CLAUDE_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v0.2.4 Source: Claude Model {CLAUDE_MODEL})_"
     
     return formatted_text
 
@@ -62,14 +62,22 @@ class ClaudeHandler(LLMHandler):
     def llm_generate_content(self, user_prompt: List[Dict], status_callback=None, *status_callback_args):
         logging.info("Sending msg to claude: %s" % user_prompt)
 
-        geppetto = {"role": "assistant", "content": f"This is for your information. Do not write this in your answer. {self.personality}."}
+        geppetto = {"role": "assistant", "content": " This is for your information only. Do not write this in your answer. Your name is Geppetto, a bot developed by DeepTechia. Answer in the language they spoke to you."}
         
-        response = self.client.messages.create(
-            model = self.model,
-            max_tokens = self.MAX_TOKENS,
-            messages = [user_prompt[0], geppetto],
-        )
+        try:
+            response = self.client.messages.create(
+                model = self.model,
+                max_tokens = self.MAX_TOKENS,
+                messages = [user_prompt[0], geppetto],
+            )
+
+            markdown_response = convert_claude_to_slack(str(response.content[0].text))
+            
+            return markdown_response
+    
+        except Exception as e:
+            logging.error(f"Error generating content: {e}")
+            return "I'm sorry, I couldn't generate a response at this time. Try using another AI model."
         
-        markdown_response = convert_claude_to_slack(str(response.content[0].text))
-        return markdown_response
+        
 
