@@ -10,7 +10,7 @@
 
 ## ⭐️ Key Features
 
-- 🔀 **Multi-Model Support:** Toggle effortlessly between AI models like ChatGPT and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model
+- 🔀 **Multi-Model Support:** Toggle effortlessly between AI models like ChatGPT, Claude and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model.
 - 💬 **Streamlined Communication:** Initiate dynamic conversation threads by directly messaging Geppetto.
 - ➡️ **Advanced LLM Control:** Manage multiple AI models with the advanced LLM controller component.
 - 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
@@ -34,11 +34,11 @@
 
 ### 🔒 Allowed Users
 
-- Access is granted only to users listed in the [allowed users configuration file](./config/allowed-slack-ids.json).
+- Access is granted only to users listed in the [allowed users configuration file](/config/allowed-slack-ids.json).
 
 ## 🔀 Switching AI Models
 
-- To switch between ChatGPT and Gemini, or other models, include the following commands in your message:
+- To switch between ChatGPT, Gemini and Claude include the following commands in your message:
   - `llm_openai` to use ChatGPT
   - `llm_gemini` to use Gemini
   - `llm_claude` to use Claude
@@ -72,14 +72,14 @@
 
 4. **Environment Setup**
 
-    Copy `.configuration/.env.example` into a new `.configuration/.env`, and adjust the environment variables accordingly:
+    Copy `config/.env.example` into a new `config/.env`, and adjust the environment variables accordingly:
 
     - `SLACK_BOT_TOKEN`: Your Slack bot token (This is the Bot User OAuth Token, it should start with 'xoxb').
     - `SLACK_APP_TOKEN`: Your Slack application token (This is the App-Level Token, it should start with 'xapp').
     - `OPENAI_API_KEY`: Your OpenAI API key.
     - `SIGNING_SECRET`: Your Signing secret to verify Slack requests (from your Slack App Credentials).
-    - `DALLE_MODEL`: The OpenAI DALL-E-3 model.
-    - `CHATGPT_MODEL`: The OpenAI ChatGPT-4 model.
+    - `DALLE_MODEL`: The OpenAI DALL-E model.
+    - `CHATGPT_MODEL`: The OpenAI ChatGPT model.
     - `GEMINI_MODEL`: The Gemini model.
     - `GOOGLE_API_KEY`: The Google Gemini API key.
     - `CLAUDE_MODEL`: The Claude model.
