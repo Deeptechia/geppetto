@@ -3,6 +3,8 @@ import sys
 import unittest
 from unittest.mock import Mock, patch
 
+from tests import TestBase
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
@@ -11,17 +13,8 @@ from geppetto.claude_handler import ClaudeHandler
 
 TEST_PERSONALITY = "Your AI assistant"
 
-def OF(**kw):
-    class OF:
-        pass
 
-    instance = OF()
-    for k, v in kw.items():
-        setattr(instance, k, v)
-    return instance
-
-
-class TestClaude(unittest.TestCase):
+class TestClaude(TestBase):
     @classmethod
     def setUpClass(cls):
         cls.patcher = patch("geppetto.claude_handler.Anthropic")
