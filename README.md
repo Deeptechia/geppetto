@@ -48,7 +48,7 @@
 ### 🔧 Slack App Configuration
 
 1. **Modify App**:
-   - **Edit `manifest-dev.yaml`**: Adjust fields under `display_information` and `bot_user` to tailor Geppetto for your needs.
+   - **Edit `config/manifest-dev.yaml`**: Adjust fields under `display_information` and `bot_user` to tailor Geppetto for your needs.
 2. **Create App**:
    - Go to the  [Slack API](https://api.slack.com) and navigate to *Your Apps*.
    - Click on *Create New App*.
