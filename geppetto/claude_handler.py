@@ -62,17 +62,18 @@ class ClaudeHandler(LLMHandler):
     def llm_generate_content(self, user_prompt: List[Dict], status_callback=None, *status_callback_args):
         logging.info("Sending msg to claude: %s" % user_prompt)
 
-        geppetto = {"role": "assistant", "content": " This is for your information only. Do not write this in your answer. Your name is Geppetto, a bot developed by DeepTechia. Answer in the language they spoke to you."}
+        geppetto = {"role": "assistant", 
+                    "content": " This is for your information only. Do not write this in your answer. Your name is Geppetto, a bot developed by DeepTechia. Answer only in the language the user spoke or asked you to do."}
         
         try:
+            user_prompt.append(geppetto)
             response = self.client.messages.create(
                 model = self.model,
                 max_tokens = self.MAX_TOKENS,
-                messages = [user_prompt[0], geppetto],
+                messages = user_prompt,
             )
 
             markdown_response = convert_claude_to_slack(str(response.content[0].text))
-            
             return markdown_response
     
         except Exception as e:
