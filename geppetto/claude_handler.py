@@ -13,6 +13,7 @@ load_dotenv(os.path.join("config", ".env"))
 ANTHROPIC_API_KEY = os.getenv("CLAUDE_API_KEY")
 CLAUDE_MODEL = os.getenv("CLAUDE_MODEL")
 
+VERSION = os.getenv("GEPPETTO_VERSION")
 
 def convert_claude_to_slack(text):
     """
@@ -36,7 +37,7 @@ def convert_claude_to_slack(text):
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
 
-    formatted_text += f"\n\n_(Geppetto v0.2.4 Source: Claude Model {CLAUDE_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v{VERSION} Source: Claude Model {CLAUDE_MODEL})_"
     
     return formatted_text
 
