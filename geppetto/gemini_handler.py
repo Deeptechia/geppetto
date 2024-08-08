@@ -40,7 +40,7 @@ def convert_gemini_to_slack(text):
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
 
-    formatted_text += f"\n\n_(Geppetto v0.2.3 Source: Gemini Model {GEMINI_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v0.2.4 Source: Gemini Model {GEMINI_MODEL})_"
     
     return formatted_text
 
