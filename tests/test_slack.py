@@ -25,11 +25,11 @@ class TestSlack(TestBase):
         self.patcherA = patch("tests.test_controller.HandlerMockA")
         self.patcherB = patch("tests.test_controller.HandlerMockB")
         self.patcherC = patch("tests.test_controller.HandlerMockC")
-        self.MockLLMHandlerA = cls.patcherA.start()
-        self.MockLLMHandlerB = cls.patcherB.start()
-        self.MockLLMHandlerC = cls.patcherC.start()
+        self.MockLLMHandlerA = self.patcherA.start()
+        self.MockLLMHandlerB = self.patcherB.start()
+        self.MockLLMHandlerC = self.patcherC.start()
         self.patcher1 = patch("geppetto.slack_handler.App")
-        self.MockApp = cls.patcher1.start()
+        self.MockApp = self.patcher1.start()
 
         SLACK_BOT_TOKEN = "slack_bot_token"
         SIGNING_SECRET = "signing_secret"
