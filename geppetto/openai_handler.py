@@ -18,6 +18,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
 CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
 
+VERSION = os.getenv("GEPPETTO_VERSION")
+
 OPENAI_IMG_FUNCTION = "generate_image"
 ROLE_FIELD = "role"
 
@@ -44,7 +46,7 @@ def convert_openai_markdown_to_slack(text):
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
-    formatted_text += f"\n\n_(Geppetto v0.2.3 Source: OpenAI Model {CHATGPT_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v{VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
     
     # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
     return formatted_text

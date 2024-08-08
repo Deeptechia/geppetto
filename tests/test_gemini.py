@@ -3,6 +3,8 @@ import sys
 import unittest
 from unittest.mock import Mock, patch
 
+from tests import TestBase
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
@@ -10,15 +12,8 @@ sys.path.append(parent_dir)
 from geppetto.exceptions import InvalidThreadFormatError
 from geppetto.gemini_handler import GeminiHandler
 
-def OF(**kw):
-    class OF:
-        pass
-    instance = OF()
-    for k, v in kw.items():
-        setattr(instance, k, v)
-    return instance
 
-class TestGemini(unittest.TestCase):
+class TestGemini(TestBase):
     @classmethod
     def setUpClass(cls):
         cls.patcher = patch("geppetto.gemini_handler.genai")

@@ -6,15 +6,16 @@ from .llm_controller import LLMController
 from .slack_handler import SlackHandler
 from .openai_handler import OpenAIHandler
 from .gemini_handler import GeminiHandler
+from .claude_handler import ClaudeHandler
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from .utils import load_json
 
 load_dotenv(os.path.join("config", ".env"))
 
 
-SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
-SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN")
-SIGNING_SECRET = os.getenv("SIGNING_SECRET")
+SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN_TEST")
+SLACK_APP_TOKEN = os.getenv("SLACK_APP_TOKEN_TEST")
+SIGNING_SECRET = os.getenv("SIGNING_SECRET_TEST")
 
 DEFAULT_RESPONSES = load_json("default_responses.json")
 
@@ -36,6 +37,12 @@ def initialized_llm_controller():
             {
                 "name": "Gemini",
                 "handler": GeminiHandler,
+                "handler_args": {
+                    "personality": DEFAULT_RESPONSES["features"]["personality"]
+                }
+            },
+            {   "name": "Claude",
+                "handler": ClaudeHandler,
                 "handler_args": {
                     "personality": DEFAULT_RESPONSES["features"]["personality"]
                 }
