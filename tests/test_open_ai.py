@@ -5,7 +5,7 @@ import logging
 import unittest
 from unittest.mock import Mock, patch
 
-from tests import TestBase
+from tests import TestBase, OF
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
