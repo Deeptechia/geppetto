@@ -8,7 +8,7 @@ parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
 
 from geppetto.claude_handler import ClaudeHandler
-
+import logging 
 TEST_PERSONALITY = "Your AI assistant"
 
 def OF(**kw):
@@ -27,6 +27,7 @@ class TestClaude(unittest.TestCase):
         cls.patcher = patch("geppetto.claude_handler.Anthropic")
         cls.mock_claude = cls.patcher.start()
         cls.claude_handler = ClaudeHandler(personality=TEST_PERSONALITY)
+        logging.getLogger().setLevel(logging.CRITICAL)
 
     @classmethod
     def tearDownClass(cls):
