@@ -1,6 +1,7 @@
 import unittest
 from geppetto.llm_api_handler import LLMHandler
 from geppetto.llm_controller import LLMController
+from tests import TestBase
 
 ClientMock = {}
 
@@ -69,16 +70,16 @@ sample_llms_cfg = [
 ]
 
 
-class TestController(unittest.TestCase):
-    @classmethod
-    def setUp(cls):
-        cls.llm_controller = LLMController(
+class TestController(TestBase):
+    def setUp(self):
+        super(TestBase, self).setUp()
+        self.llm_controller = LLMController(
             sample_llms_cfg
         )
 
-    @classmethod
-    def tearDown(cls):
-        cls.llm_controller = None
+    def tearDown(self):
+        super(TestBase, self).tearDown()
+        self.llm_controller = None
 
     def test_controller_set_up(self):
         self.assertEqual(len(self.llm_controller.llm_cfgs), 2)
