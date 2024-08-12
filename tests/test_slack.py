@@ -1,8 +1,8 @@
 import os
 import sys
 import unittest
-from unittest.mock import patch, ANY
 
+from unittest.mock import patch, ANY
 from geppetto.llm_controller import LLMController
 from tests import TestBase
 from tests.test_open_ai import TEST_PERSONALITY
@@ -371,7 +371,75 @@ class TestSlack(TestBase):
         self.assertEqual(self.slack_handler.select_llm_from_msg(
                             message_default_wrong), "LlmA")
 
+    def test_handle_command(self):
 
+        MOCK_LIST_LLMS_RESPONSE = "Here are the availables AI models!\n"
+        assistants =  self.slack_handler.llm_ctrl.list_llms()
+
+        for assistant in assistants:
+            MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + f"* {assistant}\n"
+        
+        reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
+        MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + reminder
+        channel_id = "test_channel"
+        thread_id = "test_thread_id"
+
+        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_LIST_LLMS_RESPONSE
+        message = "llms"
+        self.slack_handler.handle_message(message, channel_id, thread_id)
+
+        self.assertIn(
+            {"role": "slack_user", "content": message},
+            self.slack_handler.thread_messages[thread_id]["msgs"],
+        )
+        self.assertIn(
+            {"role": "geppetto", "content": MOCK_LIST_LLMS_RESPONSE},
+            self.slack_handler.thread_messages[thread_id]["msgs"],
+        )
+        self.MockApp().client.chat_update.assert_called_with(
+            channel=channel_id,
+            text=MOCK_LIST_LLMS_RESPONSE,
+            thread_ts=thread_id,
+            ts=ANY,
+        )
+
+    def test_command_not_written_properly(self):
+
+
+        MOCK_LIST_LLMS_RESPONSE = "Here are the availables AI models!\n"
+        assistants =  self.slack_handler.llm_ctrl.list_llms()
+
+        for assistant in assistants:
+            MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + f"* {assistant}\n"
+        
+        reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
+        MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + reminder
+
+        MOCK_ANY_RESPONSE = "a response"
+        
+        channel_id = "test_channel"
+        thread_id = "test_thread_id"
+        
+        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_ANY_RESPONSE
+
+        message = "llms is the command"
+        self.slack_handler.handle_message(message, channel_id, thread_id)
+
+        self.assertIn(
+            {"role": "slack_user", "content": message},
+            self.slack_handler.thread_messages[thread_id]["msgs"],
+        )
+        self.assertNotIn(
+            {"role": "geppetto", "content": MOCK_LIST_LLMS_RESPONSE},
+            self.slack_handler.thread_messages[thread_id]["msgs"],
+        )
+        self.MockApp().client.chat_update.assert_called_with(
+            channel=channel_id,
+            text=MOCK_ANY_RESPONSE,
+            thread_ts=thread_id,
+            ts=ANY,
+        )
+    
 def initialized_test_llm_controller(mocked_handler_a, mocked_handler_b, mocked_handler_c):
     controller = LLMController(
         [
