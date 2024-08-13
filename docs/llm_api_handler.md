@@ -5,7 +5,7 @@
 
 - name = "Name of the model"
 - model = "Model that will be used"
-- client = "Api client"
+- client = Api client
 
 ## Functions
 
