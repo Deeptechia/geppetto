@@ -103,7 +103,7 @@ class SlackHandler:
                 logging.info("Timestamp of the posted message: %s", timestamp)
             else:
                 logging.error("Failed to post the message.")
-            
+
             prompt = self.llm[selected_llm].get_prompt_from_thread(thread_history["msgs"], ASSISTANT, USER)
 
             response_from_llm_api = self.llm[selected_llm].llm_generate_content(
@@ -206,7 +206,7 @@ class SlackHandler:
         format_msg = "Here are the available AI models!\n"
 
         for assistant in availables_assistants:
-            format_msg = format_msg + f"* {assistant}\n"
+            format_msg = format_msg + f"* {assistant} -> llm_{assistant.lower()}\n" 
 
         reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
         formated_msg = format_msg + reminder

@@ -377,7 +377,7 @@ class TestSlack(TestBase):
         assistants =  self.slack_handler.llm_ctrl.list_llms()
 
         for assistant in assistants:
-            MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + f"* {assistant}\n"
+            MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE +  f"* {assistant} -> llm_{assistant.lower()}\n" 
         
         reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
         MOCK_LIST_LLMS_RESPONSE = MOCK_LIST_LLMS_RESPONSE + reminder
@@ -405,7 +405,6 @@ class TestSlack(TestBase):
         )
 
     def test_command_not_written_properly(self):
-
 
         MOCK_LIST_LLMS_RESPONSE = "Here are the availables AI models!\n"
         assistants =  self.slack_handler.llm_ctrl.list_llms()
