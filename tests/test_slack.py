@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch, ANY
 
 from geppetto.llm_controller import LLMController
+from tests import TestBase
 from tests.test_open_ai import TEST_PERSONALITY
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -17,38 +18,38 @@ MOCK_GENERIC_LLM_RESPONSE = "Mock text response"
 MOCK_GENERIC_LLM_RESPONSE_B = MOCK_GENERIC_LLM_RESPONSE + " B"
 MOCK_GENERIC_LLM_RESPONSE_C = MOCK_GENERIC_LLM_RESPONSE + " C"
 
-class TestSlack(unittest.TestCase):
-    @classmethod
-    def setUp(cls):
-        cls.patcherA = patch("tests.test_controller.HandlerMockA")
-        cls.patcherB = patch("tests.test_controller.HandlerMockB")
-        cls.patcherC = patch("tests.test_controller.HandlerMockC")
-        cls.MockLLMHandlerA = cls.patcherA.start()
-        cls.MockLLMHandlerB = cls.patcherB.start()
-        cls.MockLLMHandlerC = cls.patcherC.start()
-        cls.patcher1 = patch("geppetto.slack_handler.App")
-        cls.MockApp = cls.patcher1.start()
+
+class TestSlack(TestBase):
+    def setUp(self):
+        super(TestBase, self).setUp()
+        self.patcherA = patch("tests.test_controller.HandlerMockA")
+        self.patcherB = patch("tests.test_controller.HandlerMockB")
+        self.patcherC = patch("tests.test_controller.HandlerMockC")
+        self.MockLLMHandlerA = self.patcherA.start()
+        self.MockLLMHandlerB = self.patcherB.start()
+        self.MockLLMHandlerC = self.patcherC.start()
+        self.patcher1 = patch("geppetto.slack_handler.App")
+        self.MockApp = self.patcher1.start()
 
         SLACK_BOT_TOKEN = "slack_bot_token"
         SIGNING_SECRET = "signing_secret"
         BOT_DEFAULT_RESPONSES = load_json("default_responses.json")
 
-        cls.slack_handler = SlackHandler(
+        self.slack_handler = SlackHandler(
             {"test_user_id": "Test User"},
             BOT_DEFAULT_RESPONSES,
             SLACK_BOT_TOKEN,
             SIGNING_SECRET,
-            initialized_test_llm_controller(cls.MockLLMHandlerA,
-                                            cls.MockLLMHandlerB,
-                                            cls.MockLLMHandlerC)
+            initialized_test_llm_controller(self.MockLLMHandlerA,
+                                            self.MockLLMHandlerB,
+                                            self.MockLLMHandlerC)
         )
 
-    @classmethod
-    def tearDown(cls):
-        cls.patcher1.stop()
-        cls.patcherA.stop()
-        cls.patcherB.stop()
-        cls.patcherC.stop()
+    def tearDown(self):
+        self.patcher1.stop()
+        self.patcherA.stop()
+        self.patcherB.stop()
+        self.patcherC.stop()
 
     def test_permission_check(self):
         body = {

@@ -12,6 +12,9 @@ load_dotenv(os.path.join("config", ".env"))
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 GEMINI_MODEL=os.getenv("GEMINI_MODEL", "gemini-pro")
+
+VERSION = os.getenv("GEPPETTO_VERSION")
+
 MSG_FIELD = "parts"
 MSG_INPUT_FIELD = "content"
 
@@ -40,7 +43,7 @@ def convert_gemini_to_slack(text):
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
 
-    formatted_text += f"\n\n_(Geppetto v0.2.3 Source: Gemini Model {GEMINI_MODEL})_"
+    formatted_text += f"\n\n_(Geppetto v{VERSION} Source: Gemini Model {GEMINI_MODEL})_"
     
     return formatted_text
 

@@ -5,6 +5,8 @@ import logging
 import unittest
 from unittest.mock import Mock, patch
 
+from tests import TestBase, OF
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
@@ -13,17 +15,9 @@ from geppetto.openai_handler import OpenAIHandler
 
 TEST_PERSONALITY = "Your AI assistant"
 
-def OF(**kw):
-    class OF:
-        pass
-
-    instance = OF()
-    for k, v in kw.items():
-        setattr(instance, k, v)
-    return instance
 
 
-class TestOpenAI(unittest.TestCase):
+class TestOpenAI(TestBase):
     @classmethod
     def setUpClass(cls):
         cls.patcher = patch("geppetto.openai_handler.OpenAI")
