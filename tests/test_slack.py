@@ -373,7 +373,7 @@ class TestSlack(TestBase):
 
     def test_handle_command(self):
 
-        MOCK_LIST_LLMS_RESPONSE = "Here are the availables AI models!\n"
+        MOCK_LIST_LLMS_RESPONSE = "Here are the available AI models!\n"
         assistants =  self.slack_handler.llm_ctrl.list_llms()
 
         for assistant in assistants:
@@ -385,11 +385,12 @@ class TestSlack(TestBase):
         thread_id = "test_thread_id"
 
         self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_LIST_LLMS_RESPONSE
-        message = "llms"
+        #message with blank spaces
+        message = "   llms   "
         self.slack_handler.handle_message(message, channel_id, thread_id)
 
         self.assertIn(
-            {"role": "slack_user", "content": message},
+            {"role": "slack_user", "content": message.strip()},
             self.slack_handler.thread_messages[thread_id]["msgs"],
         )
         self.assertIn(
