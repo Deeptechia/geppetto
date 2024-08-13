@@ -43,8 +43,8 @@ class SlackHandler:
         def handle_app_mentions(body):
             self.handle_event(body)
 
-    def handle_command(self, command, channel_id, thread_id, thread_history):
 
+    def handle_command(self, command, channel_id, thread_id, thread_history):
         if command == 'llms':
             self.list_llms(channel_id, thread_id, thread_history)
         
@@ -58,12 +58,14 @@ class SlackHandler:
 
         msg = msg.strip() #deleting extra spaces
 
+        #when using the command
         #msg_copy can be ['llms'] or ['<@...>', 'llms']
         #so we get the last element
         msg_copy = msg.split()
         command = msg_copy[-1]
         
         if len(msg_copy) <= 2 and command in self.commands:
+            # This branch calls handle_command
 
             thread_history = self.thread_messages.get(thread_id, {"llm": "", "msgs": []})
             current_msg = {"role": USER, "content":command}
@@ -72,9 +74,11 @@ class SlackHandler:
             self.handle_command(command, channel_id, thread_id, thread_history)
             
         else:
-    
+            #This branch handles general messages 
+
             thread_history = self.thread_messages.get(thread_id, {"llm": "", "msgs": []})
             selected_llm = self.select_llm_from_msg(msg, thread_history["llm"])
+
 
             if thread_history["llm"] == "":
                 thread_history["llm"] = selected_llm
@@ -99,7 +103,7 @@ class SlackHandler:
                 logging.info("Timestamp of the posted message: %s", timestamp)
             else:
                 logging.error("Failed to post the message.")
-
+            
             prompt = self.llm[selected_llm].get_prompt_from_thread(thread_history["msgs"], ASSISTANT, USER)
 
             response_from_llm_api = self.llm[selected_llm].llm_generate_content(
@@ -199,7 +203,7 @@ class SlackHandler:
         
         availables_assistants = self.llm_ctrl.list_llms()
 
-        format_msg = "Here are the availables AI models!\n"
+        format_msg = "Here are the available AI models!\n"
 
         for assistant in availables_assistants:
             format_msg = format_msg + f"* {assistant}\n"
