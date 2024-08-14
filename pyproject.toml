@@ -4,7 +4,7 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry]
 name = "geppetto"
-version = "0.2.1"
+version = "0.2.5"
 authors = [
     "Lucas Arbues <lucas.arbues@coinfabrik.com>",
     "Ignacio Peña <ignacio.penia@coinfabrik.com>",
@@ -17,7 +17,7 @@ authors = [
     "Carlos Sims <carlos.sims@coinfabrik.com>",
     "Camila Gallo Garcia <camila.garcia@coinfabrik.com>"
 ]
-description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT-4, DALL-E-3, and Google's Gemini model."
+description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT, DALL-E, Claude and Google's Gemini model."
 readme = "README.md" 
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -35,7 +35,7 @@ python-dotenv = "^1.0.0"
 slack-bolt = "^1.18.1"
 slack-sdk = "^3.26.1"
 Pillow = "^10.1.0"
-google-generativeai = "^0.7.1"
+google-generativeai = "^0.7.2"
 IPython = "^8.0.0"
 unittest-xml-reporting = "^3.2.0"
 anthropic = "^0.33.0"
