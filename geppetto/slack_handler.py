@@ -169,9 +169,8 @@ class SlackHandler:
             error_msg = "There was an error when posting the message."
             thread_history["msgs"].append({"role": ASSISTANT, "content": error_msg})
             self.thread_messages[thread_id] = thread_history
-            self.post_response(error_msg, channel_id,
-                               thread_id, timestamp)
-
+            self.send_message(channel_id, thread_id, error_msg)
+            
     def handle_event(self, body):
         """
         Receives an event from the slack channel and checks if the user that sent the message is allowed to interact with the Geppetto.
@@ -243,7 +242,6 @@ class SlackHandler:
         response = self.send_message(channel_id,
                                      thread_id,
                                      formated_msg)
-
         if response["ok"]:
             timestamp = response["message"]["ts"]
             self.app.client.chat_update(channel=channel_id,
