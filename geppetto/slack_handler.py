@@ -23,7 +23,8 @@ class SlackHandler:
             SIGNING_SECRET,
             llm_controller):
         """
-        Slack Handler receives messages from the slack channel and sends responses back. It also handles commands.
+        Slack Handler receives messages from the slack channel and sends responses back. 
+        It also handles commands.
         """
         self.name = 'Geppetto Slack handler'
         self.llm_ctrl = llm_controller
@@ -173,7 +174,8 @@ class SlackHandler:
 
     def handle_event(self, body):
         """
-        Receives an event from the slack channel and checks if the user that sent the message is allowed to interact with the Geppetto. If the user is allowed, it calls the `handle_message()` function.
+        Receives an event from the slack channel and checks if the user that sent the message is allowed to interact with the Geppetto.
+        If the user is allowed, it calls the `handle_message()` function.
         """
         event = body["event"]
         msg = event["text"]
@@ -195,9 +197,7 @@ class SlackHandler:
                               "permission_denied")
 
     def send_message(self, channel_id, thread_id, message, tag="general"):
-        """
-        Sends message to the slack channel.
-        """
+        """Sends message to the slack channel."""
         logging.info("Sending %s message: %s" % (tag, message))
         return self.app.client.chat_postMessage(channel=channel_id,
                                                 text=message,
@@ -206,7 +206,8 @@ class SlackHandler:
 
     def select_llm_from_msg(self, message, last_llm=''):
         """
-        Selects the LLM from the message. If the LLM is not specified, the default LLM is chosen. In this case, ChatGPT.
+        Selects the LLM from the message. If the LLM is not specified, the default LLM is chosen. 
+        In this case, ChatGPT.
         """
         mentions = re.findall(r'(?<=\bllm_)\w+', message)
         clean_mentions = [re.sub(r'[\#\!\?\,\;\.]', "", mention)
@@ -226,7 +227,8 @@ class SlackHandler:
 
     def list_llms(self, channel_id, thread_id, thread_history):
         """
-        Implementation of 'llms' command. Lists all available LLMs and sends it to the slack channel.
+        Implementation of 'llms' command. 
+        Lists all available LLMs and sends it to the slack channel.
         """
         availables_assistants = self.llm_ctrl.list_llms()
         format_msg = ["Here are the available AI models!"]
