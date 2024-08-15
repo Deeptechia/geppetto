@@ -12,8 +12,7 @@ class HandlerMockA(LLMHandler):
         super().__init__(
             "First LLM",
             "LLM1",
-            ClientMock
-        )
+            ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -29,8 +28,7 @@ class HandlerMockB(LLMHandler):
         super().__init__(
             "Second LLM",
             "LLM2",
-            ClientMock
-        )
+            ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -46,8 +44,7 @@ class HandlerMockC(LLMHandler):
         super().__init__(
             "Third LLM",
             "LLM3",
-            ClientMock
-        )
+            ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -74,8 +71,7 @@ class TestController(TestBase):
     def setUp(self):
         super(TestBase, self).setUp()
         self.llm_controller = LLMController(
-            sample_llms_cfg
-        )
+            sample_llms_cfg)
 
     def tearDown(self):
         super(TestBase, self).tearDown()
@@ -88,7 +84,7 @@ class TestController(TestBase):
     def test_initialize_controller(self):
         self.llm_controller.init_controller()
         self.assertEqual(len(self.llm_controller.llm_cfgs), 2)
-        self.assertEqual(len(self.llm_controller.handlers),2)
+        self.assertEqual(len(self.llm_controller.handlers), 2)
 
     def test_get_llm_cfg(self):
         cfg = self.llm_controller.get_llm_cfg("Second LLM")
@@ -98,8 +94,7 @@ class TestController(TestBase):
         self.assertRaises(
             ValueError,
             self.llm_controller.get_llm_cfg,
-            "Wrong LLM"
-        )
+            "Wrong LLM")
 
     def test_list_llms(self):
         list = self.llm_controller.list_llms()
@@ -113,7 +108,8 @@ class TestController(TestBase):
         self.llm_controller.init_controller()
         info1 = self.llm_controller.handlers["First LLM"].get_info()
         self.assertEqual(info1, "Name: First LLM - Model: LLM1")
-        self.assertEqual(self.llm_controller.handlers["Second LLM"].some_arg, "SecondGPT")
+        self.assertEqual(self.llm_controller.handlers["Second LLM"].some_arg,
+                         "SecondGPT")
 
 
 if __name__ == "__main__":
