@@ -54,7 +54,7 @@ class SlackHandler:
         """
         current_msg = {"role": USER, "content": command}
         thread_history["msgs"].append(current_msg)
-        response = self.commands[command](channel_id, thread_id, thread_history)
+        response = self.commands[command](channel_id, thread_id)
         thread_history["msgs"].append({"role": ASSISTANT, "content": response})
         self.thread_messages[thread_id] = thread_history
 
