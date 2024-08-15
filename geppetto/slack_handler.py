@@ -225,7 +225,7 @@ class SlackHandler:
             # default first LLM
             return controlled_llms[0]
 
-    def list_llms(self, channel_id, thread_id, thread_history):
+    def list_llms(self, channel_id, thread_id):
         """
         Implementation of 'llms' command. 
         Lists all available LLMs and sends it to the slack channel.
