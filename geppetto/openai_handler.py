@@ -43,7 +43,9 @@ def convert_openai_markdown_to_slack(text):
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text)
-    formatted_text += f"\n\n_(Geppetto v{VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
+    formatted_text += (
+        f"\n\n_(Geppetto v{VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
+    )
 
     # Code blocks and italics remain unchanged but can be explicitly formatted
     # if necessary
@@ -53,13 +55,10 @@ def convert_openai_markdown_to_slack(text):
 class OpenAIHandler(LLMHandler):
 
     def __init__(
-            self,
-            personality,
-            ):
-        super().__init__(
-            'OpenAI',
-            CHATGPT_MODEL,
-            OpenAI(api_key=OPENAI_API_KEY))
+        self,
+        personality,
+    ):
+        super().__init__("OpenAI", CHATGPT_MODEL, OpenAI(api_key=OPENAI_API_KEY))
         self.dalle_model = DALLE_MODEL
         self.personality = personality
         self.system_role = "system"
@@ -76,9 +75,12 @@ class OpenAIHandler(LLMHandler):
 
     @staticmethod
     def get_functionalities():
-        return json.dumps(["Generate an image from text",
-                           "Get app functionalities",
-                           ])
+        return json.dumps(
+            [
+                "Generate an image from text",
+                "Get app functionalities",
+            ]
+        )
 
     def generate_image(self, prompt, size="1024x1024"):
         logging.info("Generating image: %s with size: %s" % (prompt, size))
@@ -94,7 +96,9 @@ class OpenAIHandler(LLMHandler):
         except Exception as e:
             logging.error(f"Error generating image: {e}")
 
-    def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
+    def llm_generate_content(
+        self, user_prompt, status_callback=None, *status_callback_args
+    ):
         logging.info("Sending msg to chatgpt: %s" % user_prompt)
         tools = [
             {
@@ -128,30 +132,37 @@ class OpenAIHandler(LLMHandler):
             },
         ]
         # Initial conversation message
-        messages = [{"role": self.system_role,
-                     "content": self.personality,
-                     },
-                     *user_prompt,
-                    ]
-        response = self.client.chat.completions.create(model=self.model,
-                                                       messages=messages,
-                                                       tools=tools,
-                                                       tool_choice="auto",
-                                                       )
+        messages = [
+            {
+                "role": self.system_role,
+                "content": self.personality,
+            },
+            *user_prompt,
+        ]
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            tools=tools,
+            tool_choice="auto",
+        )
         # Handle the tool calls
         tool_calls = response.choices[0].message.tool_calls
         if tool_calls:
-            available_functions = {OPENAI_IMG_FUNCTION: self.generate_image,
-                                   "get_functionalities": self.get_functionalities,
-                                   }
+            available_functions = {
+                OPENAI_IMG_FUNCTION: self.generate_image,
+                "get_functionalities": self.get_functionalities,
+            }
             tool_call = tool_calls[0]
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
 
             if function_name == OPENAI_IMG_FUNCTION and status_callback:
-                status_callback(*status_callback_args, "I'm preparing the image, please be patient "
-                                ":lower_left_paintbrush: ...")
+                status_callback(
+                    *status_callback_args,
+                    "I'm preparing the image, please be patient "
+                    ":lower_left_paintbrush: ...",
+                )
             response = function(**function_args)
             return response
         else:

@@ -38,8 +38,9 @@ class TestOpenAI(TestBase):
             mock_chat_completion_response
         )
         response = self.openai_handler.llm_generate_content(
-            user_prompt, self.my_callback, None)
-        main_content = response.split('\n\n_(Geppetto', 1)[0].strip()
+            user_prompt, self.my_callback, None
+        )
+        main_content = response.split("\n\n_(Geppetto", 1)[0].strip()
         self.assertEqual(main_content, "Mocked ChatGPT Response")
 
     def my_callback(self, *args):
@@ -67,11 +68,11 @@ class TestOpenAI(TestBase):
             mock_chat_completion_response
         )
 
-        user_prompt = [
-            {"role": "user", "content": "Generate an image of a mountain"}]
+        user_prompt = [{"role": "user", "content": "Generate an image of a mountain"}]
 
         response = self.openai_handler.llm_generate_content(
-            user_prompt, self.my_callback, None)
+            user_prompt, self.my_callback, None
+        )
 
         # Assuming download_image returns bytes
         self.assertIsInstance(response, bytes)

@@ -49,11 +49,12 @@ def convert_gemini_to_slack(text):
 
 class GeminiHandler(LLMHandler):
 
-    def __init__(self,
-                 personality,
-                ):
+    def __init__(
+        self,
+        personality,
+    ):
         super().__init__(
-            'Gemini',
+            "Gemini",
             GEMINI_MODEL,
             genai.GenerativeModel(GEMINI_MODEL),
         )
@@ -63,13 +64,20 @@ class GeminiHandler(LLMHandler):
         self.user_role = "user"
         genai.configure(api_key=GOOGLE_API_KEY)
 
-    def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
+    def llm_generate_content(
+        self, user_prompt, status_callback=None, *status_callback_args
+    ):
         logging.info("Sending msg to gemini: %s" % user_prompt)
 
-        if len(user_prompt) >= 2 and user_prompt[0].get('role') == 'user' and user_prompt[1].get('role') == 'user':
-            merged_prompt = {'role': 'user',
-                            'parts': [msg['parts'][0] for msg in user_prompt[:2]]
-                            }
+        if (
+            len(user_prompt) >= 2
+            and user_prompt[0].get("role") == "user"
+            and user_prompt[1].get("role") == "user"
+        ):
+            merged_prompt = {
+                "role": "user",
+                "parts": [msg["parts"][0] for msg in user_prompt[:2]],
+            }
             user_prompt = [merged_prompt] + user_prompt[2:]
 
         response = self.client.generate_content(user_prompt)
@@ -82,13 +90,15 @@ class GeminiHandler(LLMHandler):
         else:
             return markdown_response
 
-    def get_prompt_from_thread(self, thread: List[Dict], assistant_tag: str, user_tag: str):
+    def get_prompt_from_thread(
+        self, thread: List[Dict], assistant_tag: str, user_tag: str
+    ):
         prompt = super().get_prompt_from_thread(thread, assistant_tag, user_tag)
         for msg in prompt:
             if MSG_INPUT_FIELD in msg:
                 msg[MSG_FIELD] = [msg.pop(MSG_INPUT_FIELD)]
             else:
                 raise InvalidThreadFormatError(
-                    "The input thread doesn't have the field %s" %
-                    MSG_INPUT_FIELD)
+                    "The input thread doesn't have the field %s" % MSG_INPUT_FIELD
+                )
         return prompt

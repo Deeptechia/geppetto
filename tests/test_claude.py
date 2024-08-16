@@ -36,7 +36,11 @@ class TestClaude(TestBase):
         mock_response.content = [Mock(text="Mocked Claude response")]
         self.claude_handler.client.messages.create = Mock(return_value=mock_response)
 
-        response = self.claude_handler.llm_generate_content(user_prompt).split('\n\n_(Geppetto', 1)[0].strip()
+        response = (
+            self.claude_handler.llm_generate_content(user_prompt)
+            .split("\n\n_(Geppetto", 1)[0]
+            .strip()
+        )
         self.assertEqual(response, "Mocked Claude response")
 
     def test_failed_to_llm_generate_content(self):
@@ -46,7 +50,7 @@ class TestClaude(TestBase):
         mock_claude.content = [Mock(text=failed_response)]
         mock_claude.return_value = mock_claude
         self.claude_handler.client.messages.create = mock_claude
-        
+
         response = self.claude_handler.llm_generate_content("")
         self.assertEqual(response, failed_response)
 

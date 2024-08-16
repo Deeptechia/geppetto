@@ -38,18 +38,17 @@ def convert_claude_to_slack(text):
     formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text)
 
     formatted_text += f"\n\n_(Geppetto v{VERSION} Source: Claude Model {CLAUDE_MODEL})_"
-    
+
     return formatted_text
 
 
 class ClaudeHandler(LLMHandler):
 
-    def __init__(self,
-                 personality,
-                ):
-        super().__init__('Claude',
-                         CLAUDE_MODEL,
-                         Anthropic(api_key=ANTHROPIC_API_KEY))
+    def __init__(
+        self,
+        personality,
+    ):
+        super().__init__("Claude", CLAUDE_MODEL, Anthropic(api_key=ANTHROPIC_API_KEY))
         self.claude_model = CLAUDE_MODEL
         self.personality = personality
         self.system_role = "system"
@@ -57,20 +56,22 @@ class ClaudeHandler(LLMHandler):
         self.user_role = "user"
         self.MAX_TOKENS = 1024
 
-    def llm_generate_content(self,
-                             user_prompt: List[Dict],
-                             status_callback=None,
-                             *status_callback_args):
+    def llm_generate_content(
+        self, user_prompt: List[Dict], status_callback=None, *status_callback_args
+    ):
         logging.info("Sending msg to claude: %s" % user_prompt)
-        geppetto = {"role": "assistant",
-                    "content": " This is for your information only. Do not write this in your answer. Your name is Geppetto, a bot developed by DeepTechia. Answer only in the language the user spoke or asked you to do."}
+        geppetto = {
+            "role": "assistant",
+            "content": " This is for your information only. Do not write this in your answer. Your name is Geppetto, a bot developed by DeepTechia. Answer only in the language the user spoke or asked you to do.",
+        }
 
         try:
             user_prompt.append(geppetto)
-            response = self.client.messages.create(model=self.model,
-                                                   max_tokens=self.MAX_TOKENS,
-                                                   messages=user_prompt,
-                                                   )
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=self.MAX_TOKENS,
+                messages=user_prompt,
+            )
             markdown_response = convert_claude_to_slack(str(response.content[0].text))
             return markdown_response
         except Exception as e:

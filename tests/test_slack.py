@@ -38,13 +38,15 @@ class TestSlack(TestBase):
         SIGNING_SECRET = "signing_secret"
         BOT_DEFAULT_RESPONSES = load_json("default_responses.json")
 
-        self.slack_handler = SlackHandler({"test_user_id": "Test User"},
-                                          BOT_DEFAULT_RESPONSES,
-                                          SLACK_BOT_TOKEN,
-                                          SIGNING_SECRET,
-                                          initialized_test_llm_controller(self.MockLLMHandlerA,
-                                                                          self.MockLLMHandlerB,
-                                                                          self.MockLLMHandlerC))
+        self.slack_handler = SlackHandler(
+            {"test_user_id": "Test User"},
+            BOT_DEFAULT_RESPONSES,
+            SLACK_BOT_TOKEN,
+            SIGNING_SECRET,
+            initialized_test_llm_controller(
+                self.MockLLMHandlerA, self.MockLLMHandlerB, self.MockLLMHandlerC
+            ),
+        )
 
     def tearDown(self):
         self.patcher1.stop()
@@ -68,7 +70,8 @@ class TestSlack(TestBase):
             channel="test_channel",
             text=self.slack_handler.bot_default_responses["user"]["permission_denied"],
             thread_ts="1",
-            mrkdwn=True)
+            mrkdwn=True,
+        )
 
     def test_random_user_allowed_with_wildcard_permission(self):
         body = {
@@ -84,14 +87,13 @@ class TestSlack(TestBase):
         self.slack_handler.handle_event(body)
 
         self.MockApp().client.chat_postMessage.assert_called_with(
-            channel="test_channel",
-            text=":thought_balloon:",
-            thread_ts="1",
-            mrkdwn=True
+            channel="test_channel", text=":thought_balloon:", thread_ts="1", mrkdwn=True
         )
 
     def test_handle_message(self):
-        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
 
         message = "Test message"
 
@@ -111,7 +113,7 @@ class TestSlack(TestBase):
             channel=CHANNEL_ID,
             text=":thought_balloon:",
             thread_ts=THREAD_ID,
-            mrkdwn=True
+            mrkdwn=True,
         )
         self.MockApp().client.chat_update.assert_called_with(
             channel=CHANNEL_ID,
@@ -123,7 +125,9 @@ class TestSlack(TestBase):
     def test_handle_message_switch_simple(self):
 
         # Case A: DEFAULT LLM A
-        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         message_a = "Test message"
         self.slack_handler.handle_message(message_a, CHANNEL_ID, THREAD_ID)
         self.assertIn(
@@ -136,7 +140,9 @@ class TestSlack(TestBase):
         )
 
         # Case B: LLM B
-        self.MockLLMHandlerB().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE_B
+        self.MockLLMHandlerB().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE_B
+        )
         message_b = "Test message llm_llmb"
         self.slack_handler.handle_message(message_b, CHANNEL_ID, THREAD_ID)
         self.assertIn(
@@ -150,7 +156,9 @@ class TestSlack(TestBase):
 
     def test_handle_message_switch_same_thread_continue_non_default(self):
         # Case C: LLM C
-        self.MockLLMHandlerC().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE_C
+        self.MockLLMHandlerC().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE_C
+        )
         message_c = "Test message llm_llmc"
         self.slack_handler.handle_message(message_c, CHANNEL_ID, THREAD_ID)
         self.assertIn(
@@ -163,10 +171,11 @@ class TestSlack(TestBase):
         )
 
         # DON'T switch to DEFAULT in started NON DEFAULT conversations
-        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         non_labeled_msg = "Second message"
-        self.slack_handler.handle_message(
-            non_labeled_msg, CHANNEL_ID, THREAD_ID)
+        self.slack_handler.handle_message(non_labeled_msg, CHANNEL_ID, THREAD_ID)
         self.assertIn(
             {"role": "slack_user", "content": non_labeled_msg},
             self.slack_handler.thread_messages[THREAD_ID]["msgs"],
@@ -178,45 +187,63 @@ class TestSlack(TestBase):
 
     def test_handle_message_switch_same_thread_reset_on_switch(self):
         # Case A: LLM A
-        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         message_a = "Test message llm_llma"
         self.slack_handler.handle_message(message_a, CHANNEL_ID, THREAD_ID)
         user_msg_a = {"role": "slack_user", "content": message_a}
-        geppetto_msg_a = {
-            "role": "geppetto",
-            "content": MOCK_GENERIC_LLM_RESPONSE}
+        geppetto_msg_a = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE}
         self.assertEqual(
-            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 1)
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 1
+        )
 
         self.assertEqual(
-            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a), 1)
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a),
+            1,
+        )
 
         # Continue conversation with LLM A
         for _ in range(3):
             self.slack_handler.handle_message(message_a, CHANNEL_ID, THREAD_ID)
         self.assertEqual(
-            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 4)
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 4
+        )
         self.assertEqual(
-            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a), 4)
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a),
+            4,
+        )
 
         # SWITCH TO LLM C in an ongoing conversation
-        self.MockLLMHandlerC().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE_C
+        self.MockLLMHandlerC().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE_C
+        )
         message_c = "Test message llm_llmc"
         user_msg_c = {"role": "slack_user", "content": message_c}
         geppetto_msg_c = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE_C}
         self.slack_handler.handle_message(message_c, CHANNEL_ID, THREAD_ID)
 
         # the first user message is kept but the rest is dumped
-        self.assertEqual(self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 1)
-        
+        self.assertEqual(
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_a), 1
+        )
+
         # the previous llm responses are dumped
-        self.assertEqual(self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a), 0)
+        self.assertEqual(
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_a),
+            0,
+        )
 
         # the message that triggered the switch is kept to give context
-        self.assertEqual(self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_c), 1)
+        self.assertEqual(
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(user_msg_c), 1
+        )
 
         # the answer of the new selected llm
-        self.assertEqual(self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_c), 1)
+        self.assertEqual(
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"].count(geppetto_msg_c),
+            1,
+        )
 
     def test_handle_message_switch_different_thread(self):
         thread_id_i = "test_thread_id_i"
@@ -225,79 +252,97 @@ class TestSlack(TestBase):
         user_msg_generic = {"role": "slack_user", "content": non_labeled_msg}
 
         # --- LLM B on thread I ---
-        self.MockLLMHandlerB().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerB().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         message_b = "Test message llm_llmb"
         self.slack_handler.handle_message(message_b, CHANNEL_ID, thread_id_i)
         user_msg_b = {"role": "slack_user", "content": message_b}
-        geppetto_msg_b = {
-            "role": "geppetto",
-            "content": MOCK_GENERIC_LLM_RESPONSE}
+        geppetto_msg_b = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE}
 
         # --- LLM C on thread II ---
-        self.MockLLMHandlerC().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerC().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         message_c = "Test message llm_llmc"
         self.slack_handler.handle_message(message_c, CHANNEL_ID, thread_id_ii)
         user_msg_c = {"role": "slack_user", "content": message_c}
-        geppetto_msg_c = {
-            "role": "geppetto",
-            "content": MOCK_GENERIC_LLM_RESPONSE}
+        geppetto_msg_c = {"role": "geppetto", "content": MOCK_GENERIC_LLM_RESPONSE}
 
         # --- Return to LLM B on thread I ---
         # check
         self.assertEqual(
-            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b), 1)
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b), 1
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_i]["msgs"].count(
-                geppetto_msg_b),
-            1)
+                geppetto_msg_b
+            ),
+            1,
+        )
         # Continue conversation with LLM B without label
         for _ in range(3):
-            self.slack_handler.handle_message(
-                non_labeled_msg, CHANNEL_ID, thread_id_i)
+            self.slack_handler.handle_message(non_labeled_msg, CHANNEL_ID, thread_id_i)
 
         # --- Return to LLM C on thread II ---
         # check
         self.assertEqual(
-            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c), 1)
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c),
+            1,
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(
-                geppetto_msg_c),
-            1)
+                geppetto_msg_c
+            ),
+            1,
+        )
         # Continue conversation with LLM C without label
         for _ in range(9):
-            self.slack_handler.handle_message(
-                non_labeled_msg, CHANNEL_ID, thread_id_ii)
+            self.slack_handler.handle_message(non_labeled_msg, CHANNEL_ID, thread_id_ii)
 
         # --- Return to LLM B on thread I ---
         # check
         self.assertEqual(
-            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b), 1)
+            self.slack_handler.thread_messages[thread_id_i]["msgs"].count(user_msg_b), 1
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_i]["msgs"].count(
-                user_msg_generic),
-            3)
+                user_msg_generic
+            ),
+            3,
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_i]["msgs"].count(
-                geppetto_msg_b),
-            4)
+                geppetto_msg_b
+            ),
+            4,
+        )
 
         # --- Return to LLM C on thread II ---
         # check
         self.assertEqual(
-            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c), 1)
+            self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(user_msg_c),
+            1,
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(
-                user_msg_generic),
-            9)
+                user_msg_generic
+            ),
+            9,
+        )
         self.assertEqual(
             self.slack_handler.thread_messages[thread_id_ii]["msgs"].count(
-                geppetto_msg_c),
-            10)
+                geppetto_msg_c
+            ),
+            10,
+        )
 
     def test_handle_image(self):
         message = "Test message"
 
-        self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_GENERIC_LLM_RESPONSE
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            MOCK_GENERIC_LLM_RESPONSE
+        )
         self.slack_handler.handle_message(message, CHANNEL_ID, THREAD_ID)
         self.MockApp().client.chat_update.assert_called_with(
             channel=CHANNEL_ID,
@@ -307,7 +352,9 @@ class TestSlack(TestBase):
         )
 
         mock_open_ai_byte_response = b"Mock byte response"
-        self.MockLLMHandlerA().llm_generate_content.return_value = mock_open_ai_byte_response
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            mock_open_ai_byte_response
+        )
         self.slack_handler.handle_message(message, CHANNEL_ID, THREAD_ID)
         self.MockApp().client.files_upload_v2.assert_called_with(
             channel=CHANNEL_ID,
@@ -324,37 +371,38 @@ class TestSlack(TestBase):
         message_default_many = "llm_llmc Test llm_llmb message llm_llma"
         message_default_wrong = "Test message #zeta"
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_a), "LlmA")
+        self.assertEqual(self.slack_handler.select_llm_from_msg(message_a), "LlmA")
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_b), "LLMb")
+        self.assertEqual(self.slack_handler.select_llm_from_msg(message_b), "LLMb")
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_c), "LLMC")
+        self.assertEqual(self.slack_handler.select_llm_from_msg(message_c), "LLMC")
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_default_empty), "LlmA")
+        self.assertEqual(
+            self.slack_handler.select_llm_from_msg(message_default_empty), "LlmA"
+        )
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_default_many), "LlmA")
+        self.assertEqual(
+            self.slack_handler.select_llm_from_msg(message_default_many), "LlmA"
+        )
 
-        self.assertEqual(self.slack_handler.select_llm_from_msg(
-            message_default_wrong), "LlmA")
+        self.assertEqual(
+            self.slack_handler.select_llm_from_msg(message_default_wrong), "LlmA"
+        )
 
     def test_handle_command(self):
         mock_list_llms_response = ["Here are the available AI models!"]
         assistants = self.slack_handler.llm_ctrl.list_llms()
 
         for assistant in assistants:
-            mock_list_llms_response.append(
-                f"* {assistant} -> llm_{assistant.lower()}")
+            mock_list_llms_response.append(f"* {assistant} -> llm_{assistant.lower()}")
 
         reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
         mock_list_llms_response.append(reminder)
-        mock_list_llms_response = '\n'.join(mock_list_llms_response)
+        mock_list_llms_response = "\n".join(mock_list_llms_response)
 
-        self.MockLLMHandlerA().llm_generate_content.return_value = mock_list_llms_response
+        self.MockLLMHandlerA().llm_generate_content.return_value = (
+            mock_list_llms_response
+        )
         # message with blank spaces
         message = "   llms   "
         self.slack_handler.handle_message(message, CHANNEL_ID, THREAD_ID)
@@ -379,12 +427,11 @@ class TestSlack(TestBase):
         assistants = self.slack_handler.llm_ctrl.list_llms()
 
         for assistant in assistants:
-            mock_list_llms_response.append(
-                f"* {assistant} -> llm_{assistant.lower()}")
+            mock_list_llms_response.append(f"* {assistant} -> llm_{assistant.lower()}")
 
         reminder = "Example: Using 'llm_gemini' at the start of your message to Geppetto switches to gemini model."
         mock_list_llms_response.append(reminder)
-        mock_list_llms_response = '\n'.join(mock_list_llms_response)
+        mock_list_llms_response = "\n".join(mock_list_llms_response)
 
         self.MockLLMHandlerA().llm_generate_content.return_value = MOCK_ANY_RESPONSE
 
@@ -395,8 +442,10 @@ class TestSlack(TestBase):
             {"role": "slack_user", "content": message},
             self.slack_handler.thread_messages[THREAD_ID]["msgs"],
         )
-        self.assertNotIn({"role": "geppetto", "content": mock_list_llms_response},
-                         self.slack_handler.thread_messages[THREAD_ID]["msgs"],)
+        self.assertNotIn(
+            {"role": "geppetto", "content": mock_list_llms_response},
+            self.slack_handler.thread_messages[THREAD_ID]["msgs"],
+        )
         self.MockApp().client.chat_update.assert_called_with(
             channel=CHANNEL_ID,
             text=MOCK_ANY_RESPONSE,
@@ -405,19 +454,28 @@ class TestSlack(TestBase):
         )
 
 
-def initialized_test_llm_controller(mocked_handler_a,
-                                    mocked_handler_b,
-                                    mocked_handler_c):
-    controller = LLMController([
-        {"name": "LlmA",
-         "handler": mocked_handler_a,
-         "handler_args": {"personality": TEST_PERSONALITY}},
-        {"name": "LLMb",
-         "handler": mocked_handler_b,
-         "handler_args": {"personality": TEST_PERSONALITY}},
-        {"name": "LLMC",
-         "handler": mocked_handler_c,
-         "handler_args": {"personality": TEST_PERSONALITY}}])
+def initialized_test_llm_controller(
+    mocked_handler_a, mocked_handler_b, mocked_handler_c
+):
+    controller = LLMController(
+        [
+            {
+                "name": "LlmA",
+                "handler": mocked_handler_a,
+                "handler_args": {"personality": TEST_PERSONALITY},
+            },
+            {
+                "name": "LLMb",
+                "handler": mocked_handler_b,
+                "handler_args": {"personality": TEST_PERSONALITY},
+            },
+            {
+                "name": "LLMC",
+                "handler": mocked_handler_c,
+                "handler_args": {"personality": TEST_PERSONALITY},
+            },
+        ]
+    )
     controller.init_controller()
     return controller
 
