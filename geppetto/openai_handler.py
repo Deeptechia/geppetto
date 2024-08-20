@@ -5,10 +5,8 @@ from PIL import Image
 from urllib.request import urlopen
 import logging
 
-from .exceptions import InvalidThreadFormatError
 from .llm_api_handler import LLMHandler
 from dotenv import load_dotenv
-from typing import List, Dict
 import os
 import re
 
@@ -17,16 +15,15 @@ load_dotenv(os.path.join("config", ".env"))
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 DALLE_MODEL = os.getenv("DALLE_MODEL")
 CHATGPT_MODEL = os.getenv("CHATGPT_MODEL")
-
 VERSION = os.getenv("GEPPETTO_VERSION")
-
 OPENAI_IMG_FUNCTION = "generate_image"
 ROLE_FIELD = "role"
+
 
 def convert_openai_markdown_to_slack(text):
     """
     Converts markdown text from the OpenAI format to Slack's "mrkdwn" format.
-    
+
     This function handles:
     - Bold text conversion from double asterisks (**text**) to single asterisks (*text*).
     - Italics remain unchanged as they use underscores (_text_) in both formats.
@@ -34,10 +31,10 @@ def convert_openai_markdown_to_slack(text):
     - Bullet points are converted from hyphens (-) to Slack-friendly bullet points (•).
     - Code blocks with triple backticks remain unchanged.
     - Strikethrough conversion from double tildes (~~text~~) to single tildes (~text~).
-    
+
     Args:
         text (str): The markdown text to be converted.
-    
+
     Returns:
         str: The markdown text formatted for Slack.
     """
@@ -45,10 +42,13 @@ def convert_openai_markdown_to_slack(text):
     formatted_text = formatted_text.replace("**", "*")
     formatted_text = formatted_text.replace("__", "_")
     formatted_text = formatted_text.replace("- ", "• ")
-    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text) 
-    formatted_text += f"\n\n_(Geppetto v{VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
-    
-    # Code blocks and italics remain unchanged but can be explicitly formatted if necessary
+    formatted_text = re.sub(r"\[(.*?)\]\((.*?)\)", r"<\2|\1>", formatted_text)
+    formatted_text += (
+        f"\n\n_(Geppetto v{VERSION} Source: OpenAI Model {CHATGPT_MODEL})_"
+    )
+
+    # Code blocks and italics remain unchanged but can be explicitly formatted
+    # if necessary
     return formatted_text
 
 
@@ -58,11 +58,7 @@ class OpenAIHandler(LLMHandler):
         self,
         personality,
     ):
-        super().__init__(
-            'OpenAI',
-            CHATGPT_MODEL,
-            OpenAI(api_key=OPENAI_API_KEY)
-        )
+        super().__init__("OpenAI", CHATGPT_MODEL, OpenAI(api_key=OPENAI_API_KEY))
         self.dalle_model = DALLE_MODEL
         self.personality = personality
         self.system_role = "system"
@@ -100,7 +96,9 @@ class OpenAIHandler(LLMHandler):
         except Exception as e:
             logging.error(f"Error generating image: {e}")
 
-    def llm_generate_content(self, user_prompt, status_callback=None, *status_callback_args):
+    def llm_generate_content(
+        self, user_prompt, status_callback=None, *status_callback_args
+    ):
         logging.info("Sending msg to chatgpt: %s" % user_prompt)
         tools = [
             {
@@ -158,9 +156,13 @@ class OpenAIHandler(LLMHandler):
             function_name = tool_call.function.name
             function_args = json.loads(tool_call.function.arguments)
             function = available_functions[function_name]
+
             if function_name == OPENAI_IMG_FUNCTION and status_callback:
-                status_callback(*status_callback_args, "I'm preparing the image, please be patient "
-                                         ":lower_left_paintbrush: ...")
+                status_callback(
+                    *status_callback_args,
+                    "I'm preparing the image, please be patient "
+                    ":lower_left_paintbrush: ...",
+                )
             response = function(**function_args)
             return response
         else:
@@ -172,4 +174,3 @@ class OpenAIHandler(LLMHandler):
                 return response_parts
             else:
                 return markdown_response
-        

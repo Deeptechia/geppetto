@@ -3,18 +3,14 @@ import os
 import sys
 import logging
 import unittest
+from geppetto.openai_handler import OpenAIHandler
 from unittest.mock import Mock, patch
-
 from tests import TestBase, OF
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
 sys.path.append(parent_dir)
-
-from geppetto.openai_handler import OpenAIHandler
-
 TEST_PERSONALITY = "Your AI assistant"
-
 
 
 class TestOpenAI(TestBase):
@@ -41,8 +37,10 @@ class TestOpenAI(TestBase):
         self.mock_openai().chat.completions.create.return_value = (
             mock_chat_completion_response
         )
-        response = self.openai_handler.llm_generate_content(user_prompt, self.my_callback, None)
-        main_content = response.split('\n\n_(Geppetto', 1)[0].strip()
+        response = self.openai_handler.llm_generate_content(
+            user_prompt, self.my_callback, None
+        )
+        main_content = response.split("\n\n_(Geppetto", 1)[0].strip()
         self.assertEqual(main_content, "Mocked ChatGPT Response")
 
     def my_callback(self, *args):
@@ -72,7 +70,9 @@ class TestOpenAI(TestBase):
 
         user_prompt = [{"role": "user", "content": "Generate an image of a mountain"}]
 
-        response = self.openai_handler.llm_generate_content(user_prompt, self.my_callback, None)
+        response = self.openai_handler.llm_generate_content(
+            user_prompt, self.my_callback, None
+        )
 
         # Assuming download_image returns bytes
         self.assertIsInstance(response, bytes)

@@ -32,26 +32,26 @@ def initialized_llm_controller():
                 "handler": OpenAIHandler,
                 "handler_args": {
                     "personality": DEFAULT_RESPONSES["features"]["personality"]
-                }
+                },
             },
             {
                 "name": "Gemini",
                 "handler": GeminiHandler,
                 "handler_args": {
                     "personality": DEFAULT_RESPONSES["features"]["personality"]
-                }
+                },
             },
-            {   "name": "Claude",
+            {
+                "name": "Claude",
                 "handler": ClaudeHandler,
                 "handler_args": {
                     "personality": DEFAULT_RESPONSES["features"]["personality"]
-                }
-            }
+                },
+            },
         ]
     )
     controller.init_controller()
     return controller
-
 
 
 def main():
@@ -60,7 +60,7 @@ def main():
         DEFAULT_RESPONSES,
         SLACK_BOT_TOKEN,
         SIGNING_SECRET,
-        initialized_llm_controller()
+        initialized_llm_controller(),
     )
     SocketModeHandler(Slack_Handler.app, SLACK_APP_TOKEN).start()
 
