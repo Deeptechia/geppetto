@@ -8,3 +8,6 @@
 
 # Ignore the slack ids
 config/allowed-slack-ids.json
+
+# Ignore slack app configuration
+config/manifest-dev.yml
