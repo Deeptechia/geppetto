@@ -10,3 +10,6 @@
 config/allowed-slack-ids.json
 
 venv/
+
+# Ignore slack app configuration
+config/manifest-dev.yml
