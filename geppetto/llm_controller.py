@@ -19,18 +19,18 @@ class LLMController:
 
     def init_controller(self):
         for llm in self.llm_cfgs:
-            name = llm['name']
+            name = llm["name"]
             self.handlers[name] = self.get_handler(name)
 
     def list_llms(self):
-        return [x['name'] for x in self.llm_cfgs]
+        return [x["name"] for x in self.llm_cfgs]
 
     def get_llm_cfg(self, name):
         for llm in self.llm_cfgs:
-            if llm['name'] == name:
+            if llm["name"] == name:
                 return llm
         raise ValueError("LLM configuration not found for name: %s" % name)
 
     def get_handler(self, name):
         llm_cfg = self.get_llm_cfg(name)
-        return llm_cfg['handler'](**llm_cfg['handler_args'])
+        return llm_cfg["handler"](**llm_cfg["handler_args"])

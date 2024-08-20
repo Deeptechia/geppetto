@@ -43,6 +43,10 @@
   - `llm_gemini` to use Gemini
   - `llm_claude` to use Claude
 
+## 📚 Listing all available AI models
+
+- Only type `llms` in your message.
+
 ## 🛠️ Setup and Configuration
 
 ### 🔧 Slack App Configuration

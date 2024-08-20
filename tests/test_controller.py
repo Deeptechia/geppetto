@@ -9,11 +9,7 @@ ClientMock = {}
 class HandlerMockA(LLMHandler):
 
     def __init__(self):
-        super().__init__(
-            "First LLM",
-            "LLM1",
-            ClientMock
-        )
+        super().__init__("First LLM", "LLM1", ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -26,11 +22,7 @@ class HandlerMockB(LLMHandler):
 
     def __init__(self, some_arg):
         self.some_arg = some_arg
-        super().__init__(
-            "Second LLM",
-            "LLM2",
-            ClientMock
-        )
+        super().__init__("Second LLM", "LLM2", ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -43,11 +35,7 @@ class HandlerMockC(LLMHandler):
 
     def __init__(self, some_arg):
         self.some_arg = some_arg
-        super().__init__(
-            "Third LLM",
-            "LLM3",
-            ClientMock
-        )
+        super().__init__("Third LLM", "LLM3", ClientMock)
 
     def llm_generate_content(self, **args):
         pass
@@ -57,25 +45,19 @@ class HandlerMockC(LLMHandler):
 
 
 sample_llms_cfg = [
-    {
-        "name": "First LLM",
-        "handler": HandlerMockA,
-        "handler_args": {}
-    },
+    {"name": "First LLM", "handler": HandlerMockA, "handler_args": {}},
     {
         "name": "Second LLM",
         "handler": HandlerMockB,
-        "handler_args": {"some_arg": "SecondGPT"}
-    }
+        "handler_args": {"some_arg": "SecondGPT"},
+    },
 ]
 
 
 class TestController(TestBase):
     def setUp(self):
         super(TestBase, self).setUp()
-        self.llm_controller = LLMController(
-            sample_llms_cfg
-        )
+        self.llm_controller = LLMController(sample_llms_cfg)
 
     def tearDown(self):
         super(TestBase, self).tearDown()
@@ -88,18 +70,14 @@ class TestController(TestBase):
     def test_initialize_controller(self):
         self.llm_controller.init_controller()
         self.assertEqual(len(self.llm_controller.llm_cfgs), 2)
-        self.assertEqual(len(self.llm_controller.handlers),2)
+        self.assertEqual(len(self.llm_controller.handlers), 2)
 
     def test_get_llm_cfg(self):
         cfg = self.llm_controller.get_llm_cfg("Second LLM")
         self.assertEqual(cfg["handler_args"]["some_arg"], "SecondGPT")
 
     def test_attempt_get_nonexistent_llm_cfg(self):
-        self.assertRaises(
-            ValueError,
-            self.llm_controller.get_llm_cfg,
-            "Wrong LLM"
-        )
+        self.assertRaises(ValueError, self.llm_controller.get_llm_cfg, "Wrong LLM")
 
     def test_list_llms(self):
         list = self.llm_controller.list_llms()
@@ -113,7 +91,9 @@ class TestController(TestBase):
         self.llm_controller.init_controller()
         info1 = self.llm_controller.handlers["First LLM"].get_info()
         self.assertEqual(info1, "Name: First LLM - Model: LLM1")
-        self.assertEqual(self.llm_controller.handlers["Second LLM"].some_arg, "SecondGPT")
+        self.assertEqual(
+            self.llm_controller.handlers["Second LLM"].some_arg, "SecondGPT"
+        )
 
 
 if __name__ == "__main__":
