@@ -11,6 +11,7 @@
 ## ⭐️ Key Features
 
 - 🔀 **Multi-Model Support:** Toggle effortlessly between AI models like ChatGPT, Claude and Gemini to suit your specific requirements. ChatGPT model gpt4-turbo is set as the default model.
+- 🔑 **Access for All:** Provide access for everyone in slack without requiring any additional payment or configuration per user.
 - 💬 **Streamlined Communication:** Initiate dynamic conversation threads by directly messaging Geppetto.
 - ➡️ **Advanced LLM Control:** Manage multiple AI models with the advanced LLM controller component.
 - 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
