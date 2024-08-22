@@ -76,4 +76,4 @@ class ClaudeHandler(LLMHandler):
             return markdown_response
         except Exception as e:
             logging.error(f"Error generating content: {e}")
-            return "I'm sorry, I couldn't generate a response at this time. Try using another AI model."
+            return "Unfortunately, we're currently unable to generate a response, may be Claude API is experiencing issues. (Check status here https://status.anthropic.com). In the meantime, you can switch to other LLM models by using the commands llm_openai or llm_gemini."
