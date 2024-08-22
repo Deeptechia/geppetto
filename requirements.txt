@@ -1,6 +1,6 @@
 certifi>=2023.11.17
 openai>=1.4.0
-python-dotenv==1.0.0
+python-dotenv==1.0.1
 slack-bolt>=1.18.1
 slack-sdk>=3.26.1
 pillow>=10.1.0
