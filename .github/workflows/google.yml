@@ -1,7 +1,7 @@
 name: Build and Deploy to Cloud Run
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "Staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
