@@ -3,7 +3,7 @@
 name: Build and Deploy to Cloud Run
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "Staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
@@ -42,29 +42,28 @@ jobs:
       run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
     - name: Build Docker image
       run: |
-        echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }}" >> .env
-        echo "SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN }}" >> .env
-        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-        echo "CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }}" >> .env
-        echo "DALLE_MODEL=${{ secrets.DALLE_MODEL }}" >> .env
-        echo "SIGNING_SECRET=${{ secrets.SIGNING_SECRET }}" >> .env
-        echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
-        echo "GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}" >> .env
-        echo "CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}" >> .env
-        echo "CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }}" >> .env
-        echo "GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }}" >> .env
         docker build . -t geppetto:latest \
           --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+          --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }} \
+          --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }} \
+          --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+          --build-arg CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }} \
+          --build-arg DALLE_MODEL=${{ secrets.DALLE_MODEL }} \
+          --build-arg SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }} \
+          --build-arg GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} \
+          --build-arg GEMINI_MODEL=${{ secrets.GEMINI_MODEL }} \
+          --build-arg CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }} \
+          --build-arg CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }} \
+          --build-arg GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }} \
           --build-arg GITHUB_SHA=${{ github.sha }} \
           --build-arg GITHUB_REF=${{ github.ref }}
     - name: Publish
       run: |
-        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+          docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy ${{ env.SERVICE_NAME }} \
-          --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-          --region=${{ env.GAR_LOCATION }} \
-          --platform=managed \
-          --allow-unauthenticated
-        
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+            --region=${{ env.GAR_LOCATION }} \
+            --platform=managed \
+            --allow-unauthenticated
