@@ -42,7 +42,7 @@ jobs:
       run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
     - name: Build Docker image
       run: |
-        docker build . -t geppetto:latest \
+        docker build . --platform linux/amd64 -t geppetto:latest \
           --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
           --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }} \
           --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }} \
