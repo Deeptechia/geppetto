@@ -62,7 +62,7 @@ jobs:
           docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
     - name: Deploy to Cloud Run
       run: |
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
+          gcloud run jobs deploy ${{ env.SERVICE_NAME }} \
             --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
             --region=${{ env.GAR_LOCATION }} \
             --platform=managed \
