@@ -7,7 +7,7 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
-  SERVICE_NAME: cloud-run-service
+  SERVICE_NAME: cloud-run-jobs
   REPOSITORY: docker-repository
   IMAGE: geppetto
 jobs:
