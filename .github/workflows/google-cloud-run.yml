@@ -64,5 +64,5 @@ jobs:
       run: |
           gcloud run jobs deploy ${{ env.SERVICE_NAME }} \
             --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-            --region=${{ env.GAR_LOCATION }}
+            --region=${{ env.GAR_LOCATION }} --execute-now
         
