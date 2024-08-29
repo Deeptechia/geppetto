@@ -1,81 +1,70 @@
 # Despliegue del contenedor en Google cloud run
 
 name: Build and Deploy to Cloud Run
-
 on:
   push:
-    branches: [ "staging" ]
-
+    branches: [ "Staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
   SERVICE_NAME: cloud-run-service
   REPOSITORY: docker-repository
   IMAGE: geppetto
-
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
     environment: production
-
     permissions:
       contents: 'read'
       id-token: 'write'
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # Configurar gcloud CLI
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          version: 'latest'
-          service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
-
-      # Autenticar en Google Cloud
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
-          token_format: 'access_token'
-
-      - name: Docker configuration
-        env:
-          ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
-        run: echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
-
-      - name: Log access token
-        run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
-
-      - name: Build Docker image
-        run: |
-          echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }}" > .env
-          echo "SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }}" >> .env
-          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          echo "CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }}" >> .env
-          echo "DALLE_MODEL=${{ secrets.DALLE_MODEL }}" >> .env
-          echo "SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }}" >> .env
-          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
-          echo "GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}" >> .env
-          echo "CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}" >> .env
-          echo "CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }}" >> .env
-          echo "GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }}" >> .env
-          docker build . -t geppetto:latest \
-            --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-            --build-arg GITHUB_SHA=${{ github.sha }} \
-            --build-arg GITHUB_REF=${{ github.ref }}
-
-      - name: Publish
-        run: |
-          docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy ${{ env.SERVICE_NAME }} \
-            --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-            --region=${{ env.GAR_LOCATION }} \
-            --platform=managed \
-            --allow-unauthenticated
+    - name: Checkout
+      uses: actions/checkout@v3
+    # Configurar gcloud CLI
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+    # Autenticar en Google Cloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+    - name: Docker configuration
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+      run: echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+    - name: Log access token
+      run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
+    - name: Build Docker image
+      run: |
+        echo "SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN }}" >> .env
+        echo "SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN }}" >> .env
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+        echo "CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }}" >> .env
+        echo "DALLE_MODEL=${{ secrets.DALLE_MODEL }}" >> .env
+        echo "SIGNING_SECRET=${{ secrets.SIGNING_SECRET }}" >> .env
+        echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
+        echo "GEMINI_MODEL=${{ secrets.GEMINI_MODEL }}" >> .env
+        echo "CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}" >> .env
+        echo "CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }}" >> .env
+        echo "GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }}" >> .env
+        docker build . -t geppetto:latest \
+          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+          --build-arg GITHUB_SHA=${{ github.sha }} \
+          --build-arg GITHUB_REF=${{ github.ref }}
+    - name: Publish
+      run: |
+        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy ${{ env.SERVICE_NAME }} \
+          --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+          --region=${{ env.GAR_LOCATION }} \
+          --platform=managed \
+          --allow-unauthenticated
+        
