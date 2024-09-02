@@ -43,19 +43,7 @@ jobs:
     - name: Build Docker image
       run: |
         docker build . --platform linux/amd64 -t geppetto:latest \
-          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-          -e SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }} \
-          -e SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }} \
-          -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-          -e CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }} \
-          -e DALLE_MODEL=${{ secrets.DALLE_MODEL }} \
-          -e SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }} \
-          -e GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} \
-          -e GEMINI_MODEL=${{ secrets.GEMINI_MODEL }} \
-          -e CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }} \
-          -e CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }} \
-          -e GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }} \
-          
+          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
     - name: Publish
       run: |
           docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
@@ -63,5 +51,16 @@ jobs:
       run: |
           gcloud run jobs deploy ${{ env.SERVICE_NAME }} \
             --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
-            --region=${{ env.GAR_LOCATION }} --execute-now
-        
+            --region=${{ env.GAR_LOCATION }} \
+            --set-env-vars SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }},\
+          SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }},\
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }},\
+          CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }},\
+          DALLE_MODEL=${{ secrets.DALLE_MODEL }},\
+          SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }},\
+          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }},\
+          GEMINI_MODEL=${{ secrets.GEMINI_MODEL }},\
+          CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }},\
+          CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }},\
+          GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }} \
+            --execute-now
