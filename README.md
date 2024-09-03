@@ -106,6 +106,9 @@ With Docker and Docker Compose ready:
 - Adjust configuration values in `config/.env`.
 - Execute `docker compose build` followed by `docker compose up -d`.
 
+We published our docker container for download on Dockerhub:
+https://hub.docker.com/r/deeptechia/geppetto
+
 ## 🧪 Testing
 
 Run the following from the root directory to execute tests:
