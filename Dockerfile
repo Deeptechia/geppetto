@@ -11,6 +11,6 @@ WORKDIR /app
 RUN poetry install
 
 # Asegurarse de que el contenedor escuche en el puerto 8080
-#ENV PORT 8080
-#EXPOSE 8080
+ENV PORT 8000
+EXPOSE 8000
 CMD ["poetry", "run", "geppetto"]
