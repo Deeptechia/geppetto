@@ -28,11 +28,11 @@ RUN echo "server { \
 EXPOSE 8080
 
 # Crear un script de inicio para manejar Nginx y la aplicación
-RUN echo "#!/bin/sh\n\
+RUN echo '#!/bin/sh\n\
 service nginx start\n\
-poetry run geppetto" > /app/entrypoint.sh
+poetry run geppetto' > /app/entrypoint.sh
 
-# Hacer que el script sea ejecutable
+# Hacer el script ejecutable
 RUN chmod +x /app/entrypoint.sh
 
 # Usar el script de inicio como el comando principal
