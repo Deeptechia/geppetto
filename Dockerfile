@@ -33,7 +33,7 @@ service nginx start\n\
 poetry run geppetto" > /app/entrypoint.sh
 
 # Hacer que el script sea ejecutable
-RUN chmod +x /app/entrpoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Usar el script de inicio como el comando principal
 CMD ["/app/entrypoint.sh"]
