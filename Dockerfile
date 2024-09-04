@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Instalar las dependencias de Python
 RUN python -m pip install poetry
+RUN python -m pip install python-dotenv
 RUN poetry install
 
 # Crear una página en blanco para servir
