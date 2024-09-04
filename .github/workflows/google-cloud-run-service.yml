@@ -8,7 +8,7 @@ env:
   SERVICE_NAME: cloud-run-service
   REPOSITORY: docker-repository
   IMAGE: geppetto
-  PORT: 8080
+  PORT: 80
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
