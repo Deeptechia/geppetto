@@ -29,7 +29,7 @@ RUN echo "server { \
 EXPOSE 8080
 
 # Crear un script de inicio para manejar Nginx y la aplicación
-RUN echo '#!/bin/sh\n\
+RUN echo '#!/bin/bash\n\
 service nginx start\n\
 poetry run geppetto' > /app/entrypoint.sh
 
