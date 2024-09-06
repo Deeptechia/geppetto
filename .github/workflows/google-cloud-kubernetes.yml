@@ -1,4 +1,4 @@
-name: Build and Deploy to GKE 
+name: Build and Deploy to GKE
 on:
   push:
     branches: [ "Staging" ]
@@ -6,7 +6,7 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
   CLUSTER_NAME: your-cluster-name
-  GKE_ZONE: us-central1-c
+  GKE_ZONE: us-central1
   REPOSITORY: docker-repository
   IMAGE: geppetto
   NAMESPACE: default
