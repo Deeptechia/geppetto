@@ -1,0 +1,58 @@
+name: Build and Deploy to GKE
+on:
+  push:
+    branches: [ "staging" ]
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-central1
+  CLUSTER_NAME: your-cluster-name
+  GKE_ZONE: us-central1-c
+  REPOSITORY: docker-repository
+  IMAGE: geppetto
+  NAMESPACE: default
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy to GKE
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Configurar gcloud CLI
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+
+    # Autenticar en Google Cloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+
+    # Construir la imagen de Docker
+    - name: Build Docker image
+      run: |
+        docker build . --platform linux/amd64 -t geppetto:latest \
+          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+
+    # Publicar la imagen en Artifact Registry
+    - name: Publish Docker image to Google Artifact Registry
+      run: |
+        docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+
+    # Conectar al clúster de GKE
+    - name: Get GKE credentials
+      run: |
+        gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
+
+    # Desplegar en GKE usando kubectl
+    - name: Deploy to GKE
+      run: |
+        kubectl set image deployment/${{ env.IMAGE }} ${{ env.IMAGE }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} --namespace=${{ env.NAMESPACE }}
