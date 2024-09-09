@@ -1,0 +1,87 @@
+# Despliegue del contenedor en Kubernetes
+
+name: Build and Deploy to Kubernetes
+on:
+  push:
+    branches: [ "Staging" ]
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-central1
+  SERVICE_NAME: cloud-run-jobs
+  REPOSITORY: docker-repository
+  IMAGE: geppetto
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    • name: Checkout
+      uses: actions/checkout@v3
+      
+    # Configurar gcloud CLI (opcional si usas Google Container Registry)
+    • name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+      
+    # Autenticar en Google Cloud (opcional si usas Google Container Registry)
+    • id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+        
+    • name: Docker configuration
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+      run: echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+    
+    • name: Log access token
+      run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
+      
+    • name: Build Docker image
+      run: |
+        docker build . --platform linux/amd64 -t geppetto:latest \
+          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    
+    • name: Publish
+      run: |
+          docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    
+    # Instalar kubectl
+    • name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+    
+    # Configurar kubectl (asumiendo que el archivo de configuración se almacena en los secretos de GitHub)
+    • name: Setup kubeconfig
+      run: |
+        echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+      
+    • name: Deploy to Kubernetes
+      run: |
+        kubectl set image deployment/${{ env.SERVICE_NAME }} ${SERVICE_NAME}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        kubectl rollout status deployment/${{ env.SERVICE_NAME }}
+      
+    • name: Set environment variables in Kubernetes
+      run: |
+        kubectl set env deployment/${{ env.SERVICE_NAME }} \
+          SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }} \
+          SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }} \
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+          CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }} \
+          DALLE_MODEL=${{ secrets.DALLE_MODEL }} \
+          SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }} \
+          GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} \
+          GEMINI_MODEL=${{ secrets.GEMINI_MODEL }} \
+          CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }} \
+          CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }} \
+          GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }}
