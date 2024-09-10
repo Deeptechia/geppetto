@@ -3,7 +3,7 @@
 name: Build and Deploy to Kubernetes
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "Staging" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
