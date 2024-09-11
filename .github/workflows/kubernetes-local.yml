@@ -3,7 +3,7 @@
 name: Build and Deploy to Kubernetes
 on:
   push:
-    branches: [ "Staging" ]
+    branches: [ "staging" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -41,18 +41,40 @@ jobs:
       run: |
         echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
-    # Build Docker image
+    # Autenticar en Google Cloud
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+
+    # Autenticar gcloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+
+    # Autenticar Docker con Google Artifact Registry
+    - name: Authenticate Docker to Google Artifact Registry
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+      run: |
+        echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+
+    # Compilar imagen Docker
     - name: Build Docker image
       run: |
         docker build . --platform linux/amd64 -t geppetto:latest \
           --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
 
-    # Publish Docker image
+    # Publicar imagen Docker
     - name: Publish
       run: |
         docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
 
-    # Deploy to Kubernetes
+    # Desplegar en Kubernete-
     - name: Deploy to Kubernetes
       run: |
         KUBECONFIG=$HOME/.kube/config kubectl set image deployment/${{ env.SERVICE_NAME }} ${ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
