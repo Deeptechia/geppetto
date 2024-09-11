@@ -41,6 +41,28 @@ jobs:
       run: |
         echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
 
+    # Configurar gcloud CLI
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+
+    # Autenticar en Google Cloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+
+    # Docker configuration
+    - name: Docker configuration
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+      run: |
+        echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+
     # Build Docker image
     - name: Build Docker image
       run: |
