@@ -77,4 +77,4 @@ jobs:
     # Desplegar en Kubernete-
     - name: Deploy to Kubernetes
       run: |
-        KUBECONFIG=$HOME/.kube/config kubectl set image deployment/${{ env.SERVICE_NAME }} ${ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+       KUBECONFIG=$HOME/.kube/config kubectl set image deployment/${{ env.SERVICE_NAME }} ${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
