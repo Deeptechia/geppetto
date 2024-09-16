@@ -1,12 +1,12 @@
-certifi>=2023.11.17
+certifi>=2024.2.2
 openai>=1.4.0
 python-dotenv==1.0.1
 slack-bolt>=1.18.1
 slack-sdk>=3.26.1
 pillow>=10.1.0
-google-generativeai>=0.5.0
+google-generativeai>=0.8.1
 unittest-xml-reporting>=3.2.0
 pytest>=8.2.0
 pytest-cov>=5.0.0
 flake8>=7.0.0
-anthropic>=0.32.0
+anthropic>=0.34.0
