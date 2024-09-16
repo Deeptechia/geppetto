@@ -12,12 +12,9 @@ env:
   KUBECONFIG: ${{ secrets.KUBECONFIG }}
 jobs:
   setup-build-publish-deploy:
-15:26
-name: Setup, Build, Publish, and Deploy
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    envi
-15:26
-ronment: production
+    environment: production
     permissions:
       contents: 'read'
       id-token: 'write'
