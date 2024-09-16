@@ -3,7 +3,7 @@
 name: Build and Deploy to Kubernetes
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "Staging" ]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -30,14 +30,24 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y kubectl
+        
+    # Instalar gke-gcloud-auth-plugin
+    - name: Install gke-gcloud-auth-plugin
+      run: |
+        curl -O https://storage.googleapis.com/gke-gcloud-auth-plugin/linux_amd64/gke-gcloud-auth-plugin
+        chmod +x gke-gcloud-auth-plugin
+        sudo mv gke-gcloud-auth-plugin /usr/local/bin/gke-gcloud-auth-plugin
+        
     # Crear directorio ~/.kube si no existe
     - name: Create kube directory
       run: |
         mkdir -p $HOME/.kube
+    
     # Configurar KUBECONFIG
     - name: Set up KUBECONFIG
       run: |
         echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+
     # Autenticar en Google Cloud
     - name: Setup gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
@@ -59,16 +69,19 @@ jobs:
         ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: |
         echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+
     # Compilar imagen Docker
     - name: Build Docker image
       run: |
         docker build . --platform linux/amd64 -t geppetto:latest \
-          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+
     # Publicar imagen Docker
     - name: Publish
       run: |
         docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-    # Desplegar en Kubernete-
+
+    # Desplegar en Kubernetes
     - name: Deploy to Kubernetes
       run: |
-       KUBECONFIG=$HOME/.kube/config kubectl set image deployment/${{ env.SERVICE_NAME }} ${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        KUBECONFIG=$HOME/.kube/config kubectl set image deployment/${{ env.SERVICE_NAME }} ${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
