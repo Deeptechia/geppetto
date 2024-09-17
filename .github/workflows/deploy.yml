@@ -1,44 +1,67 @@
-name: Deploy
+# Despliegue del contenedor en Google cloud run
 
+name: Build and Deploy to Cloud Run
 on:
   push:
-    branches:
-      - staging
-
+    branches: [ "staging" ]
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: us-central1
+  SERVICE_NAME: cloud-run-jobs
+  REPOSITORY: docker-repository
+  IMAGE: geppetto
 jobs:
-  ssh-command:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-
-    env:
-      SERVER_IP: ${{ secrets.SERVER_IP }}
-    
+    environment: production
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install SSH Client
-        run: sudo apt-get update && sudo apt-get install -y openssh-client
-      
-      - name: Configure SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          touch ~/.ssh/config
-          touch ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/config
-          chmod 644 ~/.ssh/known_hosts
-          chmod 700 ~/.ssh
-          ssh-keyscan -t rsa $SERVER_IP >> ~/.ssh/known_hosts
-
-      - name: Run SSH Command
-        run: |
-          ssh -i ~/.ssh/id_rsa geppetto@$SERVER_IP "cd /home/geppetto/geppetto/ && \
-            git rev-parse HEAD && \
-            pm2 status && \
-            pm2 stop geppetto && \
-            git pull && \
-            git rev-parse HEAD && \
-            pm2 start geppetto"
-
-            
+    - name: Checkout
+      uses: actions/checkout@v3
+    # Configurar gcloud CLI
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
+    # Autenticar en Google Cloud
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+    - name: Docker configuration
+      env:
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+      run: echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+    - name: Log access token
+      run: echo "Access Token:${{ steps.auth.outputs.access_token }}"
+    - name: Build Docker image
+      run: |
+        docker build . --platform linux/amd64 -t geppetto:latest \
+          --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+          --build-arg SLACK_BOT_TOKEN=${{ secrets.SLACK_BOT_TOKEN_STG }} \
+          --build-arg SLACK_APP_TOKEN=${{ secrets.SLACK_APP_TOKEN_STG }} \
+          --build-arg OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
+          --build-arg CHATGPT_MODEL=${{ secrets.CHATGPT_MODEL }} \
+          --build-arg DALLE_MODEL=${{ secrets.DALLE_MODEL }} \
+          --build-arg SIGNING_SECRET=${{ secrets.SIGNING_SECRET_STG }} \
+          --build-arg GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }} \
+          --build-arg GEMINI_MODEL=${{ secrets.GEMINI_MODEL }} \
+          --build-arg CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }} \
+          --build-arg CLAUDE_MODEL=${{ secrets.CLAUDE_MODEL }} \
+          --build-arg GEPPETTO_VERSION=${{ secrets.GEPPETTO_VERSION }} \
+          --build-arg GITHUB_SHA=${{ github.sha }} \
+          --build-arg GITHUB_REF=${{ github.ref }}
+    - name: Publish
+      run: |
+          docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    - name: Deploy to Cloud Run
+      run: |
+          gcloud run jobs deploy ${{ env.SERVICE_NAME }} \
+            --image=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }} \
+            --region=${{ env.GAR_LOCATION }} --execute-now
