@@ -2,7 +2,7 @@
 name: Build and Deploy to Kubernetes
 on:
   push:
-    branches: [ "Staging" ]
+    branches: [ "staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
