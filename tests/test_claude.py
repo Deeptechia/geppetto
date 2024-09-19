@@ -44,7 +44,7 @@ class TestClaude(TestBase):
         self.assertEqual(response, "Mocked Claude response")
 
     def test_failed_to_llm_generate_content(self):
-        failed_response = "I'm sorry, I couldn't generate a response at this time. Try using another AI model."
+        failed_response = "Unfortunately, we're currently unable to generate a response, may be Claude API is experiencing issues. (Check status here https://status.anthropic.com). In the meantime, you can switch to other LLM models by using the commands llm_openai or llm_gemini."
 
         mock_claude = Mock()
         mock_claude.content = [Mock(text=failed_response)]
