@@ -60,4 +60,8 @@ jobs:
     - name: Publish
       run: |
           docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    - name: Run Docker
+      run: |
+          docker run -ti geppetto:latest
+
    
