@@ -1,8 +1,8 @@
-# Despliegue del contenedor en Kubernetes (GKE) en Google Cloud
+# Despliegue del contenedor en Kubernetes (GKE) en Google Cloud 
 name: Build and Deploy to GKE
 on:
   push:
-    branches: [ "staging" ]
+    branches: [ "Staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
