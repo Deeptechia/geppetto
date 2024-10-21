@@ -10,7 +10,7 @@ env:
   REPOSITORY: docker-repository
   IMAGE: geppetto
   CLUSTER_NAME: autopilot-cluster-1
-  CLUSTER_ZONE: us-central1-c  # Ajusta la zona según corresponda
+  CLUSTER_ZONE: us-central1  # Ajusta la zona según corresponda
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
