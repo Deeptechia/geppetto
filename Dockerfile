@@ -34,8 +34,11 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y \
     libssl-dev \
     pkg-config
 
-# Instalar cargo (para dependencias Rust)
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && source $HOME/.cargo/env
+# Instalar rustup y cargo (para dependencias Rust)
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+# Añadir cargo a la variable de entorno PATH
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Actualizar pip y poetry
 RUN python -m pip install --upgrade pip
