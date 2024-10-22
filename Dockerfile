@@ -26,7 +26,6 @@ ENV CLAUDE_API_KEY=${CLAUDE_API_KEY}
 ENV CLAUDE_MODEL=${CLAUDE_MODEL}
 ENV GEPPETTO_VERSION=${GEPPETTO_VERSION}
 
-
 # Actualizar e instalar dependencias necesarias para compilación
 RUN apt-get -y update && apt-get -y upgrade && apt-get install -y \
     curl \
@@ -44,6 +43,9 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN python -m pip install --upgrade pip
 RUN python -m pip install poetry
 
+# Instalar tokenizers sin PEP 517
+RUN pip install --use-pep517 "tokenizers==0.20.1"
+
 # Copiar los archivos de la aplicación al contenedor
 ADD . /app/
 WORKDIR /app
@@ -53,6 +55,7 @@ RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-dev --no-root
 
 # Comando por defecto para ejecutar la aplicación
 CMD [ "poetry", "run", "geppetto" ]
+
 
 #RUN apt-get -y update && apt-get -y upgrade
 #RUN python -m pip install --upgrade pip
