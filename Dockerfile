@@ -44,7 +44,7 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install poetry
 
 # Instalar tokenizers sin PEP 517
-RUN pip install --use-pep517 "tokenizers==0.20.1"
+RUN pip install --use-pep517 "tokenizers==0.21.0"
 
 # Copiar los archivos de la aplicación al contenedor
 ADD . /app/
