@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.12
 
 # Definir las variables como argumentos de build
 ARG SLACK_BOT_TOKEN
