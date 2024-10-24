@@ -41,27 +41,31 @@ jobs:
       with:
         version: 'latest'
         service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
-        token_format: 'access_token'
+        
+    #- id: 'auth'
+    #  name: 'Authenticate to Google Cloud'
+    #  uses: 'google-github-actions/auth@v2'
+    #  with:
+    #    credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+    #    token_format: 'access_token'
     # Obtener credenciales del clúster GKE
     - name: Get GKE credentials
       run: |
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+    
     # Autenticar Docker con Google Artifact Registry
     - name: Authenticate Docker to Google Artifact Registry
       env:
         ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: |
         echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+   
     # Compilar imagen Docker
     - name: Build Docker image
       run: |
         docker build . --platform linux/amd64 -t geppetto:latest \
         --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    
     # Publicar imagen Docker
     - name: Publish
       run: |
@@ -95,15 +99,9 @@ jobs:
     # Desplegar el archivo de manifiesto YAML en Kubernetes
     - name: Apply deployment to Kubernetes
       run: |
-        gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+       kubectl apply -f k8s-deployment.yaml
+    #    gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
         
-    # Configurar kubectl
-    - name: Install kubectl
-      run: |
-       sudo apt-get update
-       sudo apt-get install -y kubectl   
-        kubectl apply -f k8s-deployment.yaml
-          
     # Exponer el servicio (opcional)
     - name: Expose Deployment (optional)
       run: |
