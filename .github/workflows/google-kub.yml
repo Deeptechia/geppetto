@@ -1,4 +1,4 @@
-# Despliegue del contenedor en Kubernetes (GKE) en Google Clou
+# Despliegue del contenedor en Kubernetes (GKE) en Google Cloud
 name: Build and Deploy to GKE
 on:
   push:
