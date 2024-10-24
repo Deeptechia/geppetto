@@ -28,6 +28,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y kubectl
     
+    # Instalar el plugin de autenticación de GKE para kubectl
+    - name: Install gke-gcloud-auth-plugin
+      run: |
+        sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+        gcloud components install gke-gcloud-auth-plugin
+        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          
     # Instalar gke-gcloud-auth-plugin
     #- name: Install gke-gcloud-auth-plugin
     #  run: |
@@ -42,12 +49,14 @@ jobs:
         version: 'latest'
         service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
         
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
-        token_format: 'access_token'
+    
+    #- id: 'auth'
+    #  name: 'Authenticate to Google Cloud'
+    #  uses: 'google-github-actions/auth@v2'
+    #  with:
+    #    credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+    #    token_format: 'access_token'
+    
     
     # Obtener credenciales del clúster GKE
     - name: Get GKE credentials
