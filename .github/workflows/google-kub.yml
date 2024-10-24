@@ -27,12 +27,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y kubectl
+    
     # Instalar gke-gcloud-auth-plugin
-    - name: Install gke-gcloud-auth-plugin
-      run: |
-        curl -O https://storage.googleapis.com/gke-gcloud-auth-plugin/linux_amd64/gke-gcloud-auth-plugin
-        chmod +x gke-gcloud-auth-plugin
-        sudo mv gke-gcloud-auth-plugin /usr/local/bin/gke-gcloud-auth-plugin
+    #- name: Install gke-gcloud-auth-plugin
+    #  run: |
+    #    curl -O https://storage.googleapis.com/gke-gcloud-auth-plugin/linux_amd64/gke-gcloud-auth-plugin
+    #    chmod +x gke-gcloud-auth-plugin
+    #    sudo mv gke-gcloud-auth-plugin /usr/local/bin/gke-gcloud-auth-plugin
+    
     # Autenticar en Google Cloud y obtener credenciales del clúster
     - name: Setup gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
@@ -93,8 +95,15 @@ jobs:
     # Desplegar el archivo de manifiesto YAML en Kubernetes
     - name: Apply deployment to Kubernetes
       run: |
+        gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+        
+    # Configurar kubectl
+    - name: Install kubectl
+      run: |
+       sudo apt-get update
+       sudo apt-get install -y kubectl   
         kubectl apply -f k8s-deployment.yaml
-    
+          
     # Exponer el servicio (opcional)
     - name: Expose Deployment (optional)
       run: |
