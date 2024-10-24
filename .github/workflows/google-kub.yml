@@ -69,7 +69,7 @@ jobs:
       run: |
         gcloud components install gke-gcloud-auth-plugin
         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        kubectl set image deployment/${{ env.SERVICE_NAME }} ${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        kubectl set image deployment/${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
     # Exponer el servicio (opcional)
     - name: Expose Deployment (optional)
       run: |
