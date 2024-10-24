@@ -42,16 +42,20 @@ jobs:
         version: 'latest'
         service_account_key: '${{ secrets.GCLOUD_KEY_JSON }}'
         
-    #- id: 'auth'
-    #  name: 'Authenticate to Google Cloud'
-    #  uses: 'google-github-actions/auth@v2'
-    #  with:
-    #    credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
-    #    token_format: 'access_token'
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
+        token_format: 'access_token'
+    
     # Obtener credenciales del clúster GKE
     - name: Get GKE credentials
       run: |
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+    
+    
+      
     
     # Autenticar Docker con Google Artifact Registry
     - name: Authenticate Docker to Google Artifact Registry
