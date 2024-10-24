@@ -64,13 +64,51 @@ jobs:
     - name: Publish
       run: |
         docker push us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-    # Desplegar en Kubernetes
-    - name: Deploy to Kubernetes
+
+    # Crear un archivo YAML para el deployment
+    - name: Create Kubernetes deployment YAML
       run: |
-        gcloud components install gke-gcloud-auth-plugin
-        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        kubectl set image deployment/${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+        cat <<EOF > k8s-deployment.yaml
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: geppetto-stg
+        spec:
+          replicas: 1
+          selector:
+            matchLabels:
+              app: geppetto-stg
+          template:
+            metadata:
+              labels:
+                app: geppetto-stg
+            spec:
+              containers:
+              - name: geppetto-stg
+                image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+                ports:
+                - containerPort: 8080
+        EOF
+    
+    # Desplegar el archivo de manifiesto YAML en Kubernetes
+    - name: Apply deployment to Kubernetes
+      run: |
+        kubectl apply -f k8s-deployment.yaml
+    
     # Exponer el servicio (opcional)
     - name: Expose Deployment (optional)
       run: |
-        kubectl expose deployment ${{ env.SERVICE_NAME }} --type=LoadBalancer --port 80 --target-port 8080
+        kubectl expose deployment geppetto-stg --type=LoadBalancer --port 80 --target-port 8080
+
+    
+    
+    # Desplegar en Kubernetes
+    #- name: Deploy to Kubernetes
+    #  run: |
+    #    gcloud components install gke-gcloud-auth-plugin
+    #    export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+    #    kubectl set image deployment/${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    # Exponer el servicio (opcional)
+    #- name: Expose Deployment (optional)
+    #  run: |
+    #    kubectl expose deployment ${{ env.SERVICE_NAME }} --type=LoadBalancer --port 80 --target-port 8080
