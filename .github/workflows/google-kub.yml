@@ -92,6 +92,13 @@ jobs:
                 - containerPort: 8080
         EOF
     
+    # Verificar que el plugin este instalado
+    - name: Instala y verifica gke-gcloud-auth-plugin
+      run: |
+        gcloud components install gke-gcloud-auth-plugin
+        gke-gcloud-auth-plugin --version
+        
+    
     # Desplegar el archivo de manifiesto YAML en Kubernetes
     - name: Apply deployment to Kubernetes
       run: |
