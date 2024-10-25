@@ -112,6 +112,7 @@ jobs:
     # Exponer el servicio (opcional)
     - name: Expose Deployment (optional)
       run: |
+        kubectl delete service geppetto-stg --ignore-not-found
         kubectl expose deployment geppetto-stg --type=LoadBalancer --port 80 --target-port 8080
 
 
