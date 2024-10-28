@@ -90,6 +90,14 @@ jobs:
                 image: us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
                 ports:
                 - containerPort: 8080
+                resources:
+                  requests:
+                    cpu: "500m"
+                    memory: "2Gi"
+                limits:
+                    cpu: "1"
+                    memory: "4Gi"      
+                
         EOF
     
     # Verificar que el plugin este instalado
