@@ -52,7 +52,7 @@ WORKDIR /app
 
 # Instalar dependencias usando poetry
 RUN POETRY_VIRTUALENVS_CREATE=false pip install --no-build-isolation --no-cache-dir tokenizers==0.20.1
-RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-dev --no-root
+RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-dev
 
 # Comando por defecto para ejecutar la aplicación
 CMD [ "poetry", "run", "geppetto" ]
