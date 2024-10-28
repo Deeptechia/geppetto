@@ -42,6 +42,8 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 # Actualizar pip y poetry
 RUN python -m pip install --upgrade pip
 RUN python -m pip install poetry
+RUN poetry --version
+
 
 # Instalar tokenizers sin PEP 517
 RUN pip install --use-pep517 "tokenizers==0.20.1"
