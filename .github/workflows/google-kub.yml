@@ -2,7 +2,7 @@
 name: Build and Deploy to GKE
 on:
   push:
-    branches: [ "Staging" ]
+    branches: [ "staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
@@ -60,7 +60,7 @@ jobs:
     # Compilar imagen Docker
     - name: Build Docker image
       run: |
-        docker build . --platform linux/amd64 -t geppetto:latest \
+        docker build . --platform linux/amd64 --no-cache -t geppetto:latest \
         --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
     # Publicar imagen Docker
     - name: Publish
