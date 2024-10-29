@@ -29,6 +29,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.12"
+python-dotenv = "^0.21.0"
 certifi = "^2024.2.2"
 openai = "^1.4.0"
 slack-bolt = "^1.18.1"
