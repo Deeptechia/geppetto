@@ -44,6 +44,7 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install poetry
 RUN poetry --version
 
+RUN pip install -U python-dotenv
 
 # Instalar tokenizers sin PEP 517
 RUN pip install --use-pep517 "tokenizers==0.20.1"
