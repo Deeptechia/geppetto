@@ -60,7 +60,8 @@ RUN POETRY_VIRTUALENVS_CREATE=false poetry install
 #RUN python -c "import dotenv; print(dotenv.__version__)"
 
 # Comando por defecto para ejecutar la aplicación
-CMD [ "python", "m", "geppetto.main" ]
+CMD ["poetry", "run", "python", "-m", "geppetto.main"]
+
 
 
 #RUN apt-get -y update && apt-get -y upgrade
