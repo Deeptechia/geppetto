@@ -60,7 +60,8 @@ RUN POETRY_VIRTUALENVS_CREATE=false poetry install
 #RUN python -c "import dotenv; print(dotenv.__version__)"
 
 # Comando por defecto para ejecutar la aplicación
-CMD ["poetry", "run", "python", "-m", "geppetto.main"]
+CMD ["sh", "-c", "poetry run python -m geppetto.main"]
+#CMD ["poetry", "run", "python", "-m", "geppetto.main"]
 
 
 
