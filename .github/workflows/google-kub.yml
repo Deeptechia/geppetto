@@ -2,7 +2,7 @@
 name: Build and Deploy to GKE
 on:
   push:
-    branches: [ "Staging" ]
+    branches: [ "staging" ]
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GAR_LOCATION: us-central1
@@ -22,19 +22,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+   
     # Configurar kubectl
     - name: Install kubectl
       run: |
         sudo apt-get update
         sudo apt-get install -y kubectl
-    
-    # Instalar gke-gcloud-auth-plugin
-    #- name: Install gke-gcloud-auth-plugin
-    #  run: |
-    #    curl -O https://storage.googleapis.com/gke-gcloud-auth-plugin/linux_amd64/gke-gcloud-auth-plugin
-    #    chmod +x gke-gcloud-auth-plugin
-    #    sudo mv gke-gcloud-auth-plugin /usr/local/bin/gke-gcloud-auth-plugin
-    
+      
     # Autenticar en Google Cloud y obtener credenciales del clúster
     - name: Setup gcloud CLI
       uses: google-github-actions/setup-gcloud@v1
@@ -47,21 +41,25 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCLOUD_KEY_JSON }}'
         token_format: 'access_token'
+    
     # Obtener credenciales del clúster GKE
     - name: Get GKE credentials
       run: |
         gcloud container clusters get-credentials ${{ env.CLUSTER_NAME }} --zone ${{ env.CLUSTER_ZONE }} --project ${{ env.PROJECT_ID }}
+    
     # Autenticar Docker con Google Artifact Registry
     - name: Authenticate Docker to Google Artifact Registry
       env:
         ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: |
         echo $ACCESS_TOKEN | docker login -u oauth2accesstoken --password-stdin us-central1-docker.pkg.dev
+    
     # Compilar imagen Docker
     - name: Build Docker image
       run: |
         docker build . --platform linux/amd64 --no-cache -t geppetto:latest \
         --tag us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
+    
     # Publicar imagen Docker
     - name: Publish
       run: |
@@ -106,7 +104,6 @@ jobs:
         gcloud components install gke-gcloud-auth-plugin
         gke-gcloud-auth-plugin --version
         
-    
     # Desplegar el archivo de manifiesto YAML en Kubernetes
     - name: Apply deployment to Kubernetes
       run: |
@@ -118,26 +115,8 @@ jobs:
         kubectl apply -f k8s-deployment.yaml
           
     # Exponer el servicio (opcional)
-    - name: Expose Deployment (optional)
-      run: |
-        kubectl delete service geppetto-stg --ignore-not-found
-        kubectl expose deployment geppetto-stg --type=LoadBalancer --port 80 --target-port 8080
-
-
-
-
-
-
-
-    
-    
-    # Desplegar en Kubernetes
-    #- name: Deploy to Kubernetes
-    #  run: |
-    #    gcloud components install gke-gcloud-auth-plugin
-    #    export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-    #    kubectl set image deployment/${{ env.SERVICE_NAME }}=us-central1-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.sha }}
-    # Exponer el servicio (opcional)
     #- name: Expose Deployment (optional)
     #  run: |
-    #    kubectl expose deployment ${{ env.SERVICE_NAME }} --type=LoadBalancer --port 80 --target-port 8080
+    #    kubectl delete service geppetto-stg --ignore-not-found
+    #    kubectl expose deployment geppetto-stg --type=LoadBalancer --port 80 --target-port 8080
+
