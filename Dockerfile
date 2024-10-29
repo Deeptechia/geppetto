@@ -54,7 +54,7 @@ WORKDIR /app
 
 # Instalar dependencias usando poetry
 #RUN POETRY_VIRTUALENVS_CREATE=false pip install --no-build-isolation --no-cache-dir tokenizers==0.20.1
-RUN POETRY_VIRTUALENVS_CREATE=false poetry install --without dev
+RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-root
 
 # Verificar que `dotenv` y otras dependencias estén instaladas
 RUN poetry show
