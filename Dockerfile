@@ -41,10 +41,10 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Actualizar pip y poetry
 RUN python -m pip install --upgrade pip
-RUN python -m pip install poetry
+RUN python -m pip install poetry python-dotenv
 RUN poetry --version
 
-RUN pip install -U python-dotenv
+#RUN pip install -U python-dotenv
 
 # Instalar tokenizers sin PEP 517
 RUN pip install --use-pep517 "tokenizers==0.20.1"
@@ -52,6 +52,7 @@ RUN pip install --use-pep517 "tokenizers==0.20.1"
 # Copiar los archivos de la aplicación al contenedor
 ADD . /app/
 WORKDIR /app
+RUN poetry install
 
 # Instalar dependencias usando poetry
 #RUN POETRY_VIRTUALENVS_CREATE=false pip install --no-build-isolation --no-cache-dir tokenizers==0.20.1
