@@ -54,13 +54,13 @@ WORKDIR /app
 
 # Instalar dependencias usando poetry
 #RUN POETRY_VIRTUALENVS_CREATE=false pip install --no-build-isolation --no-cache-dir tokenizers==0.20.1
-RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-root
+RUN POETRY_VIRTUALENVS_CREATE=false poetry install
 
 # Verificar que `dotenv` y otras dependencias estén instaladas
 #RUN python -c "import dotenv; print(dotenv.__version__)"
 
 # Comando por defecto para ejecutar la aplicación
-CMD [ "poetry", "run", "geppetto", "-m", "geppetto.main" ]
+CMD [ "python", "m", "geppetto.main" ]
 
 
 #RUN apt-get -y update && apt-get -y upgrade
