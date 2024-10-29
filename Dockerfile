@@ -57,7 +57,7 @@ WORKDIR /app
 RUN POETRY_VIRTUALENVS_CREATE=false poetry install --no-root
 
 # Verificar que `dotenv` y otras dependencias estén instaladas
-RUN python -c "import dotenv; print(dotenv.__version__)"
+#RUN python -c "import dotenv; print(dotenv.__version__)"
 
 # Comando por defecto para ejecutar la aplicación
 CMD [ "poetry", "run", "geppetto", "-m", "geppetto.main" ]
