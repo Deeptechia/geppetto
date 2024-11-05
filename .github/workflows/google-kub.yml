@@ -94,7 +94,10 @@ jobs:
                     memory: "4Gi"
                   limits:
                     cpu: "2"
-                    memory: "4Gi"      
+                    memory: "4Gi"
+              envFrom:
+              - secretRef:
+                name: geppetto-secrets
                 
         EOF
     
