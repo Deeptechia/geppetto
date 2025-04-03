@@ -1,48 +1,48 @@
 [build-system]
-requires = ["poetry>=1.1.0"]
 build-backend = "poetry.masonry.api"
+requires = ["poetry>=1.1.0"]
 
 [tool.poetry]
-name = "geppetto"
-version = "0.2.5"
 authors = [
-    "Lucas Arbues <lucas.arbues@coinfabrik.com>",
-    "Ignacio Peña <ignacio.penia@coinfabrik.com>",
-    "Federico Patagua <federico.patagua@coinfabrik.com>",
     "Arturo Beccar <arturo.beccar@coinfabrik.com>",
-    "José Garcia Crosta <jose.garcia.crosta@coinfabrik.com>",
+    "Camila Gallo Garcia <camila.garcia@coinfabrik.com>",
+    "Carlos Sims <carlos.sims@coinfabrik.com>",
     "David Weil <david.weil@coinfabrik.com>",
     "Diego Kelyacoubian <diego.kelyacoubian@coinfabrik.com>",
+    "Federico Patagua <federico.patagua@coinfabrik.com>",
+    "Ignacio Peña <ignacio.penia@coinfabrik.com>",
+    "José Garcia Crosta <jose.garcia.crosta@coinfabrik.com>",
+    "Lucas Arbues <lucas.arbues@coinfabrik.com>",
     "Sebastian Wain <sebastian.wain@coifabrik.com>",
-    "Carlos Sims <carlos.sims@coinfabrik.com>",
-    "Camila Gallo Garcia <camila.garcia@coinfabrik.com>"
 ]
-description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT, DALL-E, Claude and Google's Gemini model."
-readme = "README.md" 
 classifiers = [
     "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
-        "Topic :: Chatbot",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.6",
+    "Topic :: Chatbot",
 ]
+description = "Geppetto is a sophisticated Slack bot that facilitates seamless interaction with multiple AI models, including OpenAI's ChatGPT, DALL-E, Claude and Google's Gemini model."
+name = "geppetto"
+readme = "README.md"
+version = "0.2.5"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+IPython = "^8.0.0"
+Pillow = "^11.0.0"
+anthropic = "^0.45.2"
 certifi = "^2025.1.31"
+google-generativeai = "^0.8.1"
 openai = "^1.4.0"
+python = "^3.9"
 python-dotenv = "^1.0.0"
 slack-bolt = "^1.18.1"
 slack-sdk = "^3.26.1"
-Pillow = "^11.0.0"
-google-generativeai = "^0.8.1"
-IPython = "^8.0.0"
 unittest-xml-reporting = "^3.2.0"
-anthropic = "^0.45.2"
 
 [tool.poetry.scripts]
-geppetto = "geppetto.main:main"
+geppetto = "geppetto.main:cli"
 
-[project.urls]
+[tool.poetry.urls]
 Homepage = "https://github.com/Deeptechia/geppetto"
 Issues = "https://github.com/Deeptechia/geppetto/issues"

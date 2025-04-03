@@ -1,26 +1,40 @@
-import json
+import toml
 import logging
+import json
 import os
-from typing import List
+from typing import Dict, Any, Optional
+
+from geppetto.core.llm.base import LLMProvider
+from geppetto.core.llm.openai_handler import OpenAIHandler
+from geppetto.core.llm.claude_handler import ClaudeHandler
+from geppetto.core.llm.gemini_handler import GeminiHandler
+
+with open("pyproject.toml", "r") as f:
+    version = toml.load(f)["tool"]["poetry"]["version"]
+
+GEPPETTO_VERSION = version
 
 
-def load_json(file_name):
-    """Load information from a JSON file."""
-    try:
-        with open(os.path.join("config", file_name), "r") as file:
-            json_file = json.load(file)
-            logging.info("%s:%s" % (file_name, json_file))
-            return json_file
-    except FileNotFoundError:
-        logging.error("%s file not found." % file_name)
-    except json.JSONDecodeError:
-        logging.error("Error decoding %s file." % file_name)
-    return {}
+def append_version_to_message(message: str, source: LLMProvider) -> str:
+    match source:
+        case OpenAIHandler():
+            return f"{message}\n\n(Geppetto v{GEPPETTO_VERSION} Source: OpenAI - {source.model})"
+        case ClaudeHandler():
+            return f"{message}\n\n(Geppetto v{GEPPETTO_VERSION} Source: Claude - {source.model})"
+        case GeminiHandler():
+            return f"{message}\n\n(Geppetto v{GEPPETTO_VERSION} Source: Gemini - {source.model})"
+        case _:
+            return message
 
 
-def is_image_data(data):
-    return isinstance(data, bytes)
+def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
+    config = {}
 
+    if config_path and os.path.exists(config_path):
+        try:
+            with open(config_path, "r") as f:
+                config = json.load(f)
+        except Exception as e:
+            logging.error(f"Error loading config file: {e}")
 
-def lower_string_list(list_to_process: List[str]):
-    return [element.lower() for element in list_to_process]
+    return config

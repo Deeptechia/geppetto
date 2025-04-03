@@ -6,4 +6,5 @@ RUN python -m pip install poetry
 ADD . /app/
 WORKDIR /app
 RUN poetry install
-CMD [ "poetry", "run", "geppetto" ]
+# TODO: Add the platform to run the bot on (currently only slack is supported)
+CMD [ "poetry", "run", "geppetto", "--platform", "slack" ]
