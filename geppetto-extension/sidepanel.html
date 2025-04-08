@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>AI Assistant</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="sidepanel.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Assistant</h1>
+            <div class="provider-selector">
+                <select id="ai-provider">
+                    <option value="openai">OpenAI (GPT-4)</option>
+                    <option value="anthropic">Anthropic (Claude)</option>
+                    <option value="gemini">Google (Gemini)</option>
+                </select>
+            </div>
+        </header>
+
+        <div id="api-key-container">
+            <div class="form-group">
+                <label for="api-key">API Key:</label>
+                <input type="password" id="api-key" placeholder="Enter your API key">
+                <button id="save-key">Save</button>
+            </div>
+            <p class="hint">Your API key is stored locally in your browser.</p>
+        </div>
+
+        <div id="chat-container" class="hidden">
+            <div id="messages"></div>
+
+            <div class="page-content-toggle">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="include-page-content">
+                    <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Include page content in query</span>
+            </div>
+
+            <div class="input-area">
+                <textarea id="user-input" placeholder="Type your message here..."></textarea>
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+</body>
+
+</html>

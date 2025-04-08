@@ -1,0 +1,22 @@
+{
+  "name": "AI Assistant",
+  "description": "Chat with multiple AI models in your browser",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_title": "AI Assistant"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
