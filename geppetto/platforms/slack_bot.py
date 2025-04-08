@@ -33,7 +33,6 @@ async def run_slack_bot(
     users_path: Optional[str] = None,
     llm_multiplexer: Optional[LLMMultiplexer] = None,
 ):
-    """Initialize and run the Slack bot."""
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -50,6 +49,7 @@ async def run_slack_bot(
             bot_token=slack_config["SLACK_BOT_TOKEN"],
             signing_secret=slack_config["SLACK_SIGNING_SECRET"],
             app_token=slack_config["APP_TOKEN"],
+            personality=slack_config["SLACK_PERSONALITY"],
             allowed_users=allowed_users,
             llm_multiplexer=llm_multiplexer,
         )

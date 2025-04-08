@@ -1,7 +1,7 @@
 import json
+import logging
 from typing import List, Optional, Dict, TypedDict, Union, Any
 import functools
-from venv import logger
 import openai
 from openai import AsyncOpenAI
 
@@ -84,30 +84,18 @@ class OpenAIHandler(LLMProvider):
         self, conversation: Conversation
     ) -> List[OpenAIMessage]:
         """Convert our Message objects to OpenAI's message format."""
-        # Separate system messages from other messages
-        system_messages = []
-        conversation_messages = []
+        conversation_messages = conversation.messages
+        user_info = conversation_messages[0].metadata
+        logging.info(f"User info: {user_info}")
 
-        for message in conversation.messages:
-            if message.role.value == "system":
-                system_messages.append({"role": "system", "content": message.content})
-            else:
-                conversation_messages.append(
-                    {"role": message.role.value, "content": message.content}
-                )
-
-        # Add user info as first system message if available
-        if conversation.user_info:
-            system_messages.insert(
-                0,
-                {
-                    "role": "system",
-                    "content": f"You are Geppetto, a helpful assistant. If you know the user name and feel you can use it to address the user, use it. Information about the user you're talking to:\n{conversation.user_info}",
-                },
-            )
-
-        # Combine all messages in the correct order
-        return system_messages + conversation_messages
+        return [
+            {
+                "role": message.role.value,
+                "content": message.content,
+                # "metadata": message.metadata.get("user_info", None).get("name", None),
+            }
+            for message in conversation.messages
+        ]
 
     async def _handle_tool_call(
         self, tool_calls: List[Dict[str, Any]]

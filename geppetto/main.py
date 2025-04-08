@@ -59,8 +59,10 @@ async def main(platform: str):
             case "slack":
                 await run_slack(llm_multiplexer)
             case "discord":
+                logger.info("Discord is not supported yet")
                 await run_discord(llm_multiplexer)
             case "teams":
+                logger.info("Teams is not supported yet")
                 await run_teams(llm_multiplexer)
             case _:
                 logger.error(f"Platform '{platform}' is not supported yet")
