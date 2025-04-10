@@ -1,10 +1,10 @@
 {
-  "name": "AI Assistant",
+  "name": "Geppetto AI Assistant",
   "description": "Chat with multiple AI models in your browser",
   "version": "1.0",
   "manifest_version": 3,
   "action": {
-    "default_title": "AI Assistant"
+    "default_title": "Geppetto AI Assistant"
   },
   "side_panel": {
     "default_path": "sidepanel.html"
@@ -18,5 +18,11 @@
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "icons": {
+  "16": "GeppettoMini.png",
+  "32": "GeppettoMini.png",
+  "48": "GeppettoMini.png",
+  "128": "GeppettoMini.png"
+}
 }

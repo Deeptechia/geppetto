@@ -2,16 +2,19 @@
 <html>
 
 <head>
-    <title>AI Assistant</title>
+    <title>Geppetto AI Assistant</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="sidepanel.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <h1>AI Assistant</h1>
+            <h1>Geppetto AI Assistant</h1>
             <div class="provider-selector">
+                <label for="ai-provider">Choose AI Provider:</label>
                 <select id="ai-provider">
                     <option value="openai">OpenAI (GPT-4)</option>
                     <option value="anthropic">Anthropic (Claude)</option>
@@ -30,7 +33,7 @@
         </div>
 
         <div id="chat-container" class="hidden">
-            <div id="messages"></div>
+            <div id="messages" role="log" aria-live="polite"></div>
 
             <div class="page-content-toggle">
                 <label class="toggle-switch">
@@ -41,7 +44,8 @@
             </div>
 
             <div class="input-area">
-                <textarea id="user-input" placeholder="Type your message here..."></textarea>
+                <label for="user-input" class="sr-only"></label>
+                <textarea id="user-input" placeholder="Type your message here..." rows="3"></textarea>
                 <button id="send-button">Send</button>
             </div>
         </div>
