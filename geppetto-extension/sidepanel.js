@@ -128,11 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function addThinkingIndicator() {
     const thinkingDiv = document.createElement('div');
+    const id = 'thinking-' + Date.now();
+    thinkingDiv.id = id;
     thinkingDiv.classList.add('message', 'assistant-message', 'thinking');
-    thinkingDiv.textContent = 'Thinking...';
+  
+    thinkingDiv.innerHTML = `
+      <span class="thinking-text">Geppetto is thinking<span class="dot dot1">.</span><span class="dot dot2">.</span><span class="dot dot3">.</span></span>
+    `;
+  
     messagesContainer.appendChild(thinkingDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    return thinkingDiv.id = 'thinking-' + Date.now();
+    return id;
   }
 
   function removeThinkingIndicator(id) {

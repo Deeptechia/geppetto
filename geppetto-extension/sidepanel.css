@@ -256,3 +256,47 @@ code {
 .hidden {
   display: none !important;
 }
+
+pre {
+  background-color: #272822;
+  color: #f8f8f2;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+code {
+  background-color: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.thinking-text {
+  font-style: italic;
+  color: #555;
+  font-size: 14px;
+}
+
+.dot {
+  animation: blink 1.5s infinite;
+  opacity: 0;
+}
+
+.dot1 {
+  animation-delay: 0s;
+}
+.dot2 {
+  animation-delay: 0.3s;
+}
+.dot3 {
+  animation-delay: 0.6s;
+}
+
+@keyframes blink {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
