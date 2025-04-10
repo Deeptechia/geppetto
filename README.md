@@ -9,8 +9,9 @@
 [DeepTechia](https://deeptechia.io/), is proud to introduce Geppetto, a versatile AI Assistant that seamlessly integrates with various AI models, empowering your team with the power of cutting-edge AI technology 🚀
 
 ## 📖 Table of Contents
-- [Geppetto as slack bot](#-geppetto-as-slack-bot)
-  - [🌟 Key Features](#-key-features)
+
+- [🤖 Geppetto as slack bot](#-geppetto-as-slack-bot)
+  - [⭐️ Key Features](#-key-features)
   - [🚀 Slack Demo](#-slack-demo)
   - [👨‍💻 Usage Guidelines](#-usage-guidelines)
     - [📩 Direct Messages](#-direct-messages)
@@ -29,7 +30,7 @@
 - [🌐 About DeepTechia](#-about-deeptechia)
 - [📜 License](#-license)
 
-# **Geppetto as slack bot**
+# 🤖 Geppetto as slack bot
 
 ## ⭐️ Key Features
 
@@ -40,7 +41,7 @@
 - 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
 - 🎨 **Creative Image Generation:** Unleash the power of DALL-E-3 to generate innovative images directly within your Slack conversations.
 
-## 🚀 **Slack Demo**
+## 🚀 Slack Demo
 
 ![Geppetto](/assets/Geppetto_demo.png)
 ![Geppetto](/assets/Geppetto_demo2.png)
