@@ -19,6 +19,7 @@
   "background": {
     "service_worker": "background.js"
   },
+  "homepage_url": "https://github.com/deeptechia/geppetto",
   "icons": {
   "16": "GeppettoMini.png",
   "32": "GeppettoMini.png",
