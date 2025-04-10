@@ -6,7 +6,30 @@
 ![License: AGPLv3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg) 
 ![Geppetto Tests](https://github.com/Deeptechia/geppetto/actions/workflows/tests-python.yml/badge.svg)
 
-[DeepTechia](https://deeptechia.io/), is proud to introduce Geppetto, a versatile Slack bot that seamlessly integrates with various AI models, empowering your team with the power of cutting-edge AI technology 🚀
+[DeepTechia](https://deeptechia.io/), is proud to introduce Geppetto, a versatile AI Assistant that seamlessly integrates with various AI models, empowering your team with the power of cutting-edge AI technology 🚀
+
+## 📖 Table of Contents
+- [Geppetto as slack bot](#-geppetto-as-slack-bot)
+  - [🌟 Key Features](#-key-features)
+  - [🚀 Slack Demo](#-slack-demo)
+  - [👨‍💻 Usage Guidelines](#-usage-guidelines)
+    - [📩 Direct Messages](#-direct-messages)
+    - [💬 Slack Channels](#-slack-channels)
+    - [🔒 Allowed Users](#-allowed-users)
+  - [🔀 Switching AI Models](#-switching-ai-models)
+  - [📚 Listing all available AI models](#-listing-all-available-ai-models)
+  - [🛠️ Setup and Configuration](#️-setup-and-configuration)
+    - [🔧 Slack App Configuration](#-slack-app-configuration)
+    - [🔐 Environment Setup](#-environment-setup)
+  - [🚀 Deployment](#-deployment)
+  - [🐳 Docker Deployment](#-docker-deployment)
+- [🧩 Geppetto as Chrome Extension](#-geppetto-as-chrome-extension)
+  - [Chrome Extension Demo](#-Chorme-extension-demo)
+- [🧪 Testing](#-testing)
+- [🌐 About DeepTechia](#-about-deeptechia)
+- [📜 License](#-license)
+
+# **Geppetto as slack bot**
 
 ## ⭐️ Key Features
 
@@ -17,7 +40,7 @@
 - 🔧 **Effortless Setup:** Enjoy a smooth setup experience powered by Docker 🐳.
 - 🎨 **Creative Image Generation:** Unleash the power of DALL-E-3 to generate innovative images directly within your Slack conversations.
 
-## 🚀 **Demo**
+## 🚀 **Slack Demo**
 
 ![Geppetto](/assets/Geppetto_demo.png)
 ![Geppetto](/assets/Geppetto_demo2.png)
@@ -108,6 +131,23 @@ With Docker and Docker Compose ready:
 
 We published our docker container for download on Dockerhub:
 https://hub.docker.com/r/deeptechia/geppetto
+
+## 🧩 Geppetto as Chrome Extension
+
+In addition to the Slack integration, Geppetto is also available as a Google Chrome extension, bringing the power of multiple AI models directly into your browser. Interact with ChatGPT, Claude, or Gemini on any website, instantly ⚡
+
+## 🚀 Features
+-	🧠 Quick Access: Launch Geppetto in one click from your browser toolbar.
+-	🔀 Multi-Model Support: Switch between ChatGPT, Claude, and Gemini directly within the extension.
+-	✍️ Contextual Prompts: Select any text on a webpage and generate AI responses via right-click.
+-	📋 Local Conversation History: Keep track of your recent interactions.
+-	🔒 Privacy First: API keys are stored locally and never shared externally.
+
+## 🔧 Installation
+- 
+
+##  Chrome Extension Demo
+-
 
 ## 🧪 Testing
 
